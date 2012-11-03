@@ -1,4 +1,11 @@
-#DataTypes module for UBC Sailbot 2013 Control Team
+#DataTypes.py 
+#Data type module for UBC Sailbot 2013 Control Team
+#Initialy Created: Sam Coulter, Nov. 3rd 2012
+#Last Updated: Above
+
+#TODO Nov 3:
+#		Need to implement overloaded operators for Angle and BountInt
+#		Details at: http://docs.python.org/2/reference/datamodel.html
 import math
 
 class BoundInt:
@@ -55,11 +62,19 @@ class Angle:
 
 
 if (__name__ == "__main__"):
+	errorCount = 0
 	#INFORMAL unit tests for Bounded Value Class
 	#TODO: Formalize
 	print "Testing BoundInt Class:"
+	
 	x = BoundInt()
-	print x
+	print "x = " + str(x) + " == 0"
+	if (x.value() == 0):
+		print "Default Construction test Passed"
+	else:
+		errorCount += 1
+		print "Default Construction test Failed"
+
 	x.set(2)
 	print x
 	x = BoundInt(0,-10,10)
@@ -69,7 +84,7 @@ if (__name__ == "__main__"):
 	print x
 
 	#INFORMAL unit tests for Angle Class
-	#Todo: Formalize
+	#TODO: Formalize
 	print "Testing Angle Class"
 	x = Angle(0)
 	print x
