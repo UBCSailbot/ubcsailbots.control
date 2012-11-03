@@ -29,7 +29,7 @@ class Angle:
 	def balance(self):
 		while (self._degree < 0):
 			self._degree = self._degree + 360
-		if (self._degree > 360):
+		if (self._degree >= 360):
 			self._degree = self._degree % 360
 
 	def __str__(self):
@@ -58,3 +58,4 @@ if (__name__ == "__main__"):
 	print str(x.radian())
 	x.set(360)
 	print str(x.radian())
+	print x
