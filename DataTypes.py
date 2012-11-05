@@ -10,10 +10,16 @@ import math
 
 class BoundInt:
 	def __init__(self, target = 0, low=0, high=1):
-		self.lowerLimit = low
-		self.upperLimit = high
-		self._value = target
-		self._balance()
+		if(type(target) != BoundInt):
+			self.lowerLimit = low
+			self.upperLimit = high
+			self._value = target
+			self._balance()
+		elif(type(target) == BoundInt &&):
+			self.lowerLimit = target.lowerLimit
+			self.upperLimit = target.upperLimit
+			self._value = target._value
+			self._balance()
 	
 	def _balance(self):
 		if (self._value > self.upperLimit):
@@ -23,6 +29,7 @@ class BoundInt:
 		self._value = int(round(self._value))
 
 	def value(self):
+		self._balance()
 		return self._value
 
 	def set(self, target):
@@ -31,6 +38,23 @@ class BoundInt:
 
 	def __str__(self):
 		return str(self._value)
+
+	def __add__(self, other):
+		return self._value + other
+
+	def __sub__(self, other):
+		return self._value - other
+
+	def __mul__(self, other):
+		return self._value * other
+
+	def __div__(self, other):
+		return self._value / other
+
+	def __pow__(self, power):
+		return self._value**power
+
+
 
 class Angle:
 	def __init__(self, target):
