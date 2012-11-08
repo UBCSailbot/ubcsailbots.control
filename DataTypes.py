@@ -10,16 +10,7 @@ import math
 
 class BoundInt:
 	def __init__(self, target = 0, low=0, high=1):
-		if(type(target) != BoundInt):
-			self.lowerLimit = low
-			self.upperLimit = high
-			self._value = target
-			self._balance()
-		elif(type(target) == BoundInt &&):
-			self.lowerLimit = target.lowerLimit
-			self.upperLimit = target.upperLimit
-			self._value = target._value
-			self._balance()
+		self._value, self.lowerLimit, self.upperLimit = int(target), int(low), int(high)
 	
 	def _balance(self):
 		if (self._value > self.upperLimit):
@@ -38,6 +29,10 @@ class BoundInt:
 
 	def __str__(self):
 		return str(self._value)
+
+	def __int__(self):
+		self._balance()
+		return int(self._value)
 
 	def __add__(self, other):
 		return self._value + other
