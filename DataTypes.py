@@ -53,7 +53,7 @@ class BoundInt:
 
 class Angle:
 	def __init__(self, target):
-		self._degree = target
+		self._degree = float(target)
 		self._balance()
 
 	def degree(self):
@@ -78,6 +78,29 @@ class Angle:
 
 	def __str__(self):
 		return str(self._degree)
+
+	def __int__(self):
+		self._balance()
+		return int(self._degree)
+
+	def __float__(self):
+		self._balance()
+		return float(self._degree)
+
+	def __add__(self, other):
+		return Angle(self._degree + float(other))
+
+	def __sub__(self, other):
+		return Angle(self._degree - float(other))
+
+	def __mul__(self, other):
+		return Angle(self._degree * float(other))
+
+	def __div__(self, other):
+		return Angle(self._degree / float(other))
+
+	def __pow__(self, power):
+		return Angle(self._degree**float(power))
 
 
 if (__name__ == "__main__"):
