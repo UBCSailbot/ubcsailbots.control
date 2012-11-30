@@ -115,6 +115,7 @@ if (__name__ == "__main__"):
 	#TODO: Formalize
 	print "Testing BoundInt Class:"
 	
+	#I think this way of handling unit tests is horrendous. -Sam
 	x = BoundInt()
 	print "x = " + str(x) + " == 0"
 	if (x.value() == 0):
