@@ -8,6 +8,14 @@
 #		Details at: http://docs.python.org/2/reference/datamodel.html
 import math
 
+class Coordinate:
+	def __Init__(self):
+		print("Do some even Cooler stuff")
+
+class GPSCoordinate:
+	def __init__(self):
+		print("Do Some Cool Stuff")
+
 class BoundInt:
 	def __init__(self, target = 0, low=0, high=1):
 		self._value, self.lowerLimit, self.upperLimit = int(target), int(low), int(high)
