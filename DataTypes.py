@@ -1,11 +1,8 @@
 #DataTypes.py 
 #Data type module for UBC Sailbot 2013 Control Team
 #Initialy Created: Sam Coulter, Nov. 3rd 2012
-#Last Updated: Above
+#Last Updated: November 29th
 
-#TODO Nov 3:
-#		Need to implement overloaded operators for Angle and BountInt
-#		Details at: http://docs.python.org/2/reference/datamodel.html
 import math
 
 class Coordinate:
@@ -89,7 +86,7 @@ class Angle:
 
 	def __int__(self):
 		self._balance()
-		return int(self._degree)
+		return int(round(self._degree))
 
 	def __float__(self):
 		self._balance()
