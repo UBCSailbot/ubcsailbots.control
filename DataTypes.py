@@ -112,6 +112,7 @@ class Angle:
 
 
 if (__name__ == "__main__"):
+	#What is the pythonic way to handle unit tests? Is there a 3rd party library ala JUnit or something we can use?
 	errorCount = 0
 	#INFORMAL unit tests for Bounded Value Class
 	#TODO: Formalize
