@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1630/trunk/libraries/GCS_MAVLink/doc
+END
+mavlink_to_html_table.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/1630/trunk/libraries/GCS_MAVLink/doc/mavlink_to_html_table.xsl
+END
+Doxyfile
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/923/trunk/libraries/GCS_MAVLink/doc/Doxyfile
+END
+mavlink.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/925/trunk/libraries/GCS_MAVLink/doc/mavlink.php
+END
+mavlink.css
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1630/trunk/libraries/GCS_MAVLink/doc/mavlink.css
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/925/trunk/libraries/GCS_MAVLink/doc/README
+END

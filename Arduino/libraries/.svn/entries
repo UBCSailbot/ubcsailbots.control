@@ -1,0 +1,180 @@
+10
+
+dir
+1855
+https://arducopter.googlecode.com/svn/trunk/libraries
+https://arducopter.googlecode.com/svn
+
+
+
+2011-04-06T01:19:03.868252Z
+1850
+james.goppert
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+f9c3cf11-9bcb-44bc-f272-b75c42450872
+
+AP_Navigation
+dir
+
+.project
+file
+
+
+
+
+2011-01-09T23:56:35.242673Z
+3d6600638f699a8edc6a11fc49ecef08
+2010-12-29T20:35:16.441672Z
+1362
+DrZiplok
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2336
+
+AP_RC
+dir
+
+GCS_SIMPLE
+dir
+
+AP_Compass
+dir
+
+.cproject
+file
+
+
+
+
+2011-03-07T04:46:44.375651Z
+c21ba7695fc81357fb5f0959d2de9224
+2011-02-14T03:16:03.992006Z
+1646
+DrZiplok@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+14094
+
+DataFlash
+dir
+
+GPS_NMEA
+dir
+
+Waypoints
+dir
+
+FastSerial
+dir
+
+GCS_MAVLink
+dir
+
+APM_RC
+dir
+
+GPS_UBLOX
+dir
+
+APM_PerfMon
+dir
+
+AP_RangeFinder
+dir
+
+GPS_MTK
+dir
+
+doc
+dir
+
+AP_Math
+dir
+
+AP_GPS
+dir
+
+AP_RcChannel
+dir
+
+APM_BinComm
+dir
+
+AP_DCM
+dir
+
+RC_Channel
+dir
+
+GPS_IMU
+dir
+
+AP_ADC
+dir
+
+APM_BMP085
+dir
+
+AP_Common
+dir
+
+AP_EEPROMB
+dir
+
+AP_IMU
+dir
+
+PID
+dir
+

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1795/trunk/libraries/GCS_MAVLink/include
+END
+bittest.c
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/925/trunk/libraries/GCS_MAVLink/include/bittest.c
+END
+documentation.dox
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/925/trunk/libraries/GCS_MAVLink/include/documentation.dox
+END
+protocol.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1795/trunk/libraries/GCS_MAVLink/include/protocol.h
+END
+checksum.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/925/trunk/libraries/GCS_MAVLink/include/checksum.h
+END
+mavlink_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/1795/trunk/libraries/GCS_MAVLink/include/mavlink_types.h
+END

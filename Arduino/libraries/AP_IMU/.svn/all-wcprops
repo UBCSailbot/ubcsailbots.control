@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/1781/trunk/libraries/AP_IMU
+END
+AP_IMU_Shim.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1781/trunk/libraries/AP_IMU/AP_IMU_Shim.h
+END
+AP_IMU.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1342/trunk/libraries/AP_IMU/AP_IMU.h
+END
+IMU.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/1650/trunk/libraries/AP_IMU/IMU.h
+END
+AP_IMU_Oilpan.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1727/trunk/libraries/AP_IMU/AP_IMU_Oilpan.h
+END
+AP_IMU_Oilpan.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1727/trunk/libraries/AP_IMU/AP_IMU_Oilpan.cpp
+END
