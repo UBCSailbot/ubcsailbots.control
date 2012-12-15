@@ -479,7 +479,7 @@ int radio_out[2];     // Output......0(rudder)  1(sheet winch)
 int  pilot_switch = 1200;  
 int  data_input_switch = 1200;
 
-FastSerialPort0(Serial);    // FTDI/console
+FastSerialPort0(Serial);
 FastSerialPort1(Serial1);   // GPS port (except for GPS_PROTOCOL_IMU)
 FastSerialPort2(Serial2);   // Aprrent Wind read from 2nd processor
 FastSerialPort3(Serial3);   // xBee communication between boat and laptop
@@ -503,7 +503,7 @@ void setup()
   delay(500);          //Wait at least 500 milli-seconds for device initialization
   Wire.begin();        // join i2c bus (address optional for master)
   
-  Serial.begin(57600, 128, 128);  
+  Serial.begin(57600, 128, 128); 
   Serial1.begin(57600, 128, 128); 
   Serial2.begin(9600,128,128);
   Serial3.begin(57600, 256, 128);
@@ -525,8 +525,8 @@ void setup()
 void loop()
 {
     read_radio();
-     
- 
+    //read_data_fromPi();              
+   Serial.println("loop");
     if(pilot_switch < RC_sail || data_input_switch < Read_GUI_Data_Challenge_Finished )      // This needs more testing
       rc_sail(); 
     else
@@ -706,7 +706,7 @@ void emergencySail() {
 //***********************************************************************************************************************************
 
 void rc_sail() {
-  
+     Serial.println("RC Sail");
    char guiDataRC[200]; 
    char cogStr[10];
    char current_headingStr[10];
@@ -733,7 +733,7 @@ void rc_sail() {
          read_radio();   
          APM_RC.OutputCh(rudder_output, radio_in[rudder_output]);           
          APM_RC.OutputCh(sheet_output, radio_in[sheet_output]);   
-         
+         read_data_fromPi();                 
          
          rcSheetPercent = (sheet_end - radio_in[sheet_output])/sheet_increment;
          
@@ -770,10 +770,7 @@ void rc_sail() {
                 
          if(millis() - update_timer >= 50) {
         
-            update_timer = millis();
-         
-            if(data_input_switch > Read_GUI_Data_Challenge_Finished && sailingChallenge == false)                     
-               read_data_fromGUI();              
+            update_timer = millis();   
          
             if(apprentWind > 0)
               upWindTargetApprentWind = abs(upWindTargetApprentWind);
@@ -797,7 +794,7 @@ void rc_sail() {
                                                                                                                                                                                                                                                                                                     
            if(!data_received)                  
                 Serial3.println(guiDataRC);    
-                Serial.println(guiDataRC);                          
+                //Serial.println(guiDataRC);                          
         
       }                                                            
      
@@ -820,37 +817,15 @@ void pi_sail() {
 
 //***********************************************************************************************************************************
 
- void read_data_fromGUI () {
- 
- //**TODO**
- //change this to read from Pi
- //  #define INLENGTH 250
-//  
-//   
-//   char inString[INLENGTH + 1] ;
-//   int inCount; 
-//   
-// 
-//   
-//   inCount = 0;
-// 
-//   while(Serial3.available() > 0)  {                                                 
-//     inString[inCount++] = Serial3.read();                                           
-//     delay(2);   // Changed from 1 May 17, 2012 by JK.
-//     
-//   }
-// 
-//   inString[inCount] = '\0';      
-//     
-//    if(inCount > 0)  
-//     {
-//      // inCount = 0; 
-//       data_received = true;
-//       challenge.parse_challenge_data(inString+1,inCount-1);  
-//       
-//       
-//       Serial3.println(inString);                                                    
-//     }
+ void read_data_fromPi () {
+      int sheet_percentage;
+   if(Serial.available())  {                                                 
+        sheet_percentage = Serial.read();
+         Serial.println(sheet_percentage,BYTE);
+   }
+   delay(50);
+
+//       adjust_sheets(sheet_percentage);
  } 
 
 //***********************************************************************************************************************************
