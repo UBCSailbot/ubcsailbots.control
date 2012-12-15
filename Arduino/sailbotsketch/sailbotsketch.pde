@@ -26,26 +26,13 @@
 #define RC_sail 1200
 #define Read_GUI_Data_Challenge_Finished 1200
 
-#define UPWIND_APPRENT_LIMIT_WEATHER_0  30                                                         // weather code 0 settings - upwind apprent limit
-#define UPWIND_APPRENT_LIMIT_WEATHER_1  30                                                         // weather code 1 settings - upwind apprent limit 
-#define UPWIND_APPRENT_LIMIT_WEATHER_2  30                                                         // weather code 2 settings - upwind apprent limit 
-#define UPWIND_APPRENT_LIMIT_WEATHER_3  35                                                         // weather code 3 settings - upwind apprent limit
-
-
 
 double rudder_centre = 1519;
 double rudder_increment = 8.97;
 double sheet_end = 1932;
 double sheet_increment = 9.53736;
          
-int y = 1500;
 
-
-enum course_descp {
-  B,CCR,CR,R,BR,BBR,DR,J};    //used to read sheet_setting[course_descp][weather]
-
-enum tack_type {
-  reach,beat,bear_off,gybe};  //used to read tack_rudder_angles[tack_type][weather] 
   
 enum sailByCourse {  
   compassMethod,
@@ -73,7 +60,7 @@ int sheet_setting[8][4] = {
 
 int  SR[4] = {15,2,2,2};
                 
-int weather = 0; 
+
 boolean starboard;
 
 double Setpoint,Input,Output; //PID variables 
@@ -83,17 +70,10 @@ double current_heading;
 int COG;
 int intSOG;
 double SOG;
-
 int apprentWind = 0;
-int appWind2SecAvg = 0; 
-int appWind6SecAvg = 0;
-
-float sog2SecAvg = 0.0;
-
+int appWindAvg=0;
 int numberSatelites;
 
-//long gps_timer = 0;
-//long radio_timer = 0;
 long update_timer = 0;
 long windTimer = 0;
 long gpsTimer = 0;
@@ -154,7 +134,6 @@ void loop()
     if(pilot_switch < RC_sail || data_input_switch < Read_GUI_Data_Challenge_Finished )      // This needs more testing
       rc_sail(); 
     else
-      if(data_received)
          pi_sail();
  
 }
@@ -211,6 +190,7 @@ int readEncoder(){
 void averageApprentWind() {
   //**TODO
   //complete a new averaging algorithm
+  //appWindAvg= _________________
   
   
   
@@ -250,21 +230,12 @@ void rc_sail() {
    char cogStr[10];
    char current_headingStr[10];
    char sogStr[10];
-
-  
-
-   int tableSheetPerecnt;
-   int calcSheetPerc;
-   
    float rcSheetPercent;  
    int altRcPercent;   
-     
-   while(pilot_switch < RC_sail || data_input_switch < Read_GUI_Data_Challenge_Finished) {
-                   
+   
          read_radio();   
          APM_RC.OutputCh(rudder_output, radio_in[rudder_output]);           
          APM_RC.OutputCh(sheet_output, radio_in[sheet_output]);   
-         read_data_fromPi();                 
          
          rcSheetPercent = (sheet_end - radio_in[sheet_output])/sheet_increment;
          
@@ -280,17 +251,13 @@ void rc_sail() {
            dtostrf(COG, 7, 0,cogStr );     
            dtostrf(current_heading, 7, 1,current_headingStr );  
             
-           sprintf(guiDataRC,"$A%11ld %11ld %8s %8s %8d %8d %8d %8d %8d %8d ",current_position -> longitude,
-                             current_position -> latitude,cogStr,current_headingStr,apprentWind,appWind2SecAvg,
-                             appWind6SecAvg,altRcPercent,g_gps -> hemisphereSatelites,g_gps->hdop);  
+           sprintf(guiDataRC,"$A%11ld %11ld %8s %8s %8d %8d %8d %8d %8d ",current_position -> longitude,
+                             current_position -> latitude,cogStr,current_headingStr,apprentWind, appWindAvg,altRcPercent,g_gps -> hemisphereSatelites,g_gps->hdop);  
                                                                                                                                                                                                                                                                                                     
            if(!data_received)                  
                 Serial3.println(guiDataRC);    
-                Serial.println(guiDataRC);                          
-        
+                Serial.println(guiDataRC);                            
       }                                                            
-     
-   }
 
 }
 
@@ -299,8 +266,8 @@ void rc_sail() {
 
 void pi_sail() {
   
-  
-//**TODO**
+         read_data_fromPi();                 
+//**TODO** complete this function
   
 
 }
@@ -399,7 +366,7 @@ void calculate_PID_input(int sailByCourse) {
     case cogMethod: difference = course - COG;
     break;
  
-    case apprentWindMethod: difference = appWind6SecAvg - course;
+    case apprentWindMethod: difference = appWindAvg - course;
     break;      
       
   
