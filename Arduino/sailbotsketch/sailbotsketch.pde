@@ -20,6 +20,7 @@
 #include <avr/pgmspace.h>
 
 
+
 #define rudder_output 0
 #define sheet_output 1
 #define RC_sail 1200
