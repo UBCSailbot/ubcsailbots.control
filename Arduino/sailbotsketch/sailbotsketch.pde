@@ -482,7 +482,6 @@ int  data_input_switch = 1200;
 
 FastSerialPort0(Serial);
 FastSerialPort1(Serial1);   // GPS port (except for GPS_PROTOCOL_IMU)
-FastSerialPort2(Serial2);   // Aprrent Wind read from 2nd processor
 FastSerialPort3(Serial3);   // xBee communication between boat and laptop
 
 boolean data_received = false;
@@ -491,10 +490,7 @@ boolean sailingChallenge = false;
 
 GPS         *g_gps;
 HEMISPHERE_GPS_NMEA     g_gps_driver(&Serial1);
-
-Encoder          *windEncoder;
-EncoderRead      encoder_driver(&Serial2);
-
+unsigned short MA3_pin=63;//**TODO this needs to be verified!
 
 //***********************************************************************************************************************************
 
@@ -504,17 +500,15 @@ void setup()
   delay(500);          //Wait at least 500 milli-seconds for device initialization
   Wire.begin();        // join i2c bus (address optional for master)
   
+  pinMode(MA3_pin, OUTPUT);
+  digitalWrite(MA3_pin, HIGH);
+
   Serial.begin(57600, 128, 128); 
   Serial1.begin(57600, 128, 128); 
-  Serial2.begin(9600,128,128);
   Serial3.begin(57600, 256, 128);
   
   g_gps = &g_gps_driver;
   g_gps->init(); 
-  
-  //**TODO update this so that it reads from the new encoder
-  windEncoder = &encoder_driver;
-  windEncoder->init();
 
   APM_RC.Init();                        // Radio Initialization
   pilot_switch = 968;
@@ -526,7 +520,6 @@ void setup()
 void loop()
 {
     read_radio();
-   Serial.println("loop");
     if(pilot_switch < RC_sail || data_input_switch < Read_GUI_Data_Challenge_Finished )      // This needs more testing
       rc_sail(); 
     else
@@ -565,85 +558,31 @@ void update_GPS(void)
 
 //***********************************************************************************************************************************
 void update_ApprentWind(void)  {
-  
-  windEncoder->update();
-  apprentWind = windEncoder->apprentWind;
+
+  apprentWind = readEncoder();
   averageApprentWind();
   
 }
 
+//from http://rpg.dosmage.net/project/sailboat/_m_a3_8pde_source.html
+int readEncoder(){
+  int  MA3_OFFSET=0;//this is the absolute offset
+   int MA3_reading = analogRead(MA3_pin);
+   int MA3_heading = add_headings( map(MA3_reading, 0, 1007, 0, 359), - MA3_OFFSET );
+   return MA3_heading;
+}
 
+ int add_headings(int heading_a, int heading_b)
+{
+   return (heading_a + heading_b + 360) % 360; //this could be a problem since we have typically done things in +/- 180
+}
 
 void averageApprentWind() {
-    static boolean appWind6secArrayFilled = false;
-    static boolean appWind2secArrayFilled = false;    
-    static int appWindArray6sec[120]; 
-    static int appWindArray2sec[40]; 
-    static int i6 = 0,i2 = 0;
-    static long appWind2SecTotal = 0;
-    static long appWind6SecTotal = 0;
-
-
-    if (i6 < 120 && !appWind6secArrayFilled) {
-        
-        appWind6SecTotal += apprentWind;        
-        appWindArray6sec[i6] = apprentWind; 
-        i6++;        
-        appWind6SecAvg = (int)(appWind6SecTotal/i6);   
-        if(appWind6SecAvg > 180)
-           appWind6SecAvg = 180; 
-        if(appWind6SecAvg < -179)
-           appWind6SecAvg = -179;         
-        
-    } else {
-        
-          
-        if (i6 == 120) 
-            i6 = 0;
-        
-        appWind6SecTotal -= appWindArray6sec[i6]; 
-        appWind6SecTotal += apprentWind;        
-        appWindArray6sec[i6] = apprentWind;   
-        appWind6SecAvg = (int)(appWind6SecTotal/120);
-        if(appWind6SecAvg > 180)
-           appWind6SecAvg = 180; 
-        if(appWind6SecAvg < -179)
-           appWind6SecAvg = -179;         
-        appWind6secArrayFilled = true;
-        i6++;
-        
-    }
-
-    if (i2 < 40 && !appWind2secArrayFilled) {
-        
-        appWind2SecTotal += apprentWind;        
-        appWindArray2sec[i2] = apprentWind;  
-        i2++;        
-        appWind2SecAvg = (int)(appWind2SecTotal/i2); 
-        if(appWind2SecAvg > 180)
-           appWind2SecAvg = 180; 
-        if(appWind2SecAvg < -179)
-           appWind2SecAvg = -179;    
-        
-    } else {
-        
-        if (i2 == 40) 
-            i2 = 0;        
-        
-        appWind2SecTotal -= appWindArray2sec[i2]; 
-        appWind2SecTotal += apprentWind;        
-        appWindArray2sec[i2] = apprentWind;   
-        appWind2SecAvg = (int)(appWind2SecTotal/40);
-        if(appWind2SecAvg > 180)
-           appWind2SecAvg = 180; 
-        if(appWind2SecAvg < -179)
-           appWind2SecAvg = -179;          
-        appWind2secArrayFilled = true;
-        i2++;
-        
-    }
-
-    
+  //**TODO
+  //complete a new averaging algorithm
+  
+  
+  
 }
 
 
@@ -706,7 +645,6 @@ void emergencySail() {
 //***********************************************************************************************************************************
 
 void rc_sail() {
-     Serial.println("RC Sail");
    char guiDataRC[200]; 
    char cogStr[10];
    char current_headingStr[10];
@@ -794,7 +732,7 @@ void rc_sail() {
                                                                                                                                                                                                                                                                                                     
            if(!data_received)                  
                 Serial3.println(guiDataRC);    
-                //Serial.println(guiDataRC);                          
+                Serial.println(guiDataRC);                          
         
       }                                                            
      
@@ -837,7 +775,8 @@ void pi_sail() {
       int sheet_percentage=atoi(inString);
       Serial.println(sheet_percentage);
       adjust_sheets(sheet_percentage);
-     }
+      //**TODO this won't work because it is called inside RC_sail so RC overrids
+      }
 
 
  } 
