@@ -525,7 +525,6 @@ void setup()
 void loop()
 {
     read_radio();
-    //read_data_fromPi();              
    Serial.println("loop");
     if(pilot_switch < RC_sail || data_input_switch < Read_GUI_Data_Challenge_Finished )      // This needs more testing
       rc_sail(); 
@@ -813,19 +812,33 @@ void pi_sail() {
 
 }
 
-
-
+ 
 //***********************************************************************************************************************************
 
  void read_data_fromPi () {
-      int sheet_percentage;
-   if(Serial.available())  {                                                 
-        sheet_percentage = Serial.read();
-         Serial.println(sheet_percentage,BYTE);
-   }
-   delay(50);
 
-//       adjust_sheets(sheet_percentage);
+    #define INLENGTH 250
+   char inString[INLENGTH + 1] ;
+   int inCount; 
+
+   inCount = 0;
+ 
+   while(Serial.available() > 0)  {                                                 
+     inString[inCount++] = Serial.read();                                           
+     delay(2);   // Changed from 1 May 17, 2012 by JK.
+     
+   }
+ 
+   inString[inCount] = '\0';      
+     
+    if(inCount > 0)  
+     {
+      int sheet_percentage=atoi(inString);
+      Serial.println(sheet_percentage);
+      adjust_sheets(sheet_percentage);
+     }
+
+
  } 
 
 //***********************************************************************************************************************************
@@ -1192,7 +1205,6 @@ int resetWeather() {
 
 
 void adjust_sheets(int sheet_percent) {
-
        int altRcPercent;
        
        //altRcPercent = pow( sheet_percent,1.65) * 0.05 ;
