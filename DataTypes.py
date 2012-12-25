@@ -13,7 +13,7 @@ class GPSCoordinate:
 	def __init__(self):
 		print("Do Some Cool Stuff")
 
-class BoundInt:
+class BoundInt():
 	def __init__(self, target = 0, low=0, high=1):
 		self._value, self.lowerLimit, self.upperLimit = int(target), int(low), int(high)
 	
