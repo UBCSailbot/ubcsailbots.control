@@ -25,7 +25,6 @@ class BoundInt():
 		self._value = int(round(self._value))
 
 	def value(self):
-		self._balance()
 		return self._value
 
 	def set(self, target):
@@ -82,7 +81,7 @@ class Angle:
 		self._balance()
 
 	def add(self, target):
-		self._degree += target
+		self._degree += float(target)
 		self._balance()
 	
 	def _balance(self):
