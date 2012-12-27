@@ -16,6 +16,18 @@ class TestBoundInt(unittest.TestCase):
 		self.y.set(20)
 		self.assertEqual(self.y.value(), 10)
 
+	def test_changebounds(self):
+		self.y.setBound(0,10)
+		self.y.set(-10)
+		self.assertEqual(self.y.value(), 0)
+
+		self.y.setLowerBound(5)
+		self.assertEqual(self.y.value(), 5)
+
+		self.y.setUpperBound(8)
+		self.y.set(10)
+		self.assertEqual(self.y.value(), 8)
+
 if __name__ == '__main__':
 	unittest.main()
 

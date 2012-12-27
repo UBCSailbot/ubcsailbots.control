@@ -29,8 +29,18 @@ class BoundInt():
 		return self._value
 
 	def set(self, target):
-		self._value = target
+		self._value = int(target)
 		self._balance()
+
+	def setBound(self, low, high):
+		self.upperLimit = int(high)
+		self.lowerLimit = int(low)
+
+	def setLowerBound(self, low):
+		self.lowerLimit = int(low)
+
+	def setUpperBound(self, high):
+		self.upperLimit = int(high)
 
 	def __str__(self):
 		return str(self._value)
@@ -68,7 +78,7 @@ class Angle:
 		return math.radians(self._degree)
 
 	def set(self, target):
-		self._degree = target
+		self._degree = float(target)
 		self._balance()
 
 	def add(self, target):
