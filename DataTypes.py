@@ -25,7 +25,8 @@ class BoundInt():
 		self._value = int(round(self._value))
 
 	def value(self):
-		return self._value
+		self._balance()
+		return int(self._value)
 
 	def set(self, target):
 		self._value = int(target)
