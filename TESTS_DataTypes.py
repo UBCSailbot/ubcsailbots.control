@@ -28,6 +28,38 @@ class TestBoundInt(unittest.TestCase):
 		self.y.set(10)
 		self.assertEqual(self.y.value(), 8)
 
+class testAngle(unittest.TestCase):
+	def setUp(self):
+		default = Angle()
+		x = Angle(10)
+		y = Angle(-10)
+
+	def test_constructor
+		self.assertEqual()
+	#INFORMAL unit tests for Angle Class
+	#TODO: Formalize
+	print "Testing Angle Class"
+	x = Angle(0)
+	print x
+	x.set(370)
+	print x
+	x.add(10)
+	print x
+	x.set(-10)
+	print x
+	x.set(0)
+	x.add(-10)
+	print x
+	x.set(-370)
+	print x
+	x.set(0)
+	print str(x.radian())
+	x.set(180)
+	print str(x.radian())
+	x.set(360)
+	print str(x.radian())
+	print x
+
 if __name__ == '__main__':
 	unittest.main()
 

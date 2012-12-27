@@ -119,28 +119,4 @@ class Angle:
 
 
 if (__name__ == "__main__"):
-
-
-	#INFORMAL unit tests for Angle Class
-	#TODO: Formalize
-	print "Testing Angle Class"
-	x = Angle(0)
-	print x
-	x.set(370)
-	print x
-	x.add(10)
-	print x
-	x.set(-10)
-	print x
-	x.set(0)
-	x.add(-10)
-	print x
-	x.set(-370)
-	print x
-	x.set(0)
-	print str(x.radian())
-	x.set(180)
-	print str(x.radian())
-	x.set(360)
-	print str(x.radian())
-	print x
+	print "DataTypes.py"
