@@ -1,6 +1,7 @@
 #Unit Tests of DataTypes.py Module
 
 import unittest
+import math
 from DataTypes import *
 
 class TestBoundInt(unittest.TestCase):
@@ -30,60 +31,31 @@ class TestBoundInt(unittest.TestCase):
 
 class testAngle(unittest.TestCase):
 	def setUp(self):
-		default = Angle()
-		x = Angle(10)
-		y = Angle(-10)
+		self.default = Angle()
+		self.x = Angle(10)
+		self.y = Angle(-10)
 
-	def test_constructor
-		self.assertEqual()
-	#INFORMAL unit tests for Angle Class
-	#TODO: Formalize
-	print "Testing Angle Class"
-	x = Angle(0)
-	print x
-	x.set(370)
-	print x
-	x.add(10)
-	print x
-	x.set(-10)
-	print x
-	x.set(0)
-	x.add(-10)
-	print x
-	x.set(-370)
-	print x
-	x.set(0)
-	print str(x.radian())
-	x.set(180)
-	print str(x.radian())
-	x.set(360)
-	print str(x.radian())
-	print x
+	def test_constructor(self):
+		self.assertEqual(self.default.degrees(), 0)
+		self.assertEqual(self.x.degrees(), 10)
+		self.assertEqual(self.y.degrees(), 350)
+
+	def test_radianConversion(self):
+		self.assertEqual(self.default.radians(), math.radians(0))
+		self.assertEqual(self.x.radians(), math.radians(10))
+		self.assertEqual(self.y.radians(), math.radians(350))
+
+	def test_wraparound(self):
+		self.assertEqual(Angle(740).degrees(), 20)
+		self.assertEqual(Angle(-400).degrees(), 320)
+
+	def test_operators(self):
+		self.assertEqual((self.x + 20).degrees(), 30)
+		self.assertEqual((20 + self.x).degrees(), 30)
+		self.assertEqual((self.x + 360).degrees(), 10)
+		self.assertEqual((self.x - 360).degrees(), 10)
+
+
 
 if __name__ == '__main__':
 	unittest.main()
-
-
-
-			#What is the pythonic way to handle unit tests? Is there a 3rd party library ala JUnit or something we can use?
-	errorCount = 0
-	#INFORMAL unit tests for Bounded Value Class
-	#TODO: Formalize
-	print "Testing BoundInt Class:"
-	
-	#I think this way of handling unit tests is horrendous. -Sam
-	x = BoundInt()
-	print "x = " + str(x) + " == 0"
-	if (x.value() == 0):
-		print "Default Construction test Passed"
-	else:
-		errorCount += 1
-		print "Default Construction test Failed"
-
-	x.set(2)
-	print x
-	x = BoundInt(0,-10,10)
-	x.set(-20)
-	print x
-	x.set(20)
-	print x

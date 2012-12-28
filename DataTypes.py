@@ -1,7 +1,7 @@
 #DataTypes.py 
 #Data type module for UBC Sailbot 2013 Control Team
 #Initialy Created: Sam Coulter, Nov. 3rd 2012
-#Last Updated: November 29th
+#Last Updated: December 27th
 
 import math
 
@@ -67,14 +67,14 @@ class BoundInt():
 
 
 class Angle:
-	def __init__(self, target):
+	def __init__(self, target=0):
 		self._degree = float(target)
 		self._balance()
 
-	def degree(self):
+	def degrees(self):
 		return self._degree
 
-	def radian(self):
+	def radians(self):
 		return math.radians(self._degree)
 
 	def set(self, target):
@@ -112,6 +112,18 @@ class Angle:
 		return Angle(self._degree * float(other))
 
 	def __div__(self, other):
+		return Angle(self._degree / float(other))
+
+	def __radd__(self, other):
+		return Angle(self._degree + float(other))
+
+	def __rsub__(self, other):
+		return Angle(self._degree - float(other))
+
+	def __rmul__(self, other):
+		return Angle(self._degree * float(other))
+
+	def __rdiv__(self, other):
 		return Angle(self._degree / float(other))
 
 	def __pow__(self, power):
