@@ -6,7 +6,7 @@
 import math
 
 class Coordinate:
-	def __Init__(self):
+	def __init__(self):
 		print("Do some even Cooler stuff")
 
 class GPSCoordinate:
@@ -59,6 +59,18 @@ class BoundInt():
 		return self._value * other
 
 	def __div__(self, other):
+		return self._value / other
+
+	def __radd__(self, other):
+		return self._value + other
+
+	def __rsub__(self, other):
+		return self._value - other
+
+	def __rmul__(self, other):
+		return self._value * other
+
+	def __rdiv__(self, other):
 		return self._value / other
 
 	def __pow__(self, power):
