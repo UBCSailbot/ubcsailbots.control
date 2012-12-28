@@ -76,8 +76,6 @@ class BoundInt():
 	def __pow__(self, power):
 		return self._value**power
 
-
-
 class Angle:
 	def __init__(self, target=0):
 		self._degree = float(target)
