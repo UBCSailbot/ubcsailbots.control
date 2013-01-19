@@ -6,10 +6,19 @@
 import math
 
 class Coordinate:
+	#This class will be python representation of a coordinate
+	#ie: degree.minute.second
+	#the values of each should wrap around, and incrememnt eachother
+	#properly
 	def __init__(self):
 		print("Do some even Cooler stuff")
 
 class GPSCoordinate:
+	#This class will be a python representation of GPS coordinates
+	#ie with a latitude/longitude made up of "Coordinates"
+	#the class should support coordinate operations similar to vector
+	#operations, ie GPSCoord1 - GPSCoord2 = A direction and magnitude
+	#from one coordinate to the other.
 	def __init__(self):
 		print("Do Some Cool Stuff")
 
