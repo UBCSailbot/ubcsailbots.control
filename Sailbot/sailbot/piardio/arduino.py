@@ -39,6 +39,18 @@ def getRudderAngle():
 def getSailAngle():
     return datatypes.Angle()
 
+# calls adjust_sheets on arduino with sheet percentage
+def adjust_sheets(sheet_percent):                                                
+    ser = serial.Serial('/dev/ttyACM0', 56000)
+    wr = "ADJUST_SHEETS:{sp}".format(sp=sheet_percent)
+    ser.write(wr)
+    
+# calls steer on arduino with method and degree
+def steer(method, degree):
+    ser = serial.Serial('/dev/ttyACM0', 56000)
+    wr = "STEER:{m},{d}".format(m=method, d=degree)
+    ser.write(wr)
+    
 # returns the latest array of all info from the arduino
 def getFromArduino():
     # First parameter: serial port for the APM
