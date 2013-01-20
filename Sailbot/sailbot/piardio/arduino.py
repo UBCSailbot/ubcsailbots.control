@@ -15,7 +15,7 @@ from sailbot.datatype import datatypes
 # returns Heading Over Ground
 def getHOG():
     # Example
-    #     HOG = getLatestFromArduino()[0]
+    #     HOG = getFromArduino()[0]
     #     return datatypes.angle(HOG)
     return datatypes.Angle()
 
@@ -40,7 +40,7 @@ def getSailAngle():
     return datatypes.Angle()
 
 # returns the latest array of all info from the arduino
-def getLatestFromArduino():
+def getFromArduino():
     # First parameter: serial port for the APM
     #     * to get serial port for the APM, type ls /dev/tty* ont he pi
     # Second parameter: baud rate on APM

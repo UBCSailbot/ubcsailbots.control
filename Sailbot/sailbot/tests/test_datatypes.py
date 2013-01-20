@@ -2,12 +2,12 @@
 
 import unittest
 import math
-from DataTypes import *
+from sailbot.datatype import datatypes
 
 class TestBoundInt(unittest.TestCase):
 	def setUp(self):
-		self.x = BoundInt()
-		self.y = BoundInt(-20,-10,10)
+		self.x = datatypes.BoundInt()
+		self.y = datatypes.BoundInt(-20,-10,10)
 
 	def test_constructor(self):
 		self.assertEqual(self.x.value(), 0)
@@ -31,9 +31,9 @@ class TestBoundInt(unittest.TestCase):
 
 class testAngle(unittest.TestCase):
 	def setUp(self):
-		self.default = Angle()
-		self.x = Angle(10)
-		self.y = Angle(-10)
+		self.default = datatypes.Angle()
+		self.x = datatypes.Angle(10)
+		self.y = datatypes.Angle(-10)
 
 	def test_constructor(self):
 		self.assertEqual(self.default.degrees(), 0)
@@ -46,8 +46,8 @@ class testAngle(unittest.TestCase):
 		self.assertEqual(self.y.radians(), math.radians(350))
 
 	def test_wraparound(self):
-		self.assertEqual(Angle(740).degrees(), 20)
-		self.assertEqual(Angle(-400).degrees(), 320)
+		self.assertEqual(datatypes.Angle(740).degrees(), 20)
+		self.assertEqual(datatypes.Angle(-400).degrees(), 320)
 
 	def test_operators(self):
 		self.assertEqual((self.x + 20).degrees(), 30)
