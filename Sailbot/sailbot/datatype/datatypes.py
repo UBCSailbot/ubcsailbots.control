@@ -1,4 +1,4 @@
-#DataTypes.py 
+#datatypes.py 
 #Data type module for UBC Sailbot 2013 Control Team
 #Initialy Created: Sam Coulter, Nov. 3rd 2012
 #Last Updated: December 27th
