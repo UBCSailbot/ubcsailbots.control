@@ -6,6 +6,15 @@ Created on Jan 19, 2013
 
 from sailbot import Main
 
+hog_index=0
+cog_index=1
+awa_index=2
+gps_index=3
+rud_index=4
+sht_index=5
+
+
+
 # --- Round Buoy ---
 # Input: TODO
 # Output: TODO
