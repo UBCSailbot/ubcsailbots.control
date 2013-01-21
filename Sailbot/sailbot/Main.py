@@ -5,6 +5,14 @@ Created on Jan 19, 2013
 '''
 import sys
 
+currentData = []
+
+def getCurrentData():
+    return currentData
+
+def setCurrentData(CD):
+    currentData = CD
+    
 def main(argv=None):
     if argv is None:
         argv = sys.argv
