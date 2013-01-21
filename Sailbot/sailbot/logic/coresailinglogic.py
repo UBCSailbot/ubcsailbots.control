@@ -13,8 +13,6 @@ gps_index=3
 rud_index=4
 sht_index=5
 
-
-
 # --- Round Buoy ---
 # Input: TODO
 # Output: TODO
@@ -25,7 +23,12 @@ def round_buoy():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def point_to_point(Dest):
-    currentData = Main.getCurrentData();
+    currentData = Main.getCurrentData()
+    GPSCoord = currentData[gps_index]
+    appWindAng = currentData[awa_index]
+    cog = currentData[cog_index]
+    hog = currentData[hog_index]
+    
     return 0
 
 # --- Station Keeping ---
