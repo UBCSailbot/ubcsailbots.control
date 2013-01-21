@@ -37,7 +37,7 @@ def getRudderAngle():
 
 # returns Sheet Percentage
 def getSheetPercentage():
-    return datatypes.Angle()
+    return 0
 
 # calls adjust_sheets on arduino with sheet percentage
 def adjust_sheets(sheet_percent):                                                
