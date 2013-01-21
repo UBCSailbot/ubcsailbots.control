@@ -16,7 +16,7 @@ from sailbot.datatype import datatypes
 def getHOG():
     # Example
     #     HOG = getFromArduino()[0]
-    #     return datatypes.angle(HOG)
+    #     return datatypes.Angle(HOG)
     return datatypes.Angle()
 
 # returns Course Over Ground
