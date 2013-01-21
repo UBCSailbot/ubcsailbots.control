@@ -16,7 +16,7 @@ def round_buoy():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def point_to_point(Dest):
-    currentData = getCurrentData();
+    currentData = Main.getCurrentData();
     return 0
 
 # --- Station Keeping ---
