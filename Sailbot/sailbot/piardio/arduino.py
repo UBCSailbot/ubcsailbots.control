@@ -35,8 +35,8 @@ def getGPSCoordinate():
 def getRudderAngle():
     return datatypes.Angle()
 
-# returns Sail Angle
-def getSailAngle():
+# returns Sheet Percentage
+def getSheetPercentage():
     return datatypes.Angle()
 
 # calls adjust_sheets on arduino with sheet percentage
