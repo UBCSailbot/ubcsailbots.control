@@ -1,0 +1,4 @@
+apparentSheetSetting: percentage sheet setting for each 181 angles
+sheetSettings: percentage sheet setting for 8 ranges of vmg angles
+SOGarray: SOG values for each 181 angles
+tackRudderAngles: Rudder angles for tacking. Row is tack type and column is weather type
