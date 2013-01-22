@@ -5,6 +5,7 @@ Created on Jan 19, 2013
 '''
 
 from sailbot import Main
+from sailbot import parser
 
 hog_index=0
 cog_index=1
