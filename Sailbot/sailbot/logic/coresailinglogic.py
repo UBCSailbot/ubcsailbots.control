@@ -16,13 +16,13 @@ sht_index=5
 # --- Round Buoy ---
 # Input: TODO
 # Output: TODO
-def round_buoy():
+def roundBuoy():
     return 0
 
 # --- Point to Point ---
 # Input: Destination GPS Coordinate
 # Output: Nothing
-def point_to_point(Dest):
+def pointToPoint(Dest):
     currentData = Main.getCurrentData()
     GPSCoord = currentData[gps_index]
     appWindAng = currentData[awa_index]
@@ -34,5 +34,5 @@ def point_to_point(Dest):
 # --- Station Keeping ---
 # Input: TODO
 # Output: TODO
-def station_keeping():
+def stationKeep():
     return 0
