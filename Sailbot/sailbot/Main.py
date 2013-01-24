@@ -16,6 +16,7 @@ functionQueue = []
 queueParameters = []
 boundaries = []
 run = True
+auto = False
 currentProcess = None
 currentParams = None
 
@@ -64,6 +65,12 @@ def getCurrentProcess():
 def setCurrentProcess(proc):
     currentProcess = proc
     
+def getAuto():
+    return auto
+
+def setAuto(a):
+    auto = a
+    
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
@@ -74,7 +81,7 @@ def main(argv=None):
         currentData = arduino.getFromArduino()
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
-        if (len(functionQueue) > 0 and currentProcess is None):
+        if (len(functionQueue) > 0 and currentProcess is None and auto):
             currentProcess = functionQueue.pop(0)
             currentParams = queueParameters.pop(0)
             thread.start_new_thread(currentProcess, currentParams)
