@@ -15,6 +15,8 @@ gps_index=3
 rud_index=4
 sht_index=5
 
+end_flag=0
+
 # --- Round Buoy ---
 # Input: TODO
 # Output: TODO
@@ -25,11 +27,19 @@ def roundBuoy():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def pointToPoint(Dest):
-    currentData = glob.currentData
-    GPSCoord = currentData[gps_index]
-    appWindAng = currentData[awa_index]
-    cog = currentData[cog_index]
-    hog = currentData[hog_index]
+    while(end_flag == 0):
+        currentData = glob.currentData
+        GPSCoord = currentData[gps_index]
+        appWindAng = currentData[awa_index]
+        cog = currentData[cog_index]
+        hog = currentData[hog_index]
+        
+        while(GPSCoord != Dest):
+            
+        if(GPSCoord == Dest):
+            end_flag = 1
+        
+    
     
     return 0
 
