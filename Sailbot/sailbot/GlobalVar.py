@@ -16,11 +16,3 @@ run = True
 auto = False
 currentProcess = None
 currentParams = None
-
-# Constant names for challenges and logic
-NAVIGATION_CHALLENGE = "challenge.navigation"
-STATION_KEEPING_CHALLENGE = "challenge.stationkeeping"
-LONG_DISTANCE_CHALLENGE = "challenge.longdistance"
-POINT_TO_POINT = "logic.coresailinglogic.pointToPoint"
-STATION_KEEP = "logic.coresailinglogic.stationKeep"
-ROUND_BUOY = "logic.coresailinglogic.roundBuoy"

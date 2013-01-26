@@ -2,50 +2,37 @@
 Created on Jan 21, 2013
 
 @author: joshandrews
+
 '''
 
 from sailbot.datatype import datatypes
-import GlobalVar
+import sailbot.GlobalVar
+import sailbot.StaticVars
 
-# Main GUI Handler Function
+# GUI Handler Class
 #    * GUI can call any of these functions and rest will be taken care of
-
-# Run Navigation challenge
-# arg must be a tuple in format:
-#    TODO
-def navigationChallenge(arg):
-    GlobalVar.functionQueue.append(GlobalVar.NAVIGATION_CHALLENGE)
-
-# Run Station Keeping challenge
-# arg must be a tuple in format:
-#    TODO
-def stationKeepingChallenge(arg):
-    GlobalVar.functionQueue.append(GlobalVar.STATION_KEEPING_CHALLENGE)
-
-# Run Long Distance challenge
-# arg must be a tuple in format:
-#    TODO
-def longDistanceChallenge(arg):
-    GlobalVar.functionQueue.append(GlobalVar.LONG_DISTANCE_CHALLENGE)
-
-# Run Point to Point logic
-# arg must be a tuple in format:
-#    TODO
-def pointToPoint(arg):
-    GlobalVar.functionQueue.append(GlobalVar.POINT_TO_POINT)
-
-# Run Station Keep logic
-# arg must be a tuple in format:
-#    TODO
-def stationKeep(arg):
-    GlobalVar.functionQueue.append(GlobalVar.STATION_KEEP)
-
-# Run Round Buoy logic
-# arg must be a tuple in format:
-#    TODO
-def roundBuoy(arg):
-    GlobalVar.functionQueue.append(GlobalVar.ROUND_BUOY)
-
-def setBoundary(coordinate, radius):
-    #Boundary format: [<GPSCoordinate>, <radius(float)>]
-    GlobalVar.boundaries.append([coordinate, radius])
+class GuiHandler:
+    
+    # when the user sends new instructions
+    # the control code will update its instructions object
+    # When the remote control signals a switch to auto then the instructions are carried out
+    def setInstructions(self, instructionsData):
+        pass
+    
+    
+    # returns the  instructions object
+    def getInstructions(self):        #main.returninstructionsdataforgui
+        pass
+    
+    # returns all the telemetry data as an object
+    # ex. apparent wind, gps location, SOG, COG, heading, etc.
+    def getData(self):
+        pass
+    
+    
+    #returns a string of debug messages
+    def getDebugMessages(self):
+        #debug messages should be appended to a string buffer
+        #this buffer will be cleared every time this function is called
+        #a limit could be placed on the length of this buffer (ex. 100 lines)
+        pass

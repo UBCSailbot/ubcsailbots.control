@@ -41,7 +41,7 @@ def getSheetPercentage():
 
 # calls adjust_sheets on arduino with sheet percentage
 def adjust_sheets(sheet_percent):                                                
-    ser = serial.Serial('/dev/ttyACM0', 56000)
+    ser = serial.Serial('/dev/ttyACM0', 57600)
     # Format
     #    "ADJUST_SHEETS:<sheet_percent>"
     wr = "ADJUST_SHEETS:{sp}".format(sp=sheet_percent)
@@ -49,7 +49,7 @@ def adjust_sheets(sheet_percent):
     
 # calls steer on arduino with method and degree
 def steer(method, degree):
-    ser = serial.Serial('/dev/ttyACM0', 56000)
+    ser = serial.Serial('/dev/ttyACM0', 57600)
     # Format
     #    "STEER:<method>,<degree>"
     wr = "STEER:{m},{d}".format(m=method, d=degree)
@@ -60,7 +60,7 @@ def getFromArduino():
     # First parameter: serial port for the APM
     #     * to get serial port for the APM, type ls /dev/tty* ont he pi
     # Second parameter: baud rate on APM
-    ser = serial.Serial('/dev/ttyACM0', 56000)
+    ser = serial.Serial('/dev/ttyACM0', 57600)
     # Splits comma-separated string (ex-"1, 12, 123, 1234, 12345") into array
     ardArr = []
     # Waits for a response from the Arduino
