@@ -4,8 +4,9 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 
-from sailbot import Main
+import sailbot.GlobalVar as glob
 from sailbot import parser
+import sailbot.GlobalVar
 
 hog_index=0
 cog_index=1
@@ -24,7 +25,7 @@ def roundBuoy():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def pointToPoint(Dest):
-    currentData = Main.getCurrentData()
+    currentData = glob.currentData
     GPSCoord = currentData[gps_index]
     appWindAng = currentData[awa_index]
     cog = currentData[cog_index]
