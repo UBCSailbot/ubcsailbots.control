@@ -34,9 +34,10 @@ def pointToPoint(Dest):
         cog = currentData[cog_index]
         hog = currentData[hog_index]
         
-        while(GPSCoord != Dest):
+        if(GPSCoord.lat != Dest.lat || GPSCoord.long != Dest.long):
+                
             
-        if(GPSCoord == Dest):
+        else:
             end_flag = 1
         
     
