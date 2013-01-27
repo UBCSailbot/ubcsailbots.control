@@ -34,8 +34,8 @@ def pointToPoint(Dest):
         cog = currentData[cog_index]
         hog = currentData[hog_index]
         
-        if(GPSCoord.lat != Dest.lat || GPSCoord.long != Dest.long):
-                
+        if(GPSCoord.lat != Dest.lat or GPSCoord.long != Dest.long):
+            x = 1
             
         else:
             end_flag = 1
