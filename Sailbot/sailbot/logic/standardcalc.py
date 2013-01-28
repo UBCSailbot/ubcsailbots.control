@@ -4,7 +4,7 @@ Created on Jan 20, 2013
 @author: joshandrews
 '''
 import math
-from sailbot.datatype import datatypes
+import sailbot.datatype.datatypes as datatype
 
 def distBetweenTwoCoords(coord1, coord2):
     dLongRad = math.radians(coord1.long - coord2.long)
@@ -17,7 +17,7 @@ def distBetweenTwoCoords(coord1, coord2):
     return 6371.0*c #6371 is mean radius of earth in km
 
 def angleBetweenTwoCoords(sourceCoord, destCoord):
-    GPSCoord = datatypes.GPSCoordinate
+    GPSCoord = datatype.GPSCoordinate
     
     if(sourceCoord.lat > destCoord.lat):
         GPSCoord.lat = sourceCoord.lat
@@ -45,19 +45,19 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
     if(sourceCoord.lat < destCoord.lat):
         if(sourceCoord.long < destCoord.long):
             angle = -angle
-            return datatypes.Angle(angle)
+            return datatype.Angle(angle)
         elif(sourceCoord.long > destCoord.long):
-            return datatypes.Angle(angle)
+            return datatype.Angle(angle)
         else:
-            return datatypes.Angle(0)        
+            return datatype.Angle(0)        
     else:
         if(sourceCoord.long < destCoord.long):
             angle = -90-angle
-            return datatypes.Angle(angle)
+            return datatype.Angle(angle)
         elif(sourceCoord.long > destCoord.long):
             angle = 90+angle
-            return datatypes.Angle(angle)
+            return datatype.Angle(angle)
         else:
-            return datatypes.Angle(180)
+            return datatype.Angle(180)
             
             
