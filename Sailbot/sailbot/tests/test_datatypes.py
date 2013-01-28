@@ -38,16 +38,16 @@ class testAngle(unittest.TestCase):
 	def test_constructor(self):
 		self.assertEqual(self.default.degrees(), 0)
 		self.assertEqual(self.x.degrees(), 10)
-		self.assertEqual(self.y.degrees(), 350)
+		self.assertEqual(self.y.degrees(), -10)
 
 	def test_radianConversion(self):
 		self.assertEqual(self.default.radians(), math.radians(0))
 		self.assertEqual(self.x.radians(), math.radians(10))
-		self.assertEqual(self.y.radians(), math.radians(350))
+		self.assertEqual(self.y.radians(), math.radians(-10))
 
 	def test_wraparound(self):
 		self.assertEqual(datatype.Angle(740).degrees(), 20)
-		self.assertEqual(datatype.Angle(-400).degrees(), 320)
+		self.assertEqual(datatype.Angle(-400).degrees(), -40)
 
 	def test_operators(self):
 		self.assertEqual((self.x + 20).degrees(), 30)

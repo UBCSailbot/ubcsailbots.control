@@ -5,7 +5,7 @@ Created on Jan 19, 2013
 '''
 import sys
 import thread
-from piardio import arduino
+from piardio import arduino as ard
 import challenge
 import logic
 import GlobalVars as globvar
@@ -16,6 +16,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
+    arduino = ard()
     while (globvar.run):
         globvar.currentData = arduino.getFromArduino()
         # When the function queue has waiting calls, and there is no currently running process,

@@ -9,5 +9,6 @@
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/Users/joshandrews/Documents/ubcsailbots.control/Sailbot/sailbot/lib/pyserial-2.6-py2.6.egg</path>
+<path>/Users/joshandrews/Documents/ubcsailbots.control/Sailbot/sailbot/lib/mock-1.0.1.zip</path>
 </pydev_pathproperty>
 </pydev_project>
