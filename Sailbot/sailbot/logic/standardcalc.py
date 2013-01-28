@@ -42,7 +42,7 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
     distBtwnCoords = distBetweenTwoCoords(sourceCoord, destCoord)
     distSin = distBetweenTwoCoords(destCoord, GPSCoord)
     
-    angle = math.asin(distSin/distBtwnCoords)
+    angle = math.asin(distSin/distBtwnCoords)*180/math.pi
     
     if(sourceCoord.lat < destCoord.lat):
         if(sourceCoord.long < destCoord.long):

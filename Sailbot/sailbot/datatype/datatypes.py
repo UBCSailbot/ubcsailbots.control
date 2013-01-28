@@ -106,10 +106,10 @@ class Angle:
 		self._balance()
 	
 	def _balance(self):
-		while (self._degree < 0):
+		while (self._degree <= -180):
 			self._degree = self._degree + 360
-		if (self._degree >= 360):
-			self._degree = self._degree % 360
+		while (self._degree > 180):
+			self._degree = self._degree - 360
 
 	def __str__(self):
 		return str(self._degree)
