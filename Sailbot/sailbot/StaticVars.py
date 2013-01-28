@@ -22,3 +22,7 @@ GO_AROUND_STBD = "go_around_stbd"
 LD_START_FINISH = "ld_start_finish"
 LD_FIRST = "ld_first"
 LD_SECOND = "ld_second"
+
+# Navigation Challenge waypoint types
+
+# Station Keeping Challenge waypoint types
