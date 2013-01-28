@@ -15,7 +15,7 @@ def distBetweenTwoCoords(coord1, coord2):
     
     a = math.pow(math.sin(dLatRad/2),2) + math.cos(latRad1)*math.cos(latRad2)*math.pow(math.sin(dLongRad/2),2)
     c = 2*math.atan2(math.sqrt(a),math.sqrt(1-a))
-    return 6371.0*c*1000 #6371 is mean radius of earth in km
+    return 6378140*c #6371 is mean radius of earth in km
 
 #Returns the angle in degrees
 def angleBetweenTwoCoords(sourceCoord, destCoord):
@@ -30,10 +30,10 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
         GPSCoord.long = sourceCoord.long
     
     elif(sourceCoord.long < destCoord.long):
-        return -90
+        return 90
     
     elif(sourceCoord.long > destCoord.long):
-        return 90
+        return -90
     
     else:
         return None
@@ -46,18 +46,18 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
     
     if(sourceCoord.lat < destCoord.lat):
         if(sourceCoord.long < destCoord.long):
-            angle = -angle
             return datatype.Angle(angle)
         elif(sourceCoord.long > destCoord.long):
+            angle = -angle
             return datatype.Angle(angle)
         else:
             return datatype.Angle(0)        
     else:
         if(sourceCoord.long < destCoord.long):
-            angle = -90-angle
+            angle = 90+angle
             return datatype.Angle(angle)
         elif(sourceCoord.long > destCoord.long):
-            angle = 90+angle
+            angle = -90-angle
             return datatype.Angle(angle)
         else:
             return datatype.Angle(180)

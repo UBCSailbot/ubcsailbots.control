@@ -28,13 +28,17 @@ def roundBuoy():
 def pointToPoint(Dest):
     while(end_flag == 0):
         currentData = glob.currentData
+        
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
         hog = currentData[hog_index]
         
         if(GPSCoord.lat != Dest.lat or GPSCoord.long != Dest.long):
-            x = 1
+            #This if statement determines the sailing method we are going to use based on apparent wind angle
+            if( -34 < appWindAng and appWindAng < 34):
+                
+            else:
             
         else:
             end_flag = 1
