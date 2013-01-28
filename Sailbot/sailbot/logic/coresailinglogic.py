@@ -6,7 +6,6 @@ Created on Jan 19, 2013
 
 import sailbot.GlobalVar as glob
 from sailbot import parser
-import sailbot.GlobalVar
 
 hog_index=0
 cog_index=1

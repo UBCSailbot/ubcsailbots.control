@@ -5,7 +5,7 @@ Created on Jan 21, 2013
 
 '''
 
-from sailbot.datatype import datatypes
+import sailbot.datatype.datatypes as datatype
 import sailbot.GlobalVar
 import sailbot.StaticVars
 

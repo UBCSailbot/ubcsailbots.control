@@ -10,30 +10,30 @@ Format of return from Arduino:
 
 import serial
 import re
-from sailbot.datatype import datatypes
+import sailbot.datatype.datatypes as datatype
 
 # returns Heading Over Ground
 def getHOG():
     # Example
     #     HOG = getFromArduino()[0]
     #     return datatypes.Angle(HOG)
-    return datatypes.Angle()
+    return datatype.Angle()
 
 # returns Course Over Ground
 def getCOG():
-    return datatypes.Angle()
+    return datatype.Angle()
 
 # returns Apparent Wind Angle
 def getAWA():
-    return datatypes.Angle()
+    return datatype.Angle()
 
 # returns GPS coordinate
 def getGPSCoordinate(): 
-    return datatypes.GPSCoordinate()
+    return datatype.GPSCoordinate()
 
 # returns Rudder Angle
 def getRudderAngle():
-    return datatypes.Angle()
+    return datatype.Angle()
 
 # returns Sheet Percentage
 def getSheetPercentage():

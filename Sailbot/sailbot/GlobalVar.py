@@ -3,7 +3,6 @@ Created on Jan 26, 2013
 
 @author: joshandrews
 '''
-from sailbot.datatype import *
 
     
 # Array for all current data from arduino
