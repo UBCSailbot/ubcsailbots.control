@@ -24,6 +24,19 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
         self.angle1value = self.angle1.degrees()
         self.angle2value = self.angle2.degrees()
         
-    def testAngle1(self):        
+        self.source2 = datatypes.GPSCoordinate(0,0)
+        self.dest2 = datatypes.GPSCoordinate(1,1)
+        
+        self.angle3 = standardcalc.angleBetweenTwoCoords(self.source2, self.dest2)
+        self.angle4 = standardcalc.angleBetweenTwoCoords(self.dest2, self.source2)
+        
+        self.angle3value = self.angle3.degrees()
+        self.angle4value = self.angle4.degrees()
+        
+    def testAngleSet1(self):        
         self.assertEqual(self.angle1value, 0)
         self.assertEqual(self.angle2value, 180)
+        
+    def testAngleSet2(self):
+        self.assertEqual(round(self.angle3value,0), 45)
+        self.assertEqual(round(self.angle4value,0), -135)
