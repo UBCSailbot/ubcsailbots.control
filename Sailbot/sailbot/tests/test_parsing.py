@@ -2,7 +2,7 @@
 
 import unittest
 from sailbot.parser import parsing
-import os
+from os import path
 
 class TestParsing(unittest.TestCase):
 	def setUp(self):
@@ -11,7 +11,7 @@ class TestParsing(unittest.TestCase):
 		self.assertEqual(parsing.parse(""), None)
 		self.assertEqual(parsing.parse("fakeFile"), None)
 	def test_yesFile(self):
-		self.assertEqual(parsing.parse(os.path.abspath("test_file"))[1][1], 7)
+		self.assertEqual(parsing.parse(path.join(path.dirname(__file__), 'test_file'))[1][1], 7)
 
 if __name__ == '__main__':
 	unittest.main()
