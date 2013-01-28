@@ -30,10 +30,10 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
         GPSCoord.long = sourceCoord.long
     
     elif(sourceCoord.long < destCoord.long):
-        return -90
+        return 90
     
     elif(sourceCoord.long > destCoord.long):
-        return 90
+        return -90
     
     else:
         return None
@@ -46,18 +46,18 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
     
     if(sourceCoord.lat < destCoord.lat):
         if(sourceCoord.long < destCoord.long):
-            angle = -angle
             return datatype.Angle(angle)
         elif(sourceCoord.long > destCoord.long):
+            angle = -angle
             return datatype.Angle(angle)
         else:
             return datatype.Angle(0)        
     else:
         if(sourceCoord.long < destCoord.long):
-            angle = -90-angle
+            angle = 90+angle
             return datatype.Angle(angle)
         elif(sourceCoord.long > destCoord.long):
-            angle = 90+angle
+            angle = -90-angle
             return datatype.Angle(angle)
         else:
             return datatype.Angle(180)

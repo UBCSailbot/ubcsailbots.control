@@ -38,5 +38,5 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
         self.assertEqual(self.angle2value, 180)
         
     def testAngleSet2(self):
-        self.assertEqual(round(self.angle3value,0), -45)
-        self.assertEqual(round(self.angle4value,0), 135)
+        self.assertEqual(round(self.angle3value,0), 45)
+        self.assertEqual(round(self.angle4value,0), -135)
