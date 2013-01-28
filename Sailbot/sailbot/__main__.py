@@ -8,7 +8,7 @@ import thread
 from piardio import arduino
 import challenge
 import logic
-import GlobalVar
+import GlobalVars as globvar
 
 
 # Main - pass challenge or logic function name as argument
@@ -16,13 +16,13 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
-    while (GlobalVar.run):
-        GlobalVar.currentData = arduino.getFromArduino()
+    while (globvar.run):
+        globvar.currentData = arduino.getFromArduino()
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
-        if (len(GlobalVar.functionQueue) > 0 and GlobalVar.currentProcess is None and GlobalVar.auto):
-            currentProcess = GlobalVar.functionQueue.pop(0)
-            currentParams = GlobalVar.queueParameters.pop(0)
+        if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None and globvar.auto):
+            currentProcess = globvar.functionQueue.pop(0)
+            currentParams = globvar.queueParameters.pop(0)
             thread.start_new_thread(currentProcess, currentParams)
     
 

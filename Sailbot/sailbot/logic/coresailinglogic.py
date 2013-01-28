@@ -4,7 +4,7 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 
-import sailbot.GlobalVar as glob
+import sailbot.GlobalVars as glob
 from sailbot import parser
 
 hog_index=0

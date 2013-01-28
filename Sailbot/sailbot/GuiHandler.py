@@ -6,7 +6,7 @@ Created on Jan 21, 2013
 '''
 
 import sailbot.datatype.datatypes as datatype
-import sailbot.GlobalVar
+import sailbot.GlobalVars
 import sailbot.StaticVars
 
 # GUI Handler Class
