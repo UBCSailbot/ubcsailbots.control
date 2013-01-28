@@ -7,9 +7,10 @@ class TestParsing(unittest.TestCase):
 	def setUp(self):
 		self.fname = "test_file"
 	def test_noFile(self):
-		self.assertEqual(parse(""), None)
-		self.assertEqual(parse("fakeFile"), None)
+		self.assertEqual(parsing.parse(""), None)
+		self.assertEqual(parsing.parse("fakeFile"), None)
 	def test_yesFile(self):
-		self.assertEqual(parse("test_file")[1][1], 7)
+		self.assertEqual(parsing.parse("test_file")[1][1], 7)
+
 if __name__ == '__main__':
-    unittest.main()
+	unittest.main()
