@@ -19,8 +19,9 @@ class GPSCoordinate:
 	#the class should support coordinate operations similar to vector
 	#operations, ie GPSCoord1 - GPSCoord2 = A direction and magnitude
 	#from one coordinate to the other.
-	def __init__(self):
-		print("Do Some Cool Stuff")
+	def __init__(self, latitude = 0, longitude = 0):
+		self.lat = latitude
+		self.long = longitude
 
 class BoundInt():
 	def __init__(self, target = 0, low=0, high=1):
