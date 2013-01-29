@@ -11,7 +11,7 @@ class TestDistBetweenTwoCoords(unittest.TestCase):
         
     def testDist1(self):
         distance = standardcalc.distBetweenTwoCoords(self.point1, self.point2)
-        self.assertEqual(round(distance/1000,1), 157.2)
+        self.assertEqual(round(distance/1000,1), 157.4)
         
 class TestAngleBetweenTwoCoords(unittest.TestCase):
     def setUp(self):

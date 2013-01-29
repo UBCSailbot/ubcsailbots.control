@@ -19,10 +19,14 @@ class GPSCoordinate:
 	#the class should support coordinate operations similar to vector
 	#operations, ie GPSCoord1 - GPSCoord2 = A direction and magnitude
 	#from one coordinate to the other.
-	def __init__(self, latitude = 0, longitude = 0):
+	def __init__(self, latitude=0, longitude=0):
 		self.lat = latitude
 		self.long = longitude
+	
+	def __str__(self):
+		return str("{lat}, {long}".format(lat=self.lat, long=self.long))
 
+# Binds an int to a specific upper and lower bound
 class BoundInt():
 	def __init__(self, target = 0, low=0, high=1):
 		self._value, self.lowerLimit, self.upperLimit = int(target), int(low), int(high)
@@ -86,6 +90,7 @@ class BoundInt():
 	def __pow__(self, power):
 		return self._value**power
 
+# Instantiates angle between -180 and 180 degrees
 class Angle:
 	def __init__(self, target=0):
 		self._degree = float(target)
@@ -149,6 +154,25 @@ class Angle:
 	def __pow__(self, power):
 		return Angle(self._degree**float(power))
 
+# Instantiates a waypoint for interpretation by the control logic
+class Waypoint:
+	def __init__(self, coordinate, wtype=""):
+		self.coordinate = coordinate
+		self.wtype = wtype
+
+
+# Instantiates a circular boundary set by a GPS Coordinate and a radius
+class Boundary:
+	def __init__(self, coordinate, radius=0):
+		self.coordinate = coordinate
+		self.radius = radius
+
+# Instructions which contain all instructions passed from a GUI to the control logic
+class Instructions:
+	def __init__(self, challenge="", waypoints=[], boundaries=[]):
+		self.challenge = challenge
+		self.waypoints = waypoints
+		self.boundaries = boundaries
 
 if (__name__ == "__main__"):
 	print "DataTypes.py"

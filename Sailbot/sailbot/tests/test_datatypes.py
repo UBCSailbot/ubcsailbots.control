@@ -3,7 +3,19 @@
 import unittest
 import math
 import sailbot.datatype.datatypes as datatype
+import sailbot.StaticVars as sVars
 
+class TestGPSCoordinate(unittest.TestCase):
+	def setUp(self):
+		self.x = datatype.GPSCoordinate()
+		self.y = datatype.GPSCoordinate(42, -121)
+	
+	def testConstructor(self):
+		self.assertEqual(self.x.lat, 0)
+		self.assertEqual(self.x.long, 0)
+		self.assertEqual(self.y.lat, 42)
+		self.assertEqual(self.y.long, -121)
+		
 class TestBoundInt(unittest.TestCase):
 	def setUp(self):
 		self.x = datatype.BoundInt()
@@ -55,7 +67,44 @@ class testAngle(unittest.TestCase):
 		self.assertEqual((self.x + 360).degrees(), 10)
 		self.assertEqual((self.x - 360).degrees(), 10)
 
+class TestWaypoint(unittest.TestCase):
+	def setUp(self):
+		self.x = datatype.Waypoint(datatype.GPSCoordinate())
+		self.y = datatype.Waypoint(datatype.GPSCoordinate(42, -121), sVars.GO_TO)
+	
+	def testConstructor(self):
+		self.assertEqual(self.x.coordinate.lat, 0)
+		self.assertEqual(self.x.coordinate.long, 0)
+		self.assertEqual(self.x.wtype, "")
+		self.assertEqual(self.y.coordinate.lat, 42)
+		self.assertEqual(self.y.coordinate.long, -121)
+		self.assertEqual(self.y.wtype, sVars.GO_TO)
 
+class TestBoundary(unittest.TestCase):
+	def setUp(self):
+		self.x = datatype.Boundary(datatype.GPSCoordinate())
+		self.y = datatype.Boundary(datatype.GPSCoordinate(42, -121), 123.456)
+	
+	def testConstructor(self):
+		self.assertEqual(self.x.coordinate.lat, 0)
+		self.assertEqual(self.x.coordinate.long, 0)
+		self.assertEqual(self.x.radius, 0)
+		self.assertEqual(self.y.coordinate.lat, 42)
+		self.assertEqual(self.y.coordinate.long, -121)
+		self.assertEqual(self.y.radius, 123.456)
 
+class TestInstructions(unittest.TestCase):
+	def setUp(self):
+		self.x = datatype.Instructions()
+		self.y = datatype.Instructions(sVars.LONG_DISTANCE_CHALLENGE, [0, 1], [0, 1])
+	
+	def testConstructor(self):
+		self.assertEqual(self.x.challenge, "")
+		self.assertEqual(self.x.waypoints, [])
+		self.assertEqual(self.x.boundaries, [])
+		self.assertEqual(self.y.challenge, sVars.LONG_DISTANCE_CHALLENGE)
+		self.assertEqual(self.y.waypoints, [0, 1])
+		self.assertEqual(self.y.boundaries, [0, 1])
+		
 if __name__ == '__main__':
 	unittest.main()

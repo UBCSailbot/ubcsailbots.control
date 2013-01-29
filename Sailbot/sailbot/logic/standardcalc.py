@@ -6,6 +6,8 @@ Created on Jan 20, 2013
 import math
 import sailbot.datatype.datatypes as datatype
 
+EARTH_RADIUS = 6378140
+
 #Returns the distance in metres
 def distBetweenTwoCoords(coord1, coord2):
     dLongRad = math.radians(coord1.long - coord2.long)
@@ -15,7 +17,7 @@ def distBetweenTwoCoords(coord1, coord2):
     
     a = math.pow(math.sin(dLatRad/2),2) + math.cos(latRad1)*math.cos(latRad2)*math.pow(math.sin(dLongRad/2),2)
     c = 2*math.atan2(math.sqrt(a),math.sqrt(1-a))
-    return 6378140*c #6371 is mean radius of earth in km
+    return EARTH_RADIUS*c
 
 #Returns the angle in degrees
 def angleBetweenTwoCoords(sourceCoord, destCoord):
