@@ -24,8 +24,8 @@ LD_FIRST = "ld_first"
 LD_SECOND = "ld_second"
 
 # Navigation Challenge waypoint types
-# TODO
-
+NAV_FIRST = "nav_first"
+NAV_FINISH ="nav_finish"
 # Station Keeping Challenge waypoint types
 SK_TOP_LEFT = "sk_top_left"
 SK_TOP_RIGHT = "sk_top_right"
