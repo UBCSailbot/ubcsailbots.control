@@ -5,6 +5,8 @@ Created on Jan 26, 2013
 '''
 
     
+
+instructions = None
 # Array for all current data from arduino
 #    Format: TODO
 currentData = []

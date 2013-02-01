@@ -16,10 +16,16 @@ sht_index=5
 
 end_flag=0
 
-# --- Round Buoy ---
+# --- Round Buoy Port---
 # Input: TODO
 # Output: TODO
-def roundBuoy():
+def roundBuoyPort():
+    return 0
+
+# --- Round Buoy Stbd---
+# Input: TODO
+# Output: TODO
+def roundBuoyStbd():
     return 0
 
 # --- Point to Point ---
@@ -37,12 +43,12 @@ def pointToPoint(Dest):
         if(GPSCoord.lat != Dest.lat or GPSCoord.long != Dest.long):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if( -34 < appWindAng and appWindAng < 34):
-                
+                x = 1
             else:
+                x = 1
             
         else:
             end_flag = 1
-        
     
     
     return 0

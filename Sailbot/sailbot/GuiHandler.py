@@ -5,9 +5,10 @@ Created on Jan 21, 2013
 
 '''
 
-import sailbot.datatype.datatypes as datatype
-import sailbot.GlobalVars
-import sailbot.StaticVars
+import sailbot.GlobalVars as gVars
+import sailbot.StaticVars as sVars
+import sailbot.challenge as challenge
+import sailbot.logic.coresailinglogic as sl
 
 # GUI Handler Class
 #    * GUI can call any of these functions and rest will be taken care of
@@ -17,17 +18,33 @@ class GuiHandler:
     # the control code will update its instructions object
     # When the remote control signals a switch to auto then the instructions are carried out
     def setInstructions(self, instructionsData):
-        pass
-    
-    
+        # Stores current boundaries
+        gVars.boundaries = instructionsData.boundaries
+        gVars.instructions = instructionsData
+        # Stores function queue and parameter queue
+        if (instructionsData.challenge == 0):
+            for waypoint in instructionsData.waypoints:
+                gVars.functionQueue.append(getattr(sl, waypoint.wtype))
+                gVars.queueParameters.append(waypoint.coordinate)
+                
+        elif (instructionsData.challenge == sVars.NAVIGATION_CHALLENGE):
+            gVars.functionQueue.append(getattr(challenge.navigation, "run"))
+            gVars.queueParameters.append(tuple(instructionsData.waypoints))
+        elif (instructionsData.challenge == sVars.STATION_KEEPING_CHALLENGE):
+            gVars.functionQueue.append(getattr(challenge.stationkeeping, "run"))
+            gVars.functionQueue.append(getattr(challenge.stationkeeping, "run"))
+        elif (instructionsData.challenge == sVars.LONG_DISTANCE_CHALLENGE):
+            gVars.functionQueue.append(getattr(challenge.longdistance, "run"))
+            gVars.functionQueue.append(getattr(challenge.stationkeeping, "run"))
+            
     # returns the  instructions object
     def getInstructions(self):        #main.returninstructionsdataforgui
-        pass
+        return gVars.instructions
     
     # returns all the telemetry data as an object
     # ex. apparent wind, gps location, SOG, COG, heading, etc.
     def getData(self):
-        pass
+        return gVars.currentData
     
     
     #returns a string of debug messages

@@ -11,11 +11,11 @@ LONG_DISTANCE_CHALLENGE = "challenge.longdistance"
 
 # -- Logic Waypoint Types --
 # Point to Point waypoint types
-GO_TO = "goto"
+GO_TO = "pointToPoint"
 
 # Round Buoy waypoint types
-GO_AROUND_PORT = "go_around_port"
-GO_AROUND_STBD = "go_around_stbd"
+GO_AROUND_PORT = "roundBuoyPort"
+GO_AROUND_STBD = "roundBuoyStbd"
 
 # -- Challenge Waypoint types --
 # Long Distance Challenge waypoint types

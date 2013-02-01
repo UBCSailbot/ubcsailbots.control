@@ -25,6 +25,9 @@ class GPSCoordinate:
 	
 	def __str__(self):
 		return str("{lat}, {long}".format(lat=self.lat, long=self.long))
+	
+	def __eq__(self, other):
+		return (self.lat == other.lat and self.long == other.long)
 
 # Binds an int to a specific upper and lower bound
 class BoundInt():
