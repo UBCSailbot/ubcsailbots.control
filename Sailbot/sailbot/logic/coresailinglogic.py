@@ -5,7 +5,8 @@ Created on Jan 19, 2013
 '''
 
 import sailbot.GlobalVars as glob
-from sailbot import parser
+from sailbot.parser import parsing
+from os import path
 
 hog_index=0
 cog_index=1
@@ -32,6 +33,7 @@ def roundBuoyStbd():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def pointToPoint(Dest):
+    list = parsing.parse(sheetSettings.txt)
     while(end_flag == 0):
         currentData = glob.currentData
         
