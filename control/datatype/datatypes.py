@@ -162,6 +162,9 @@ class Waypoint:
 	def __init__(self, coordinate, wtype=""):
 		self.coordinate = coordinate
 		self.wtype = wtype
+	
+	def __eq__(self, other):
+		return (self.coordinate == other.coordinate and self.wtype == other.wtype)
 
 
 # Instantiates a circular boundary set by a GPS Coordinate and a radius
