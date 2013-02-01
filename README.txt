@@ -48,10 +48,15 @@ To run the project you must have the mock and serial libraries installed. To do 
 Core Sailing Logic & Standard Calc
 ==================================
 
-All sailing logic is in a module logic/coresailinglogic.  In that module you may call roundBuoyPort, roundBuoyStbd, and pointToPoint.  This logic relies on standard calculation methods which can be found inside of the module logic/standardcalc
+All sailing logic is in a module logic/coresailinglogic.  In that module you may call roundBuoyPort, roundBuoyStbd, and pointToPoint.  This logic relies on standard calculation methods which can be found inside of the module logic/standardcalc.  Any new helper methods which are not directly related toward a specific function may be put in logic/standardcalc.  All new sailing logic may be put in logic/coresailinglogic.
 
 Challenges
 ==========
 
 All challenges are in the package challenge.  You must import each challenge module individually to run it. To run a challenge, import the individual package and call {challenge}.run(params).
+
+Naming
+======
+
+All static variables are contained within the StaticVars module.  If you wish to add a new challenge, you must define its name inside of StaticVars.  Any new waypoint types must also be added to StaticVars.
 
