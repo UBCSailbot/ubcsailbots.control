@@ -33,7 +33,7 @@ def roundBuoyStbd():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def pointToPoint(Dest):
-    list = parsing.parse(sheetSettings.txt)
+    list = parsing.parse(parsing.parse(path.join(path.dirname(__file__), "sheetSettings")))
     while(end_flag == 0):
         currentData = glob.currentData
         
