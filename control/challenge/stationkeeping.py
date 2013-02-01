@@ -16,12 +16,12 @@ def stationKeepInit(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord):  
 
     if (northAngle < 90):
         #90 - northAngle
-        break
+        x=1
     elif (northAngle > 90):
         #northAngle - 90
-        break
+        x=1
     else:
         #northWayPnt = datatypes.GPSCoordinate(topLeftCoord.long+, t)
-        break
+        x=1
 def run():
     return 0
