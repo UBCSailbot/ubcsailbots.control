@@ -40,6 +40,7 @@ def pointToPoint(Dest):
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
+        
         hog = currentData[hog_index]
         
         if(GPSCoord.lat != Dest.lat or GPSCoord.long != Dest.long):
