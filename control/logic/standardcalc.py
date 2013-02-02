@@ -73,11 +73,11 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
         else:
             return datatype.Angle(180)
 
-'''def isWPNoGo (AWA, hog, dest, sog, GPS):
+def isWPNoGo (AWA, hog, dest, sog, GPS):
     if(sog<119):
         if(hog-AWA-45 < 90 - angleBetweenTwoCoords(GPS,dest).degrees() and 90 - angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
             return 1
         else:
             return 0
     else:
-                    '''
+                    
