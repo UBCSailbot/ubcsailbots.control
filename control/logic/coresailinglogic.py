@@ -41,6 +41,7 @@ def pointToPoint(Dest):
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
+        
         hog = currentData[hog_index]
         sog = currentData[sog_index]
         
