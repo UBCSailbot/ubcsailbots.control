@@ -10,10 +10,11 @@ from os import path
 
 hog_index=0
 cog_index=1
-awa_index=2
-gps_index=3
-rud_index=4
-sht_index=5
+sog_index=2
+awa_index=3
+gps_index=4
+rud_index=5
+sht_index=6
 
 end_flag=0
 
@@ -33,14 +34,16 @@ def roundBuoyStbd():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def pointToPoint(Dest):
-    list = parsing.parse(parsing.parse(path.join(path.dirname(__file__), "sheetSettings")))
+    list = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     while(end_flag == 0):
         currentData = glob.currentData
         
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
+        
         hog = currentData[hog_index]
+        sog = currentData[sog_index]
         
         if(GPSCoord.lat != Dest.lat or GPSCoord.long != Dest.long):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
