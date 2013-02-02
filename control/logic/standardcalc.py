@@ -84,14 +84,20 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
             return 0
     else:
         AWAindex = searchIndex(AWA, AWAList, 4)
+        return 0
         
 def searchIndex(number, list, numCol):
-    n = list.index(number)
-    if(n != None):
-        return math.floor(n/numCol)
-    else:
-        min=min(range(len(list)), key=lambda i: abs(list[i]-number))
-        return math.floor(min/numCol)
+    try:
+        n = list.index(number)
+    except ValueError:
+        if(n != None):
+            return math.floor(n/numCol)
+        else:
+            print 'hit else'
+            min=min(range(len(list)), key=lambda i: abs(list[i]-number))
+            return math.floor(min/numCol)
+        
+    return n
         
         
     

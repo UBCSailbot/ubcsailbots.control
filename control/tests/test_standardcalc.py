@@ -67,3 +67,15 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
     def testAngleSet2(self):
         self.assertEqual(round(self.angle3value,0), 45)
         self.assertEqual(round(self.angle4value,0), -135)
+        
+class TestSearchIndex(unittest.TestCase):
+    def setUp(self):
+        self.list1 = [0,1,2,3,10,15]
+        self.value1 = 2
+        self.value2 = 2.3
+        self.value3 = 20
+        
+    def testSearch1(self):
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.list1, 1), 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.list1, 1), 2)
+        self.assertEqual(standardcalc.searchIndex(self.value3, self.list1, 1), 5)
