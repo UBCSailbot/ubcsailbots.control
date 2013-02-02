@@ -4,17 +4,15 @@ Created on 2013-01-20
 @author: DG
 '''
 def parse(filepath):
-    index = 0
-    numlist = list()
+    numlist = list()   #list of values in file
     try:
-        with open(filepath,'r') as fo: pass
+        with open(filepath,'r') as fo: pass  # test if file can be opened, else pass error
     except IOError as e:
         return None
     
-    fo = open(filepath,'r')
+    fo = open(filepath,'r') 
     for line in fo:
-        nums = [int(n)for n in line.split()]
+        nums = [int(n)for n in line.split()]  #split by whitespace and append to numlist
         numlist.append(nums)
-        index+=1
         
     return numlist

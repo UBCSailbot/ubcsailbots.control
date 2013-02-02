@@ -8,6 +8,15 @@ import control.datatype.datatypes as datatype
 
 EARTH_RADIUS = 6378140
 
+#returns gpscoordinate distance in meters away from starting point.
+#positive yDist = North, positive xDist = East
+def GPSDistAway(coord, yDist, xDist):
+    result = datatype.GPSCoordinate()
+    result.long = coord.long + (180.0/math.pi)*(float(xDist)/EARTH_RADIUS)/math.cos(math.radians(coord.lat))
+    result.lat = coord.lat + (180.0/math.pi)*(float(yDist)/EARTH_RADIUS)
+    return result
+
+
 #Returns the distance in metres
 def distBetweenTwoCoords(coord1, coord2):
     dLongRad = math.radians(coord1.long - coord2.long)
@@ -64,11 +73,11 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
         else:
             return datatype.Angle(180)
 
-def isWPNoGo (AWA, hog, dest, sog, GPS):
+'''def isWPNoGo (AWA, hog, dest, sog, GPS):
     if(sog<119):
         if(hog-AWA-45 < 90 - angleBetweenTwoCoords(GPS,dest).degrees() and 90 - angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
             return 1
         else:
             return 0
     else:
-                    
+                    '''
