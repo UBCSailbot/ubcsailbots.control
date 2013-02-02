@@ -57,9 +57,3 @@ def pointToPoint(Dest):
     
     
     return 0
-
-# --- Station Keeping ---
-# Input: TODO
-# Output: TODO
-def stationKeep():
-    return 0
