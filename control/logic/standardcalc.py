@@ -5,6 +5,8 @@ Created on Jan 20, 2013
 '''
 import math
 import control.datatype.datatypes as datatype
+from control.parser import parsing
+from os import path
 
 EARTH_RADIUS = 6378140
 
@@ -65,10 +67,23 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
             return datatype.Angle(180)
 
 def isWPNoGo (AWA, hog, dest, sog, GPS):
+    AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA'))
     if(sog<119):
         if(hog-AWA-45 < 90 - angleBetweenTwoCoords(GPS,dest).degrees() and 90 - angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
             return 1
         else:
             return 0
     else:
+        AWAindex = searchIndex(AWA, AWAList, 4)
+        
+def searchIndex(number, list, numCol):
+    n = list.index(number)
+    if(n != None):
+        return math.floor(n/numCol)
+    else:
+        min=min(range(len(list)), key=lambda i: abs(list[i]-number))
+        return math.floor(min/numCol)
+        
+        
+    
                     
