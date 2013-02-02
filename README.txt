@@ -40,6 +40,25 @@ The important types to be used are:
 
 The GUI sends instructions to the GUIHandler which will parse the data and add function queues
 
+Angles
+======
+
+Angles are always between -180 and 180
+
+                  * ^ *                       
+               *    |    *                        
+             *      |      *                 
+            *       |       *                
+           *        |        *               
+           *    -   |   +    *              
+           *        |        *               
+            *       |       *                
+             *      |      *                  
+               *    |    *                    
+                  * | *                       
+            -180        +180                
+       
+
 Libraries
 ========
 
