@@ -9,14 +9,16 @@ from piardio import arduino as ard
 import challenge
 import logic
 import GlobalVars as globvar
-
+import logging
+from os import path
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
+    logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
     if argv is None:
         argv = sys.argv
     
-    arduino = ard()
+    arduino = ard.arduino()
     while (globvar.run):
         globvar.currentData = arduino.getFromArduino()
         # When the function queue has waiting calls, and there is no currently running process,

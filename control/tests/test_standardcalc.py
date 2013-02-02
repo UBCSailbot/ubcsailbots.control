@@ -1,9 +1,36 @@
 #Unit tests of standardcalc.py module
 
 import unittest
+import math
 from control.logic import standardcalc
 from control.datatype import datatypes
 
+class TestGPSDistAway(unittest.TestCase):
+    def setUp(self):
+        self.source = datatypes.GPSCoordinate(49.262330, -123.248148)
+        self.result1 = datatypes.GPSCoordinate(49.26322919993, -123.24677409844) #100m north, 100m east
+        self.result2 = datatypes.GPSCoordinate(49.26143080008, -123.24952185164) #100m south, 100m west
+        self.result3 = datatypes.GPSCoordinate(49.27132080213, -123.23440919997) #1km north, 1km east
+        self.result4 = datatypes.GPSCoordinate(49.25333758688, -123.26188680003) #1km south, 1km west
+    def testGPSCalc1(self):
+        self.test1 = standardcalc.GPSDistAway(self.source, 100, 100)
+        self.test2 = standardcalc.GPSDistAway(self.source, -100, -100)
+        self.assertEqual((math.fabs(self.result1.lat - self.test1.lat) <= 0.0001),1)
+        self.assertEqual((math.fabs(self.result1.long - self.test1.long) <= 0.0001),1)
+        self.assertEqual((math.fabs(self.result2.lat - self.test2.lat) <= 0.0001),1)
+        self.assertEqual((math.fabs(self.result2.long - self.test2.long) <= 0.0001),1)
+    def testGPSCalc2(self):
+        self.test3 = standardcalc.GPSDistAway(self.source, 1000, 1000)
+        self.test4 = standardcalc.GPSDistAway(self.source, -1000, -1000)
+        self.assertEqual((math.fabs(self.result3.lat - self.test3.lat) <= 0.0001),1)
+        self.assertEqual((math.fabs(self.result3.long - self.test3.long) <= 0.0001),1)
+        self.assertEqual((math.fabs(self.result4.lat - self.test4.lat) <= 0.0001),1)
+        self.assertEqual((math.fabs(self.result4.long - self.test4.long) <= 0.0001),1)
+    def testGPSCalc3(self):
+        self.test5 = standardcalc.GPSDistAway(self.source, 0, 0)
+        self.assertEqual(self.test5.lat, self.source.lat)
+        self.assertEqual(self.test5.long, self.source.long)
+        
 class TestDistBetweenTwoCoords(unittest.TestCase):
     def setUp(self):
         self.point1 = datatypes.GPSCoordinate(0,0)
