@@ -94,7 +94,6 @@ def searchIndex(number, list1, numCol):
         if(n != None):
             return math.floor(n/numCol)
         else:
-            print 'hit else'
             minList=min(range(len(list1)), key=lambda i: abs(list1[i]-number))
             return math.floor(minList/numCol)
         
