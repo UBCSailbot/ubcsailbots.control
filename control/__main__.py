@@ -6,6 +6,7 @@ Created on Jan 19, 2013
 import sys
 import thread
 from piardio import arduino as ard
+from piardio import mockarduino as mockard
 import challenge
 import logic
 import GlobalVars as globvar
@@ -15,12 +16,20 @@ from os import path
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
     logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    mock = True
     if argv is None:
         argv = sys.argv
+    else:
+        if (argv[1]):
+            mock = argv[1]
     
-    arduino = ard.arduino()
+    if (mock == False):        
+        arduino = ard.arduino()
+    else:
+        arduino = mockard.arduino()
     while (globvar.run):
         globvar.currentData = arduino.getFromArduino()
+        print (globvar.currentData)
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
         if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None and globvar.auto):
