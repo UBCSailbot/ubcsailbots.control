@@ -88,16 +88,11 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
         
 def searchIndex(number, list1, numCol):
     n = None
-    try:
-        n = list1.index(number)
-    except ValueError:
-        if(n != None):
-            return math.floor(n/numCol)
-        else:
-            minList=min(range(len(list1)), key=lambda i: abs(list1[i]-number))
-            return math.floor(minList/numCol)
-        
-    return n
+    
+    big_list = list1[0]+list1[1]+list1[2]+list1[3]
+    
+    return 0
+    
         
         
     
