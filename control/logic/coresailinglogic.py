@@ -10,6 +10,7 @@ from os import path
 from control.logic import standardcalc
 
 ACCEPTANCE_DISTANCE = 3
+AWA_THRESHOLD = 1
 
 hog_index=0
 cog_index=1
