@@ -7,7 +7,7 @@ import math
 import control.datatype.datatypes as datatype
 from control.parser import parsing
 from os import path
-from control.logic import coresailinglogic
+from control import StaticVars as sVars
 
 EARTH_RADIUS = 6378140
 
@@ -92,7 +92,7 @@ def searchIndex(number, list1):
     indcol_list = list()
     
     for n in big_list:
-        if( math.fabs(big_list[n]-number) <= coresailinglogic.AWA_THRESHOLD ):
+        if( math.fabs(big_list[n]-number) <=  sVars.AWA_THRESHOLD):
             index = n%181
             column = n%4
             small_list = [index,column]

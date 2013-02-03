@@ -8,9 +8,7 @@ import control.GlobalVars as glob
 from control.parser import parsing
 from os import path
 from control.logic import standardcalc
-
-ACCEPTANCE_DISTANCE = 3
-AWA_THRESHOLD = 1
+from control import StaticVars as sVars
 
 hog_index=0
 cog_index=1
@@ -49,7 +47,7 @@ def pointToPoint(Dest):
         hog = currentData[hog_index]
         sog = currentData[sog_index]
         
-        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > ACCEPTANCE_DISTANCE):
+        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if( -34 < appWindAng and appWindAng < 34):
                 x = 1
