@@ -1,7 +1,12 @@
 '''
 Created on Jan 26, 2013
 
-@author: joshandrews
+Static Variables for the control logic and GUI
+-   All static variables are contained within the StaticVars module.
+    If you wish to add a new challenge, you must define its name 
+    inside of StaticVars.  Any new Waypoint types must also be added 
+    to StaticVars.
+
 '''
 
 # Constant names for challenges and logic
