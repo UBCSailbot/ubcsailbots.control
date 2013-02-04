@@ -22,3 +22,7 @@ run = True
 auto = False
 currentProcess = None
 currentParams = None
+
+#Thresholds for sailing logic functions
+ACCEPTANCE_DISTANCE = 3
+AWA_THRESHOLD = 0.9

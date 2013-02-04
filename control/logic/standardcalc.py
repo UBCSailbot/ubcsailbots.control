@@ -7,7 +7,7 @@ import math
 import control.datatype.datatypes as datatype
 from control.parser import parsing
 from os import path
-from control.logic import coresailinglogic
+from control import GlobalVars as glob
 
 EARTH_RADIUS = 6378140
 
@@ -88,12 +88,16 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
         return 0
         
 def searchIndex(number, list1):
-    big_list = list1[0]+list1[1]+list1[2]+list1[3]
+    big_list = list()
     indcol_list = list()
     
-    for n in big_list:
-        if( math.fabs(big_list[n]-number) <= coresailinglogic.AWA_THRESHOLD ):
-            index = n%181
+    for i in range(len(list1)):
+        for j in range(len(list1[i])):
+            big_list.append(list1[i][j])    
+    
+    for n in range(len(big_list)):
+        if( math.fabs(big_list[n]-number) <= glob.AWA_THRESHOLD ):
+            index = math.floor(n/4)
             column = n%4
             small_list = [index,column]
             indcol_list.append(small_list)
