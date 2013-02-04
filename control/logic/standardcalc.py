@@ -7,7 +7,7 @@ import math
 import control.datatype.datatypes as datatype
 from control.parser import parsing
 from os import path
-from control import GlobalVars as glob
+from control import StaticVars as sVars
 
 EARTH_RADIUS = 6378140
 
@@ -96,7 +96,7 @@ def searchIndex(number, list1):
             big_list.append(list1[i][j])    
     
     for n in range(len(big_list)):
-        if( math.fabs(big_list[n]-number) <= glob.AWA_THRESHOLD ):
+        if( math.fabs(big_list[n]-number) <= sVars.AWA_THRESHOLD ):
             index = math.floor(n/4)
             column = n%4
             small_list = [index,column]

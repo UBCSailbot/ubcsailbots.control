@@ -36,3 +36,7 @@ SK_TOP_LEFT = "sk_top_left"
 SK_TOP_RIGHT = "sk_top_right"
 SK_BOTTOM_LEFT = "sk_bottom_left"
 SK_BOTTOM_RIGHT = "sk_bottom_right"
+
+# Thresholds for sailing logic functions
+ACCEPTANCE_DISTANCE = 3
+AWA_THRESHOLD = 0.9
