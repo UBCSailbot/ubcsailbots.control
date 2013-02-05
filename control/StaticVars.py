@@ -40,3 +40,9 @@ SK_BOTTOM_RIGHT = "sk_bottom_right"
 # Thresholds for sailing logic functions
 ACCEPTANCE_DISTANCE = 3
 AWA_THRESHOLD = 0.9
+
+# Methods for the Arduino Steer function
+
+ARD_STEER_COMPASS = "compass"
+ARD_STEER_COG = "cog"
+ARD_STEER_APPARENT_WIND = "apparent_wind"
