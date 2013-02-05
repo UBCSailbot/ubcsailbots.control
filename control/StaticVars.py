@@ -40,3 +40,4 @@ SK_BOTTOM_RIGHT = "sk_bottom_right"
 # Thresholds for sailing logic functions
 ACCEPTANCE_DISTANCE = 3     #The acceptable distance (how close the boat has to be to the waypoint before it accepts that it has reached its destination
 AWA_THRESHOLD = 0.9         #Since the table has non-realistic values for AWA, this allows the AWA lookup to be off slightly
+SPEED_AFFECTION_THRESHOLD = 119     #Speed threshold at which lower speeds are shown to note have a significant variation between AWA and TWA

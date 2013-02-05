@@ -76,16 +76,22 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
         else:
             return datatype.Angle(180)
 
+#Determines whether the waypoint can be reached with our current coordinates
+#Returns 1 if waypoint can't be reached
+#Returns 0 if waypoint can be reached
 def isWPNoGo (AWA, hog, dest, sog, GPS):
     AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA'))
-    if(sog<119):
-        if(hog-AWA-45 < 90 - angleBetweenTwoCoords(GPS,dest).degrees() and 90 - angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
+    if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+        if(hog-AWA-45 < angleBetweenTwoCoords(GPS,dest).degrees() and angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
             return 1
         else:
             return 0
     else:
         AWAindex = searchIndex(AWA, AWAList)
         return 0
+
+def getTrueWindAngle(awa, sog):
+    return 0
 
 #Only works with tables with 4 columns!!!!!        
 def searchIndex(number, list1):
