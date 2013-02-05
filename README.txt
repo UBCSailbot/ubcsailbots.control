@@ -1,6 +1,6 @@
-===========
-UBC Sailbot
-===========
+===================
+UBC Sailbot Control
+===================
 
 UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop which will continue to run until told otherwise by the GUI.
 
