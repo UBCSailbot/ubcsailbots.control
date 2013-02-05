@@ -86,7 +86,8 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
     else:
         AWAindex = searchIndex(AWA, AWAList)
         return 0
-        
+
+#Only works with tables with 4 columns!!!!!        
 def searchIndex(number, list1):
     big_list = list()
     indcol_list = list()
