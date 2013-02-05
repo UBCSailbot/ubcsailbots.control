@@ -27,11 +27,14 @@ def main(argv=None):
         arduino = ard.arduino()
     else:
         arduino = mockard.arduino()
+    i = 0
     while (globvar.run):
-        globvar.currentData = arduino.getFromArduino()
-        print (globvar.currentData)
+        if (i % 5000000 == 0):
+            print globvar.currentData
+            globvar.currentData = arduino.getFromArduino()
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
+        i += 1
         if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None and globvar.auto):
             currentProcess = globvar.functionQueue.pop(0)
             currentParams = globvar.queueParameters.pop(0)
