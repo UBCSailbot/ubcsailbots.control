@@ -23,35 +23,57 @@ rud_index=5
 sht_index=6
 EARTH_RADIUS = 6378140
 
+# Parameters which may be changed to affect how the simulation runs
+ALLOW_WIND_REVERSAL = False
+
+
 
 class arduino:
     def __init__(self):
+        
+        # Sets initial vectors and magnitudes for wind and boat
+        self.windStrength = round(random.uniform(1, 5), 0)
+        self.actualWindAngle = round(random.uniform(-179, 180), 2)
+        self.actualWindSpeed = round(random.uniform(3, 6), 2)*self.windStrength
+        self.idealBoatSpd = round(random.uniform(.5, 1), 2)*self.windStrength
+        
         # Instantiates an array of initial conditions which simulates putting a boat in the water.
-        self.windStrength = round(random.uniform(0, 4), 0)
-        self.boatSpd = round(random.uniform(.5, 1), 2)*self.windStrength
-        print(self.windStrength)
-        self.ardArray = [round(random.uniform(-179, 180), 2), round(random.uniform(-179, 180), 2), 0,
+        cog = round(random.uniform(-179, 180), 2)
+        hog = cog - round(random.uniform(-2, 2), 2)
+        self.ardArray = [hog, cog, 0,
                           round(random.uniform(-179, 180), 2), datatype.GPSCoordinate(49, -121), round(random.uniform(-89, 90), 2), 
                           round(random.uniform(0, 100), 2)]
         print(self.ardArray)
+        
     def getFromArduino(self):
         self._update()
         return self.ardArray
+    
     def adjust_sheets(self, sheet_percent):                                                
-        return
+        self.ardArray[sht_index] = sheet_percent
+        
     def steer(self, method, degree):
         return
+    
     def _update(self):
-        # Adjust these values to produce the most 'life-like' results
+        if (ALLOW_WIND_REVERSAL):
+            self.actualWindAngle += round(random.uniform(-.2, .1))
+        else:
+            self.actualWindAngle += round(random.uniform(-.1, .1), 2)
+            
+        self.actualWindSpeed += round(random.uniform(-.1, .1), 2)
         self.ardArray[hog_index] += random.uniform(-.5, .5)
         self.ardArray[cog_index] += round(random.uniform(-.5, .5), 2)
         
-        if (math.fabs(self.ardArray[sog_index]-self.boatSpd) < .2):
+        if (math.fabs(self.ardArray[sog_index]-self.idealBoatSpd) < .2):
             self.ardArray[sog_index] += round(random.uniform(-.1, .1), 2)
-            print(self.boatSpd)
+            print(self.idealBoatSpd)
             print(self.ardArray[sog_index])
-        else:
+            print("Hi, I'm a boat and I'm going the right speed!")
+        elif (self.ardArray[sog_index] < self.idealBoatSpd):
             self.ardArray[sog_index] += round(random.uniform(0, .1), 2)
+        elif (self.ardArray[sog_index] >= self.idealBoatSpd):
+            self.ardArray[sog_index] += round(random.uniform(-.1, 0), 2)
             
         self.ardArray[awa_index] += round(random.uniform(-.5, .5), 2)
         

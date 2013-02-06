@@ -29,7 +29,7 @@ def main(argv=None):
         arduino = mockard.arduino()
     i = 0
     while (globvar.run):
-        if (i % 5000000 == 0):
+        if (i % 500000 == 0):
             print globvar.currentData
             globvar.currentData = arduino.getFromArduino()
         # When the function queue has waiting calls, and there is no currently running process,
