@@ -33,7 +33,7 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     hog = currentData[hog_index] # Height over ground
     
     X = 14.6388 #Calculated
-    angleToNorth = sc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
+    angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
     
     if GPSCoord.long > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
         moveLong = math.cos(90 - abs(angleToNorth) - 90 - X) # - X movement 
