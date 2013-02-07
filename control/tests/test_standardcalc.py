@@ -1,9 +1,36 @@
 #Unit tests of standardcalc.py module
 
 import unittest
+import math
 from control.logic import standardcalc
 from control.datatype import datatypes
 
+class TestGPSDistAway(unittest.TestCase):
+    def setUp(self):
+        self.source = datatypes.GPSCoordinate(49.262330, -123.248148)
+        self.result1 = datatypes.GPSCoordinate(49.26322919993, -123.24677409844) #100m north, 100m east
+        self.result2 = datatypes.GPSCoordinate(49.26143080008, -123.24952185164) #100m south, 100m west
+        self.result3 = datatypes.GPSCoordinate(49.27132080213, -123.23440919997) #1km north, 1km east
+        self.result4 = datatypes.GPSCoordinate(49.25333758688, -123.26188680003) #1km south, 1km west
+    def testGPSCalc1(self):
+        self.test1 = standardcalc.GPSDistAway(self.source, 100, 100)
+        self.test2 = standardcalc.GPSDistAway(self.source, -100, -100)
+        self.assertEqual((math.fabs(self.result1.lat - self.test1.lat) <= 0.00004),1)
+        self.assertEqual((math.fabs(self.result1.long - self.test1.long) <= 0.00004),1)
+        self.assertEqual((math.fabs(self.result2.lat - self.test2.lat) <= 0.00004),1)
+        self.assertEqual((math.fabs(self.result2.long - self.test2.long) <= 0.00004),1)
+    def testGPSCalc2(self):
+        self.test3 = standardcalc.GPSDistAway(self.source, 1000, 1000)
+        self.test4 = standardcalc.GPSDistAway(self.source, -1000, -1000)
+        self.assertEqual((math.fabs(self.result3.lat - self.test3.lat) <= 0.00004),1)
+        self.assertEqual((math.fabs(self.result3.long - self.test3.long) <= 0.00004),1)
+        self.assertEqual((math.fabs(self.result4.lat - self.test4.lat) <= 0.00004),1)
+        self.assertEqual((math.fabs(self.result4.long - self.test4.long) <= 0.00004),1)
+    def testGPSCalc3(self):
+        self.test5 = standardcalc.GPSDistAway(self.source, 0, 0)
+        self.assertEqual(self.test5.lat, self.source.lat)
+        self.assertEqual(self.test5.long, self.source.long)
+        
 class TestDistBetweenTwoCoords(unittest.TestCase):
     def setUp(self):
         self.point1 = datatypes.GPSCoordinate(0,0)
@@ -40,3 +67,27 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
     def testAngleSet2(self):
         self.assertEqual(round(self.angle3value,0), 45)
         self.assertEqual(round(self.angle4value,0), -135)
+        
+class TestSearchIndex(unittest.TestCase):
+    def setUp(self):
+        self.list1 = [0,1,2,3]
+        self.list2 = [0,1,2,3]
+        self.big_list = list()
+        self.big_list = [self.list1,self.list2]
+        self.value1 = 2
+        self.value2 = 2.3
+        self.value3 = 20
+        
+    def testSearch1(self):
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[1][0], 1)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[1][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[1][0], 0)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[1][1], 3)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[2][0], 1)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[2][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[3][0], 1)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[3][1], 3)

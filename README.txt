@@ -1,6 +1,6 @@
-===========
-UBC Sailbot
-===========
+===================
+UBC Sailbot Control
+===================
 
 UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop which will continue to run until told otherwise by the GUI.
 
@@ -39,6 +39,25 @@ The important types to be used are:
 * GPS Coordinate
 
 The GUI sends instructions to the GUIHandler which will parse the data and add function queues
+
+Angles
+======
+
+Angles are always between -180 and 180
+
+                  * ^ *                       
+               *    |    *                        
+             *      |      *                 
+            *       |       *                
+           *        |        *               
+           *    -   |   +    *              
+           *        |        *               
+            *       |       *                
+             *      |      *                  
+               *    |    *                    
+                  * | *                       
+            -180        +180                
+       
 
 Libraries
 ========

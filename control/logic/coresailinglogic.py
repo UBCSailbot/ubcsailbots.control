@@ -8,14 +8,16 @@ import control.GlobalVars as glob
 import math
 from control.parser import parsing
 from os import path
-from control.logic import standardcalc as sc
+from control.logic import standardcalc
+from control import StaticVars as sVars
 
 hog_index=0
 cog_index=1
-awa_index=2
-gps_index=3
-rud_index=4
-sht_index=5
+sog_index=2
+awa_index=3
+gps_index=4
+rud_index=5
+sht_index=6
 
 end_flag=0
 
@@ -50,7 +52,7 @@ def roundBuoyStbd():
 # Input: Destination GPS Coordinate
 # Output: Nothing
 def pointToPoint(Dest):
-    list = parsing.parse(parsing.parse(path.join(path.dirname(__file__), "sheetSettings")))
+    list = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     while(end_flag == 0):
         currentData = glob.currentData
         
@@ -58,8 +60,9 @@ def pointToPoint(Dest):
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
         hog = currentData[hog_index]
+        sog = currentData[sog_index]
         
-        if(GPSCoord.lat != Dest.lat or GPSCoord.long != Dest.long):
+        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if( -34 < appWindAng and appWindAng < 34):
                 x = 1
@@ -70,10 +73,4 @@ def pointToPoint(Dest):
             end_flag = 1
     
     
-    return 0
-
-# --- Station Keeping ---
-# Input: TODO
-# Output: TODO
-def stationKeep():
     return 0

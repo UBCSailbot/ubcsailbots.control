@@ -1,8 +1,11 @@
 '''
 Created on Jan 21, 2013
 
-@author: joshandrews
+GUI Handler for the control logic
+-   The GUI sends instructions to the GUIHandler which 
+    will parse the data and add function queues.
 
+@author: joshandrews
 '''
 
 import control.GlobalVars as gVars

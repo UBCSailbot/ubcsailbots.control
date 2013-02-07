@@ -42,14 +42,6 @@ class arduino:
     def getSheetPercentage(self):
         return 0
     
-    # calls adjust_rudder on arduino with rudder percentage
-    def adjust_rudder(self, rudder_percent):
-        ser = serial.Serial(SERIAL_PORT, BAUD)
-        # Format
-        #    "ADJUST_RUDDER:<rudder_percent>"
-        wr = "ADJUST_RUDDER:{rp}".format(rp=rudder_percent)
-        ser.write(wr)
-    
     # calls adjust_sheets on arduino with sheet percentage
     def adjust_sheets(self, sheet_percent):                                                
         ser = serial.Serial(SERIAL_PORT, BAUD)
