@@ -65,18 +65,15 @@ class arduino:
         self.ardArray[hog_index] += random.uniform(-.5, .5)
         self.ardArray[cog_index] += round(random.uniform(-.5, .5), 2)
         
+        # Gets the boat up to speed and allows for a little variation
         if (math.fabs(self.ardArray[sog_index]-self.idealBoatSpd) < .2):
             self.ardArray[sog_index] += round(random.uniform(-.1, .1), 2)
-            print(self.idealBoatSpd)
-            print(self.ardArray[sog_index])
-            print("Hi, I'm a boat and I'm going the right speed!")
         elif (self.ardArray[sog_index] < self.idealBoatSpd):
             self.ardArray[sog_index] += round(random.uniform(0, .1), 2)
         elif (self.ardArray[sog_index] >= self.idealBoatSpd):
             self.ardArray[sog_index] += round(random.uniform(-.1, 0), 2)
             
         self.ardArray[awa_index] += round(random.uniform(-.5, .5), 2)
-        
         # Calculation for change in GPS Coordinate
         lon = self.ardArray[gps_index].long
         lat = self.ardArray[gps_index].lat
@@ -86,8 +83,8 @@ class arduino:
         x = EARTH_RADIUS * math.cos(lat) * math.cos(lon)
         y = EARTH_RADIUS * math.cos(lat) * math.sin(lon)
         z = EARTH_RADIUS * math.sin(lat)
-        vlon = (-1*vx* math.sin(lon) + vy* math.cos(lon))/1000
-        vlat = (vx *math.cos(lon)* math.cos(lat) + vy* math.sin(lon) * math.cos(lat) - vz * math.sin(lat))/1000
+        vlon = (-1*vx* math.sin(lon) + vy* math.cos(lon))/50000
+        vlat = (vx *math.cos(lon)* math.cos(lat) + vy* math.sin(lon) * math.cos(lat) - vz * math.sin(lat))/50000
         
         self.ardArray[gps_index].lat += vlat
         self.ardArray[gps_index].long += vlon
