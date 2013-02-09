@@ -77,6 +77,8 @@ class arduino:
         # Calculation for change in GPS Coordinate
         lon = self.ardArray[gps_index].long
         lat = self.ardArray[gps_index].lat
+        
+        self.ardArray[hog_index] = 45
         vx = self.ardArray[sog_index] * math.cos(self.ardArray[hog_index])
         vy = self.ardArray[sog_index] * math.sin(self.ardArray[hog_index])
         vz = 0
