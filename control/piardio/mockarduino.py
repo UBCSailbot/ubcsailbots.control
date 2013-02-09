@@ -85,6 +85,8 @@ class arduino:
         elif (self.ardArray[sog_index] >= self.idealBoatSpd):
             self.ardArray[sog_index] += round(random.uniform(-.1, 0), 2)
         
+        
+        # Sets the apparent wind angle using vectors/magnitudes
         if (self.ardArray[hog_index] < 0):
             boat_bearing = 360 + self.ardArray[hog_index]
         else:
@@ -114,8 +116,8 @@ class arduino:
         if (awa > 180):
             awa = awa - 360
         self.ardArray[awa_index] = awa
-        # Calculation for change in GPS Coordinate
         
+        # Calculation for change in GPS Coordinate
         heading = self.ardArray[hog_index]
         
         if (heading < 0):
