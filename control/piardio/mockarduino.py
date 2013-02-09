@@ -75,18 +75,22 @@ class arduino:
             
         self.ardArray[awa_index] += round(random.uniform(-.5, .5), 2)
         # Calculation for change in GPS Coordinate
-        lon = self.ardArray[gps_index].long
-        lat = self.ardArray[gps_index].lat
         
-        self.ardArray[hog_index] = 45
-        vx = self.ardArray[sog_index] * math.cos(self.ardArray[hog_index])
-        vy = self.ardArray[sog_index] * math.sin(self.ardArray[hog_index])
-        vz = 0
-        x = EARTH_RADIUS * math.cos(lat) * math.cos(lon)
-        y = EARTH_RADIUS * math.cos(lat) * math.sin(lon)
-        z = EARTH_RADIUS * math.sin(lat)
-        vlon = (-1*vx* math.sin(lon) + vy* math.cos(lon))/50000
-        vlat = (vx *math.cos(lon)* math.cos(lat) + vy* math.sin(lon) * math.cos(lat) - vz * math.sin(lat))/50000
+        heading = self.ardArray[hog_index]
         
-        self.ardArray[gps_index].lat += vlat
-        self.ardArray[gps_index].long += vlon
+        if (heading < 0):
+            heading = 360 + heading
+        
+        lon0 = self.ardArray[gps_index].long
+        lat0 = self.ardArray[gps_index].lat
+        heading = self.ardArray[hog_index]
+        speed = self.ardArray[sog_index]
+        
+        x = speed * math.sin(heading*math.pi/180) * 1.5
+        y = speed * math.cos(heading*math.pi/180) * 1.5
+        
+        lat = lat0 + 180 / math.pi * y / EARTH_RADIUS;
+        lon = lon0 + 180 / math.pi / math.sin(lat0*math.pi/180) * x / EARTH_RADIUS;
+        
+        self.ardArray[gps_index].lat = lat
+        self.ardArray[gps_index].long = lon
