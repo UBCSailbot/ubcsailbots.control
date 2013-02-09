@@ -25,7 +25,7 @@ EARTH_RADIUS = 6378140
 
 # Parameters which may be changed to affect how the simulation runs
 ALLOW_WIND_REVERSAL = False
-
+STRONG_CURRENT = False
 
 
 class arduino:
@@ -36,7 +36,12 @@ class arduino:
         self.actualWindAngle = round(random.uniform(-179, 180), 2)
         self.actualWindSpeed = round(random.uniform(3, 6), 2)*self.windStrength
         self.idealBoatSpd = round(random.uniform(.5, 1), 2)*self.windStrength
+        if (STRONG_CURRENT):
+            self.currplusmin = round(random.uniform(-4, 4), 2)
+        else:
+            self.currplusmin = round(random.uniform(-1, 1), 2)
         
+        print(self.currplusmin)  
         # Instantiates an array of initial conditions which simulates putting a boat in the water.
         cog = round(random.uniform(-179, 180), 2)
         hog = cog - round(random.uniform(-2, 2), 2)
@@ -53,18 +58,25 @@ class arduino:
         self.ardArray[sht_index] = sheet_percent
         
     def steer(self, method, degree):
-        return
+        self.ardArray[hog_index] = degree
     
     def _update(self):
         if (ALLOW_WIND_REVERSAL):
-            self.actualWindAngle += round(random.uniform(-.2, .1))
+            self.actualWindAngle += random.uniform(-.2, .1)
         else:
-            self.actualWindAngle += round(random.uniform(-.1, .1), 2)
-            
-        self.actualWindSpeed += round(random.uniform(-.1, .1), 2)
-        self.ardArray[hog_index] += random.uniform(-.5, .5)
-        self.ardArray[cog_index] += round(random.uniform(-.5, .5), 2)
+            self.actualWindAngle += random.uniform(-.1, .1)
         
+        
+        self.ardArray[hog_index] += round(random.uniform(-.1, .1), 2)
+
+        if (math.fabs(self.ardArray[cog_index]+self.currplusmin-self.ardArray[hog_index]) < .4):
+            self.ardArray[cog_index] += round(random.uniform(-.1, .1), 2)
+        elif (self.ardArray[cog_index]+self.currplusmin < self.ardArray[hog_index]):
+            self.ardArray[cog_index] += round(random.uniform(0, .2), 2)
+        elif (self.ardArray[cog_index]+self.currplusmin > self.ardArray[hog_index]):
+            self.ardArray[cog_index] += round(random.uniform(-.2, 0), 2)
+        
+                
         # Gets the boat up to speed and allows for a little variation
         if (math.fabs(self.ardArray[sog_index]-self.idealBoatSpd) < .2):
             self.ardArray[sog_index] += round(random.uniform(-.1, .1), 2)
@@ -72,8 +84,36 @@ class arduino:
             self.ardArray[sog_index] += round(random.uniform(0, .1), 2)
         elif (self.ardArray[sog_index] >= self.idealBoatSpd):
             self.ardArray[sog_index] += round(random.uniform(-.1, 0), 2)
-            
-        self.ardArray[awa_index] += round(random.uniform(-.5, .5), 2)
+        
+        if (self.ardArray[hog_index] < 0):
+            boat_bearing = 360 + self.ardArray[hog_index]
+        else:
+            boat_bearing = self.ardArray[hog_index]
+        boat_speed = self.ardArray[sog_index]
+        if (self.actualWindAngle < 0):
+            wind_bearing = 360 + self.actualWindAngle
+        else:
+            wind_bearing = self.actualWindAngle
+        
+        boat_bearing = boat_bearing - 180
+        if (boat_bearing < 0):
+            boat_bearing = 360 + boat_bearing
+             
+        wind_speed = self.actualWindSpeed
+        
+        boat_x = boat_speed * math.cos(boat_bearing)
+        boat_y = boat_speed * math.sin(boat_bearing)
+        wind_x = wind_speed * math.cos(wind_bearing)
+        wind_y = wind_speed * math.sin(wind_bearing)
+        
+        x = boat_x + wind_x
+        y = boat_y + wind_y
+        
+        awa = math.atan(x/y)
+        awa = awa * 180/math.pi
+        if (awa > 180):
+            awa = awa - 360
+        self.ardArray[awa_index] = awa
         # Calculation for change in GPS Coordinate
         
         heading = self.ardArray[hog_index]

@@ -29,6 +29,9 @@ def main(argv=None):
         arduino = mockard.arduino()
     i = 0
     while (globvar.run):
+        if ( i == 10000000):
+            print ("steer at 80")
+            arduino.steer("asdf", 80)
         if (i % 500000 == 0):
             print globvar.currentData
             globvar.currentData = arduino.getFromArduino()
