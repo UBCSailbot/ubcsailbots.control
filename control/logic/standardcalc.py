@@ -7,6 +7,7 @@ import math
 import control.datatype.datatypes as datatype
 from control.parser import parsing
 from os import path
+from control import StaticVars as sVars
 
 EARTH_RADIUS = 6378140
 
@@ -75,29 +76,41 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
         else:
             return datatype.Angle(180)
 
+#Determines whether the waypoint can be reached with our current coordinates
+#Returns 1 if waypoint can't be reached
+#Returns 0 if waypoint can be reached
 def isWPNoGo (AWA, hog, dest, sog, GPS):
     AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA'))
-    if(sog<119):
-        if(hog-AWA-45 < 90 - angleBetweenTwoCoords(GPS,dest).degrees() and 90 - angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
+    if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+        if(hog-AWA-45 < angleBetweenTwoCoords(GPS,dest).degrees() and angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
             return 1
         else:
             return 0
     else:
-        AWAindex = searchIndex(AWA, AWAList, 4)
+        AWAindex = searchIndex(AWA, AWAList)
         return 0
-        
-def searchIndex(number, list1, numCol):
-    n = None
-    try:
-        n = list1.index(number)
-    except ValueError:
-        if(n != None):
-            return math.floor(n/numCol)
-        else:
-            minList=min(range(len(list1)), key=lambda i: abs(list1[i]-number))
-            return math.floor(minList/numCol)
-        
-    return n
+
+def getTrueWindAngle(awa, sog):
+    return 0
+
+#Only works with tables with 4 columns!!!!!        
+def searchIndex(number, list1):
+    big_list = list()
+    indcol_list = list()
+    
+    for i in range(len(list1)):
+        for j in range(len(list1[i])):
+            big_list.append(list1[i][j])    
+    
+    for n in range(len(big_list)):
+        if( math.fabs(big_list[n]-number) <= sVars.AWA_THRESHOLD ):
+            index = math.floor(n/4)
+            column = n%4
+            small_list = [index,column]
+            indcol_list.append(small_list)
+            
+    return indcol_list
+    
         
         
     

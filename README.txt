@@ -1,6 +1,6 @@
-===========
-UBC Sailbot
-===========
+===================
+UBC Sailbot Control
+===================
 
 UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop which will continue to run until told otherwise by the GUI.
 
@@ -79,3 +79,8 @@ Naming
 
 All static variables are contained within the StaticVars module.  If you wish to add a new challenge, you must define its name inside of StaticVars.  Any new waypoint types must also be added to StaticVars.
 
+
+Mock Arduino
+============
+
+Mocks an arduino class which should feed back information as if the boat was in the water.  Use this class to test code in a simulation mode.  There are parameters which can be explicitly set in the class to test implementation code in different ways.

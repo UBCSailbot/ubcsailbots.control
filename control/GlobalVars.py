@@ -1,7 +1,12 @@
 '''
 Created on Jan 26, 2013
 
-@author: joshandrews
+Global Variables for the control logic
+-   All variables set by main in the control logic are stored in the
+    global variable class.  Global variables can be accessed from other
+    classes, however, they should not be set outside of main and the GUI
+    Handler.
+
 '''
 
     

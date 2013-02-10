@@ -22,6 +22,9 @@ class GPSCoordinate:
 	def __init__(self, latitude=0, longitude=0):
 		self.lat = latitude
 		self.long = longitude
+		
+	def __repr__(self):
+		return str("{lat}, {long}".format(lat=self.lat, long=self.long))
 	
 	def __str__(self):
 		return str("{lat}, {long}".format(lat=self.lat, long=self.long))

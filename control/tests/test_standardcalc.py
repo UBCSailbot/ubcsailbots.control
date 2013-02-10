@@ -70,12 +70,24 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
         
 class TestSearchIndex(unittest.TestCase):
     def setUp(self):
-        self.list1 = [0,1,2,3,10,15]
+        self.list1 = [0,1,2,3]
+        self.list2 = [0,1,2,3]
+        self.big_list = list()
+        self.big_list = [self.list1,self.list2]
         self.value1 = 2
         self.value2 = 2.3
         self.value3 = 20
         
     def testSearch1(self):
-        self.assertEqual(standardcalc.searchIndex(self.value1, self.list1, 1), 2)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.list1, 1), 2)
-        self.assertEqual(standardcalc.searchIndex(self.value3, self.list1, 1), 5)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[1][0], 1)
+        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[1][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[1][0], 0)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[1][1], 3)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[2][0], 1)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[2][1], 2)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[3][0], 1)
+        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[3][1], 3)
