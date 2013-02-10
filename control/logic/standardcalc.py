@@ -12,7 +12,7 @@ EARTH_RADIUS = 6378140
 
 #returns gpscoordinate distance in meters away from starting point.
 #positive yDist = North, positive xDist = East
-def GPSDistAway(coord, yDist, xDist):
+def GPSDistAway(coord, xDist, yDist):
     result = datatype.GPSCoordinate()
     result.long = coord.long + (180.0/math.pi)*(float(xDist)/EARTH_RADIUS)/math.cos(math.radians(coord.lat))
     result.lat = coord.lat + (180.0/math.pi)*(float(yDist)/EARTH_RADIUS)
