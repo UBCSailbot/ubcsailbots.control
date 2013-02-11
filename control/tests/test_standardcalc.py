@@ -48,25 +48,20 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
         self.angle1 = standardcalc.angleBetweenTwoCoords(self.source1, self.dest1)
         self.angle2 = standardcalc.angleBetweenTwoCoords(self.dest1, self.source1)
         
-        self.angle1value = self.angle1.degrees()
-        self.angle2value = self.angle2.degrees()
-        
         self.source2 = datatypes.GPSCoordinate(0,0)
         self.dest2 = datatypes.GPSCoordinate(1,1)
         
         self.angle3 = standardcalc.angleBetweenTwoCoords(self.source2, self.dest2)
         self.angle4 = standardcalc.angleBetweenTwoCoords(self.dest2, self.source2)
         
-        self.angle3value = self.angle3.degrees()
-        self.angle4value = self.angle4.degrees()
         
     def testAngleSet1(self):        
-        self.assertEqual(self.angle1value, 0)
-        self.assertEqual(self.angle2value, 180)
+        self.assertEqual(self.angle1, 0)
+        self.assertEqual(self.angle2, 180)
         
     def testAngleSet2(self):
-        self.assertEqual(round(self.angle3value,0), 45)
-        self.assertEqual(round(self.angle4value,0), -135)
+        self.assertEqual(round(self.angle3,0), 45)
+        self.assertEqual(round(self.angle4,0), -135)
         
 class TestSearchIndex(unittest.TestCase):
     def setUp(self):
@@ -79,15 +74,25 @@ class TestSearchIndex(unittest.TestCase):
         self.value3 = 20
         
     def testSearch1(self):
-        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[0][0], 0)
-        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[0][1], 2)
-        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[1][0], 1)
-        self.assertEqual(standardcalc.searchIndex(self.value1, self.big_list)[1][1], 2)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[0][0], 0)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[0][1], 2)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[1][0], 0)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[1][1], 3)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[2][0], 1)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[2][1], 2)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[3][0], 1)
-        self.assertEqual(standardcalc.searchIndex(self.value2, self.big_list)[3][1], 3)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value1, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value1, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value1, self.big_list)[1][0], 1)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value1, self.big_list)[1][1], 2)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[1][0], 0)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[1][1], 3)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[2][0], 1)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[2][1], 2)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[3][0], 1)
+        self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[3][1], 3)
+
+class TestGetTrueWindAngle(unittest.TestCase):
+    def setUp(self):
+        self.sog1 = 214
+        self.awa1 = 82
+        
+        self.TWA1 = standardcalc.getTrueWindAngle(self.awa1, self.sog1)
+        
+    def testGetTrueWindAngle1(self):
+        self.assertEqual(self.TWA1, 114)
