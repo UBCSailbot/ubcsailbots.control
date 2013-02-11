@@ -46,13 +46,16 @@ class arduino:
         cog = round(random.uniform(-179, 180), 2)
         hog = cog - round(random.uniform(-2, 2), 2)
         self.ardArray = [hog, cog, 0,
-                          round(random.uniform(-179, 180), 2), datatype.GPSCoordinate(49, -121), round(random.uniform(-89, 90), 2), 
+                          round(random.uniform(-179, 180), 2), datatype.GPSCoordinate(49, -121), 0, 
                           round(random.uniform(0, 100), 2)]
         print(self.ardArray)
         
     def getFromArduino(self):
         self._update()
         return self.ardArray
+    
+    def adjust_rudder(self, rudder_angle):
+        self.ardArray[rud_index] = rudder_angle
     
     def adjust_sheets(self, sheet_percent):                                                
         self.ardArray[sht_index] = sheet_percent
@@ -66,7 +69,14 @@ class arduino:
         else:
             self.actualWindAngle += random.uniform(-.1, .1)
         
+        # Makes the rudder turn the boat
+        rud = self.ardArray[rud_index]
         
+        if (rud != 0):
+            chng = rud/3
+            self.ardArray[hog_index] -= chng
+            
+                
         self.ardArray[hog_index] += round(random.uniform(-.1, .1), 2)
 
         if (math.fabs(self.ardArray[cog_index]+self.currplusmin-self.ardArray[hog_index]) < .4):

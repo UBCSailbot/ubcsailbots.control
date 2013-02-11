@@ -36,9 +36,18 @@ def main(argv=None):
         if ( i == 10000000):
             print ("steer at 80")
             arduino.steer("asdf", 80)
+        if (i == 20000000):
+            print ("adjust rudder 90!")
+            arduino.adjust_rudder(90)
+        if (i == 30000000):
+            print ("adjust rudder 0!")
+            arduino.adjust_rudder(0)
+            
         if (i % 500000 == 0):
-            print globvar.currentData
             globvar.currentData = arduino.getFromArduino()
+        if (i % 1000000 == 0):
+            print globvar.currentData
+        
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
         i += 1
