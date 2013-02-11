@@ -32,20 +32,63 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     cog = currentData[cog_index] # Course  over ground    
     hog = currentData[hog_index] # Height over ground
     
-    X = 14.6388 #Calculated
+    X = 16.64 # Degrees, Calculated
+    Dest = 23.41 # Meters, Distance from boat to buoy
     angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
+    reflectLong = GPSCoord.long * -1 # Used for calculation ONLY, when longitude decreases from left to right
     
-    if GPSCoord.long > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
-        moveLong = math.cos(90 - abs(angleToNorth) - 90 - X) # - X movement 
-        moveLat = math.sin(90 - abs(angleToNorth) - 90 - X) # - Y movement
-    elif GPSCoord.long < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
-        moveLong = math.cos(90 - (90 - (angleToNorth - 90)) - X) # + X Movement
+    if reflectLong > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.sin(180 - angleToNorth + X)) * -1 # - X movement 
+        moveLat = abs(math.cos(180 - angleToNorth + X)) * - 1 # - Y movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.cos(angleToNorth -90 - X)) # + X Movement
+        moveLat = abs(math.sin(angleToNorth - 90 - X)) * -1 # - Y Movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
+        moveLong = abs(math.sin(angleToNorth - X)) # + X Movement
+        moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement
+    else:
+        moveLong = abs(math.sin(angleToNorth + X)) * - 1 # - X Movement
+        moveLat = abs(math.cos(angleToNorth + X)) # + Y Movement 
+        
+    moveLong *= Dest
+    moveLat *= Dest
+    
+    moveLong *= -1 # Convert back actual coordinates 
     return 0
 
 # --- Round Buoy Stbd---
 # Input: TODO
 # Output: TODO
-def roundBuoyStbd():
+def roundBuoyStbd(BuoyLoc, FinalBearing):
+    currentData = glob.currentData
+        
+    GPSCoord = currentData[gps_index]
+    appWindAng = currentData[awa_index]
+    cog = currentData[cog_index] # Course  over ground    
+    hog = currentData[hog_index] # Height over ground
+    
+    X = 16.64 # Degrees, Calculated
+    Dest = 23.41 # Meters, Distance from boat to buoy
+    angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
+    reflectLong = GPSCoord.long * -1 # Used for calculation ONLY, when longitude decreases from left to right
+    
+    if reflectLong > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.cos(180 - angleToNorth + X)) * -1 # - X movement 
+        moveLat = abs(math.sin(180 - angleToNorth + X)) * - 1 # - Y movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.sin(angleToNorth -90 - X)) # + X Movement
+        moveLat = abs(math.cos(angleToNorth - 90 - X)) * -1 # - Y Movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
+        moveLong = abs(math.cos(angleToNorth - X)) # + X Movement
+        moveLat = abs(math.sin(angleToNorth - X)) # + Y Movement
+    else:
+        moveLong = abs(math.sin(angleToNorth - X)) * - 1 # - X Movement
+        moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement 
+    
+    moveLong *= Dest
+    moveLat *= Dest
+    
+    moveLong *= -1 # Convert back to actual coordinates
     return 0
 
 # --- Point to Point ---
