@@ -46,3 +46,12 @@ SPEED_AFFECTION_THRESHOLD = 119     #Speed threshold at which lower speeds are s
 ARD_STEER_COMPASS = "compass"
 ARD_STEER_COG = "cog"
 ARD_STEER_APPARENT_WIND = "apparent_wind"
+
+# Indices for current_data
+HOG_INDEX=0
+COG_INDEX=1
+SOG_INDEX=2
+AWA_INDEX=3
+GPS_INDEX=4
+RUD_INDEX=5
+SHT_INDEX=6

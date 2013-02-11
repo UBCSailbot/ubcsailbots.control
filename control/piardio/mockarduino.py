@@ -73,8 +73,13 @@ class arduino:
         rud = self.ardArray[rud_index]
         
         if (rud != 0):
-            chng = rud/3
-            self.ardArray[hog_index] -= chng
+            hog = self.ardArray[hog_index]
+            hog -= rud/3
+            if (hog > 180):
+                hog -= 360
+            elif (hog < -180):
+                hog += 360
+            self.ardArray[hog_index] = hog
             
                 
         self.ardArray[hog_index] += round(random.uniform(-.1, .1), 2)
