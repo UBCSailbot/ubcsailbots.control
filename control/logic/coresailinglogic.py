@@ -107,15 +107,16 @@ def pointToPoint(Dest, initialTack=None):
         hog = currentData[hog_index]
         sog = currentData[sog_index]
         
+        aobject = arduino.arduino()
+        
         if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
-            if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
-                if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+            if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
                     TWA = appWindAng
-                else:
+            else:
                     TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
-                
-                aobject = arduino.arduino()
+                    
+            if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
                 
                 #Trying to determine whether 45 degrees clockwise or counter clockwise of TWA wrt North is closer to current heading
                 #This means we are trying to determine whether hog-TWA-45 or hog-TWA+45 (both using TWA wrt North) is closer to our current heading.
@@ -128,8 +129,8 @@ def pointToPoint(Dest, initialTack=None):
                 elif(abs(-TWA-45)>=abs(-TWA+45) and initialTack is None):
                     aobject.steer(aobject,'AWA',hog-TWA+45)
                     
-            elif:
-                
+            elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
+                aobject.steer(aobject,'compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
             
         else:
             end_flag = 1
