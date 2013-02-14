@@ -70,8 +70,8 @@ class arduino:
     def tack(self):
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
-        #    "TACK:<>
-        wr = "TACK:{}"
+        #    "TACK:
+        wr = "TACK:"
         ser.write(wr)
     # returns the latest array of all info from the arduino
     def getFromArduino(self):
