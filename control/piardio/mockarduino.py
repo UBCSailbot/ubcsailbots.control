@@ -35,7 +35,7 @@ class arduino:
         else:
             self.currplusmin = round(random.uniform(-1, 1), 2)
         
-        print(self.currplusmin)  
+        print("Current Plus/Min: " + str(self.currplusmin))  
         # Instantiates an array of initial conditions which simulates putting a boat in the water.
         cog = round(random.uniform(-179, 180), 2)
         hog = cog - round(random.uniform(-2, 2), 2)
@@ -68,7 +68,7 @@ class arduino:
         
         if (rud != 0):
             hog = self.ardArray[sVars.HOG_INDEX]
-            hog -= rud/3
+            hog -= rud/6
             if (hog > 180):
                 hog -= 360
             elif (hog < -180):
@@ -90,9 +90,9 @@ class arduino:
         if (math.fabs(self.ardArray[sVars.SOG_INDEX]-self.idealBoatSpd) < .2):
             self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-.1, .1), 2)
         elif (self.ardArray[sVars.SOG_INDEX] < self.idealBoatSpd):
-            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(0, .1), 2)
+            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(0, 5), 2)
         elif (self.ardArray[sVars.SOG_INDEX] >= self.idealBoatSpd):
-            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-.1, 0), 2)
+            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-5, 0), 2)
         
         
         # Sets the apparent wind angle using vectors/magnitudes
