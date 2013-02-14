@@ -10,6 +10,7 @@ from control.parser import parsing
 from os import path
 from control.logic import standardcalc
 from control import StaticVars as sVars
+from control.piardio import arduino
 
 hog_index=0
 cog_index=1
@@ -18,6 +19,7 @@ awa_index=3
 gps_index=4
 rud_index=5
 sht_index=6
+tac_index=7
 
 end_flag=0
 
@@ -64,10 +66,21 @@ def pointToPoint(Dest):
         
         if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
-            if( -34 < appWindAng and appWindAng < 34):
-                x = 1
-            else:
-                x = 1
+            if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
+                if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+                    TWA = appWindAng
+                else:
+                    TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
+                
+                #Trying to determine whether 45 degrees clockwise or counter clockwise of TWA wrt North is closer to current heading
+                #This means we are trying to determine whether hog-TWA-45 or hog-TWA+45 (both using TWA wrt North) is closer to our current heading.
+                #Since those values give us TWA wrt to north, we need to subtract hog from them to get TWA wrt to our heading and figure out which one has a smaller value.
+                #To get it wrt to current heading, we use hog-TWA-45-hog and hog-TWA+45-hog.  Both terms have hogs cancelling out.
+                #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
+                #Since we are trying to figure out which one is closest to turn to, we use absolute values.
+                if(abs(-TWA-45)<abs(-TWA+45)):
+                    aobject = arduino.arduino()
+                    aobject.steer(aobject,'AWA',hog-TWA-45)
             
         else:
             end_flag = 1
