@@ -23,10 +23,13 @@ def main(argv=None):
     mock = True
     if argv is None:
         argv = sys.argv
+        print"Started: synchronous"
     else:
+        print"Started: asynchronous"
         if (argv[1]):
             mock = argv[1]
     
+    print("Mock Enabled: " + str(mock))
     if (mock == False):        
         arduino = ard.arduino()
     else:
@@ -34,19 +37,20 @@ def main(argv=None):
     i = 0
     while (globvar.run):
         if ( i == 10000000):
-            print ("steer at 80")
+            print ("Steer at 80")
             arduino.steer("asdf", 80)
+            print ("New Heading = " + str(globvar.currentData[0]))
         if (i == 20000000):
-            print ("adjust rudder 90!")
+            print ("Adjust rudder to 90!")
             arduino.adjust_rudder(90)
         if (i == 30000000):
-            print ("adjust rudder 0!")
+            print ("Adjust rudder 0!")
             arduino.adjust_rudder(0)
             
         if (i % 500000 == 0):
             globvar.currentData = arduino.getFromArduino()
         if (i % 1000000 == 0):
-            print globvar.currentData
+            printArdArray(globvar.currentData)
         
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
@@ -56,7 +60,8 @@ def main(argv=None):
             currentParams = globvar.queueParameters.pop(0)
             thread.start_new_thread(currentProcess, currentParams)
     
-
+def printArdArray(arr):
+    print("Heading: " + str(arr[0]) + ", COG: " + str(arr[1]) + ", SOG: " + str(arr[2]) + ", AWA: " + str(arr[3]) + ", GPS[ lat=" + str(arr[4]) + " ], Rudder: " + str(arr[5]) + ", Sheet Percent: " + str(arr[6]))
     
 if __name__ == '__main__':
     sys.exit(main())

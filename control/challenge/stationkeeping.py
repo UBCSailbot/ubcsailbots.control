@@ -26,7 +26,7 @@ def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most we
                 if (coord.long < top2):
                     top2 = coord.lat
                     topindex2 = index
-        index++
+        index += 1
     return
 
 def lineintersect():            
