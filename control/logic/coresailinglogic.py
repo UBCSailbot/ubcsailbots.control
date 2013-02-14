@@ -115,6 +115,8 @@ def pointToPoint(Dest, initialTack=None):
                 else:
                     TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
                 
+                aobject = arduino.arduino()
+                
                 #Trying to determine whether 45 degrees clockwise or counter clockwise of TWA wrt North is closer to current heading
                 #This means we are trying to determine whether hog-TWA-45 or hog-TWA+45 (both using TWA wrt North) is closer to our current heading.
                 #Since those values give us TWA wrt to north, we need to subtract hog from them to get TWA wrt to our heading and figure out which one has a smaller value.
@@ -122,8 +124,12 @@ def pointToPoint(Dest, initialTack=None):
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
                 if(abs(-TWA-45)<abs(-TWA+45) and initialTack is None):
-                    aobject = arduino.arduino()
                     aobject.steer(aobject,'AWA',hog-TWA-45)
+                elif(abs(-TWA-45)>=abs(-TWA+45) and initialTack is None):
+                    aobject.steer(aobject,'AWA',hog-TWA+45)
+                    
+            elif:
+                
             
         else:
             end_flag = 1
