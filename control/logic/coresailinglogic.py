@@ -94,9 +94,9 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
     return 0
 
 # --- Point to Point ---
-# Input: Destination GPS Coordinate
+# Input: Destination GPS Coordinate, initialTack: 0 for port, 1 for starboard, nothing calculates on own.
 # Output: Nothing
-def pointToPoint(Dest):
+def pointToPoint(Dest, initialTack=None):
     list = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     while(end_flag == 0):
         currentData = glob.currentData
@@ -121,7 +121,7 @@ def pointToPoint(Dest):
                 #To get it wrt to current heading, we use hog-TWA-45-hog and hog-TWA+45-hog.  Both terms have hogs cancelling out.
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
-                if(abs(-TWA-45)<abs(-TWA+45)):
+                if(abs(-TWA-45)<abs(-TWA+45) and initialTack is None):
                     aobject = arduino.arduino()
                     aobject.steer(aobject,'AWA',hog-TWA-45)
             
