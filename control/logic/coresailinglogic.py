@@ -10,6 +10,7 @@ from control.parser import parsing
 from os import path
 from control.logic import standardcalc
 from control import StaticVars as sVars
+from control.piardio import arduino
 
 hog_index=0
 cog_index=1
@@ -18,6 +19,7 @@ awa_index=3
 gps_index=4
 rud_index=5
 sht_index=6
+tac_index=7
 
 end_flag=0
 
@@ -32,26 +34,69 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     cog = currentData[cog_index] # Course  over ground    
     hog = currentData[hog_index] # Height over ground
     
-    X = 14.6388 #Calculated
+    X = 16.64 # Degrees, Calculated
+    Dest = 23.41 # Meters, Distance from boat to buoy
     angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
+    reflectLong = GPSCoord.long * -1 # Used for calculation ONLY, when longitude decreases from left to right
     
-    if GPSCoord.long > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
-        moveLong = math.cos(90 - abs(angleToNorth) - 90 - X) # - X movement 
-        moveLat = math.sin(90 - abs(angleToNorth) - 90 - X) # - Y movement
-    elif GPSCoord.long < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
-        moveLong = math.cos(90 - (90 - (angleToNorth - 90)) - X) # + X Movement
+    if reflectLong > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.sin(180 - angleToNorth + X)) * -1 # - X movement 
+        moveLat = abs(math.cos(180 - angleToNorth + X)) * - 1 # - Y movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.cos(angleToNorth -90 - X)) # + X Movement
+        moveLat = abs(math.sin(angleToNorth - 90 - X)) * -1 # - Y Movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
+        moveLong = abs(math.sin(angleToNorth - X)) # + X Movement
+        moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement
+    else:
+        moveLong = abs(math.sin(angleToNorth + X)) * - 1 # - X Movement
+        moveLat = abs(math.cos(angleToNorth + X)) # + Y Movement 
+        
+    moveLong *= Dest
+    moveLat *= Dest
+    
+    moveLong *= -1 # Convert back actual coordinates 
     return 0
 
 # --- Round Buoy Stbd---
 # Input: TODO
 # Output: TODO
-def roundBuoyStbd():
+def roundBuoyStbd(BuoyLoc, FinalBearing):
+    currentData = glob.currentData
+        
+    GPSCoord = currentData[gps_index]
+    appWindAng = currentData[awa_index]
+    cog = currentData[cog_index] # Course  over ground    
+    hog = currentData[hog_index] # Height over ground
+    
+    X = 16.64 # Degrees, Calculated
+    Dest = 23.41 # Meters, Distance from boat to buoy
+    angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
+    reflectLong = GPSCoord.long * -1 # Used for calculation ONLY, when longitude decreases from left to right
+    
+    if reflectLong > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.cos(180 - angleToNorth + X)) * -1 # - X movement 
+        moveLat = abs(math.sin(180 - angleToNorth + X)) * - 1 # - Y movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
+        moveLong = abs(math.sin(angleToNorth -90 - X)) # + X Movement
+        moveLat = abs(math.cos(angleToNorth - 90 - X)) * -1 # - Y Movement
+    elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
+        moveLong = abs(math.cos(angleToNorth - X)) # + X Movement
+        moveLat = abs(math.sin(angleToNorth - X)) # + Y Movement
+    else:
+        moveLong = abs(math.sin(angleToNorth - X)) * - 1 # - X Movement
+        moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement 
+    
+    moveLong *= Dest
+    moveLat *= Dest
+    
+    moveLong *= -1 # Convert back to actual coordinates
     return 0
 
 # --- Point to Point ---
-# Input: Destination GPS Coordinate
+# Input: Destination GPS Coordinate, initialTack: 0 for port, 1 for starboard, nothing calculates on own.
 # Output: Nothing
-def pointToPoint(Dest):
+def pointToPoint(Dest, initialTack=None):
     list = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     while(end_flag == 0):
         currentData = glob.currentData
@@ -62,12 +107,30 @@ def pointToPoint(Dest):
         hog = currentData[hog_index]
         sog = currentData[sog_index]
         
+        aobject = arduino.arduino()
+        
         if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
-            if( -34 < appWindAng and appWindAng < 34):
-                x = 1
+            if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+                    TWA = appWindAng
             else:
-                x = 1
+                    TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
+                    
+            if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
+                
+                #Trying to determine whether 45 degrees clockwise or counter clockwise of TWA wrt North is closer to current heading
+                #This means we are trying to determine whether hog-TWA-45 or hog-TWA+45 (both using TWA wrt North) is closer to our current heading.
+                #Since those values give us TWA wrt to north, we need to subtract hog from them to get TWA wrt to our heading and figure out which one has a smaller value.
+                #To get it wrt to current heading, we use hog-TWA-45-hog and hog-TWA+45-hog.  Both terms have hogs cancelling out.
+                #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
+                #Since we are trying to figure out which one is closest to turn to, we use absolute values.
+                if(abs(-TWA-45)<abs(-TWA+45) and initialTack is None):
+                    aobject.steer(aobject,'AWA',hog-TWA-45)
+                elif(abs(-TWA-45)>=abs(-TWA+45) and initialTack is None):
+                    aobject.steer(aobject,'AWA',hog-TWA+45)
+                    
+            elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
+                aobject.steer(aobject,'compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
             
         else:
             end_flag = 1

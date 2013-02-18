@@ -66,7 +66,13 @@ class arduino:
         #    "STEER:<method>,<degree>"
         wr = "STEER:{m},{d}".format(m=method, d=degree)
         ser.write(wr)
-        
+    # calls tack on arduino    
+    def tack(self):
+        ser = serial.Serial(SERIAL_PORT, BAUD)
+        # Format
+        #    "TACK:
+        wr = "TACK:"
+        ser.write(wr)
     # returns the latest array of all info from the arduino
     def getFromArduino(self):
         # First parameter: serial port for the APM

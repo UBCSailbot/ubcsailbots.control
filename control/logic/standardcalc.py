@@ -11,6 +11,9 @@ from control import StaticVars as sVars
 
 EARTH_RADIUS = 6378140
 
+#Implemented for the same reason as AWA_THRESHOLD, kept separate since this one will be changing.
+SOG_THRESHOLD = 0
+
 #returns gpscoordinate distance in meters away from starting point.
 #positive yDist = North, positive xDist = East
 def GPSDistAway(coord, xDist, yDist):
@@ -60,41 +63,62 @@ def angleBetweenTwoCoords(sourceCoord, destCoord):
     
     if(sourceCoord.lat < destCoord.lat):
         if(sourceCoord.long < destCoord.long):
-            return datatype.Angle(angle)
+            return angle
         elif(sourceCoord.long > destCoord.long):
             angle = -angle
-            return datatype.Angle(angle)
+            return angle
         else:
-            return datatype.Angle(0)        
+            return 0        
     else:
         if(sourceCoord.long < destCoord.long):
             angle = 90+angle
-            return datatype.Angle(angle)
+            return angle
         elif(sourceCoord.long > destCoord.long):
             angle = -90-angle
-            return datatype.Angle(angle)
+            return angle
         else:
-            return datatype.Angle(180)
+            return 180
 
 #Determines whether the waypoint can be reached with our current coordinates
 #Returns 1 if waypoint can't be reached
 #Returns 0 if waypoint can be reached
 def isWPNoGo (AWA, hog, dest, sog, GPS):
-    AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA'))
     if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
-        if(hog-AWA-45 < angleBetweenTwoCoords(GPS,dest).degrees() and angleBetweenTwoCoords(GPS,dest).degrees() < hog-AWA+45):
+        if(hog-AWA-45 < angleBetweenTwoCoords(GPS,dest) and angleBetweenTwoCoords(GPS,dest) < hog-AWA+45):
             return 1
         else:
             return 0
     else:
-        AWAindex = searchIndex(AWA, AWAList)
-        return 0
+        TWA = getTrueWindAngle(AWA, sog)
+        if(hog-TWA-45 < angleBetweenTwoCoords(GPS,dest) and angleBetweenTwoCoords(GPS,dest) < hog-TWA+45):
+            return 1
+        else:
+            return 0
 
 def getTrueWindAngle(awa, sog):
-    return 0
+    while(1):
+        AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
+        SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))
+        AWAentries = searchAWAIndex(awa, AWAList)
+        SOGentries = searchSOGIndex(sog, SOGList)
+    
+        for i in range(len(AWAentries)):
+            index = AWAentries[i][0]
+            column = AWAentries[i][1]
+                
+            for x in range(len(SOGentries)):
+                if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
+                    return index;
+        
+        SOG_THRESHOLD += 1
+        
+        if(SOG_THRESHOLD >= 5):
+            return None;    
+    
 
 #Only works with tables with 4 columns!!!!!        
-def searchIndex(number, list1):
+def searchAWAIndex(number, list1):
+    number = abs(number)
     big_list = list()
     indcol_list = list()
     
@@ -104,6 +128,24 @@ def searchIndex(number, list1):
     
     for n in range(len(big_list)):
         if( math.fabs(big_list[n]-number) <= sVars.AWA_THRESHOLD ):
+            index = math.floor(n/4)
+            column = n%4
+            small_list = [index,column]
+            indcol_list.append(small_list)
+            
+    return indcol_list
+
+def searchSOGIndex(number, list1):
+    number = abs(number)
+    big_list = list()
+    indcol_list = list()
+    
+    for i in range(len(list1)):
+        for j in range(len(list1[i])):
+            big_list.append(list1[i][j])    
+    
+    for n in range(len(big_list)):
+        if( math.fabs(big_list[n]-number) <= SOG_THRESHOLD ):
             index = math.floor(n/4)
             column = n%4
             small_list = [index,column]
