@@ -5,6 +5,7 @@ Created on Jan 19, 2013
 '''
 import math
 import control.logic.standardcalc as standardcalc
+import control.GlobalVars as GlobalVars
 
 def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most west point of the two most northern points
     coordHalf1 = [tL, tR]
@@ -23,7 +24,6 @@ def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most we
             coordList.append(secondCoordHalf[0])
             coordList.append(secondCoordHalf[1])
         else:
-<<<<<<< HEAD
             coordList.append(secondCoordHalf[0])
             if(firstCoordHalf[1].lat >= secondCoordHalf[1].lat):
                 coordList.append(firstCoordHalf[1])
@@ -45,19 +45,6 @@ def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most we
             else:
                 coordList.append(secondCoordHalf[1])
                 coordList.append(firstCoordHalf[1])
-=======
-            if (coord.lat > top2):
-                top2 = coord.lat
-                topindex2 = index
-            elif (coord.lat == top2): #edge case: if box forms diamond with respect to true north, choose left side as top face
-                if (coord.long < top2):
-                    top2 = coord.lat
-                    topindex2 = index
-        index += 1
-    return
-
-def lineintersect():            
->>>>>>> 30ce9eb020598a127f3948c14175be7459ebd3c1
     
     if (coordList[0].lat == coordList[1].lat):      #square
         if (coordList[0].long < coordList[1].long):
@@ -83,9 +70,8 @@ def lineintersect():
 
 def stationKeepInit(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord):
     boxCoords = setBoxCoords(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord)
-    if (GlobalVars.timerSet == True){
+    if (GlobalVars.timerSet == True):
         run(boxCoords)
-        }
     return
 
 def run(boxCoords):
