@@ -22,3 +22,4 @@ run = True
 auto = False
 currentProcess = None
 currentParams = None
+timerSet = False

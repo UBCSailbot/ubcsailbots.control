@@ -5,51 +5,75 @@ Created on Jan 19, 2013
 '''
 import math
 import control.logic.standardcalc as standardcalc
-import control.datatype.datatypes as datatypes
 
 def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most west point of the two most northern points
-    top1 = 0.0
-    top2 = 0.0
-    topindex1 = 0
-    topindex2 = 0
-    index = 0
-    coordList = [tL, tR, bL, bR]
-    for coord in coordList:
-        if (coord.lat > top1):
-            top1 = coord.lat
-            topindex1 = index
+    coordHalf1 = [tL, tR]
+    coordHalf2 = [bL, bR]
+    coordList = []
+    finalCoordList = []
+    if (coordHalf1[1].lat > coordHalf1[0].lat):
+        firstCoordHalf = [coordHalf1[1], coordHalf1[0]]
+    if (coordHalf2[1].lat > coordHalf2[0].lat):
+        secondCoordHalf = [coordHalf1[1], coordHalf1[0]]
+        
+    if (firstCoordHalf[0].lat >= secondCoordHalf[0].lat):  #mergesort
+        coordList.append(firstCoordHalf[0])
+        if (firstCoordHalf[1].lat >= secondCoordHalf[0].lat):
+            coordList.append(firstCoordHalf[1])
+            coordList.append(secondCoordHalf[0])
+            coordList.append(secondCoordHalf[1])
         else:
-            if (coord.lat > top2):
-                top2 = coord.lat
-                topindex2 = index
-            elif (coord.lat == top2): #edge case: if box forms diamond with respect to true north, choose left side as top face
-                if (coord.long < top2):
-                    top2 = coord.lat
-                    topindex2 = index
-        index++
-    return
-
-def lineintersect():            
+            coordList.append(secondCoordHalf[0])
+            if(firstCoordHalf[1].lat >= secondCoordHalf[1].lat):
+                coordList.append(firstCoordHalf[1])
+                coordList.append(secondCoordHalf[1])
+            else:
+                coordList.append(secondCoordHalf[1])
+                coordList.append(firstCoordHalf[1])
+    else:
+        coordList.append(secondCoordHalf[0])
+        if (firstCoordHalf[0].lat < secondCoordHalf[1].lat):
+            coordList.append(secondCoordHalf[1])
+            coordList.append(firstCoordHalf[0])
+            coordList.append(firstCoordHalf[1])
+        else:
+            coordList.append(firstCoordHalf[0])
+            if(firstCoordHalf[1].lat >= secondCoordHalf[1].lat):
+                coordList.append(firstCoordHalf[1])
+                coordList.append(secondCoordHalf[1])
+            else:
+                coordList.append(secondCoordHalf[1])
+                coordList.append(firstCoordHalf[1])
     
-    return
+    if (coordList[0].lat == coordList[1].lat):      #square
+        if (coordList[0].long < coordList[1].long):
+            finalCoordList.append(coordList[0])
+            finalCoordList.append(coordList[1])
+        else:
+            finalCoordList.append(coordList[1])
+            finalCoordList.append(coordList[0])
+        if (coordList[2].long < coordList[3].long):
+            finalCoordList.append(coordList[3])
+            finalCoordList.append(coordList[2])
+        else:
+            finalCoordList.append(coordList[2])
+            finalCoordList.append(coordList[3])
+    elif (coordList[1].long < coordList[2].long):  #tilted left square or diamond
+        finalCoordList.append(coordList[1])
+        finalCoordList.append(coordList[0])
+        finalCoordList.append(coordList[2])
+        finalCoordList.append(coordList[3])
+    else:                                             #tilted right square
+        return coordList
+    return finalCoordList
 
 def stationKeepInit(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord):
     boxCoords = setBoxCoords(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord)
-    
-    northAngle = standardcalc.angleBetweenTwoCoords(topLeftCoord, topRightCoord)  # angle of top face to true north
-    eastAngle = standardcalc.angleBetweenTwoCoords(topRightCoord, botRightCoord) - 90  # angle of right face to true east
-    
-    distBtwnCrnr = standardcalc.distBetweenTwoCoords(topLeftCoord, topRightCoord)/2.0
+    if (GlobalVars.timerSet == True){
+        run(boxCoords)
+        }
+    return
 
-    if (northAngle < 90):
-        #90 - northAngle
-        northTriangleAngle = 90 - northAngle
-        x=1
-    elif (northAngle > 90):
-        #northAngle - 90
-        x=1
-    else:
-        northWayPnt = standardcalc.GPSDistAway(topLeftCoord, distBtwnCrnr, 100) #north face faces true north, want way point 100m away and square is 60m per side
-        eastWayPnt = standardcalc.GPSDistAway(topRightCoord, 100, -distBtwnCrner)
-def run():
+def run(boxCoords):
+    
     return 0
