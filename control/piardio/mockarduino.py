@@ -81,18 +81,18 @@ class arduino:
         if (math.fabs(self.ardArray[sVars.COG_INDEX]+self.currplusmin-self.ardArray[sVars.HOG_INDEX]) < .4):
             self.ardArray[sVars.COG_INDEX] += round(random.uniform(-.1, .1), 2)
         elif (self.ardArray[sVars.COG_INDEX]+self.currplusmin < self.ardArray[sVars.HOG_INDEX]):
-            self.ardArray[sVars.COG_INDEX] += round(random.uniform(0, .2), 2)
+            self.ardArray[sVars.COG_INDEX] += round(random.uniform(0, 5), 2)
         elif (self.ardArray[sVars.COG_INDEX]+self.currplusmin > self.ardArray[sVars.HOG_INDEX]):
-            self.ardArray[sVars.COG_INDEX] += round(random.uniform(-.2, 0), 2)
+            self.ardArray[sVars.COG_INDEX] += round(random.uniform(-5, 0), 2)
         
                 
         # Gets the boat up to speed and allows for a little variation
         if (math.fabs(self.ardArray[sVars.SOG_INDEX]-self.idealBoatSpd) < .2):
             self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-.1, .1), 2)
         elif (self.ardArray[sVars.SOG_INDEX] < self.idealBoatSpd):
-            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(0, 5), 2)
+            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(0, .2), 2)
         elif (self.ardArray[sVars.SOG_INDEX] >= self.idealBoatSpd):
-            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-5, 0), 2)
+            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-.2, 0), 2)
         
         
         # Sets the apparent wind angle using vectors/magnitudes

@@ -40,7 +40,7 @@ def main(argv=None):
             print ("Steer at 80")
             arduino.steer("asdf", 80)
             print ("New Heading = " + str(globvar.currentData[0]))
-        if (i == 20000000):
+        if (i == 25000000):
             print ("Adjust rudder to 90!")
             arduino.adjust_rudder(90)
         if (i == 30000000):
@@ -49,7 +49,7 @@ def main(argv=None):
             
         if (i % 500000 == 0):
             globvar.currentData = arduino.getFromArduino()
-        if (i % 1000000 == 0):
+        if (i % 2000000 == 0):
             printArdArray(globvar.currentData)
         
         # When the function queue has waiting calls, and there is no currently running process,
