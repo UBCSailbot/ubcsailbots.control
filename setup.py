@@ -12,15 +12,20 @@ import os
 LIB_DEPENDENCIES = ['mock == 1.0.1', 'pyserial == 2.6', 'nose']
 # Name of top level directory
 TEST_PACKAGE = "control"
-SETUP_OPTIONS = {"install_lib":"Installs all library dependencies", 
+# Setup options - any added functionality must be added here
+SETUP_OPTIONS = {
+                 "install_lib":"Installs all library dependencies", 
                  "test":"Finds and runs all project unit tests",
-                 "install":"Installs dependencies"}
+                 "install":"Installs dependencies"
+                 }
 
-    
+
+# Installs all library dependencies defined in the LIB_DEPENDENCIES list
 def install_lib():
     print ("Installing all library dependencies")
     easy_install.main(LIB_DEPENDENCIES)
 
+# Uses the nose library to run unit tests.  Installs missing dependencies.
 def test():
     print('Running UBC Sailbot Control Tests')
     nose_installed = True
@@ -37,7 +42,8 @@ def test():
 
 def install():
     install_lib()
-    
+
+# Prints setup.py options 
 def printOptions():
     print("usage: setup.py [arg]")
     print("arg options:")
@@ -46,6 +52,7 @@ def printOptions():
     print("")
     
 def main():    
+    # Runs the argument as a function, catches invalid argument
     if (len(sys.argv) > 1):
         try:
             globals()[sys.argv[1]]()
