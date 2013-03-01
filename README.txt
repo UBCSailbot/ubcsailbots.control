@@ -62,10 +62,14 @@ Angles are always between -180 and 180
 Libraries
 ========
 
-To run the project you must have the mock and serial libraries installed. To do this, go to the control/lib folder and install the egg folder into site-packages by unzipping the folder, navigating to the directory and running "python setup.py install".
+From console in top level run 'python setup.py install_lib'
+
+To run the project you must have the mock and serial libraries installed.
 
 Tests
 =====
+
+From console in top-level directory run: nosetests
 
 If a class is written which can be unit tested, it should be unit tested.  All tests must be added to control/tests package and named test_{file_being_tested}.py.  To run simulation tests, you may run the Mock Arudino as documented elsewhere in this document.
 

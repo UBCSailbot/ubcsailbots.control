@@ -9,7 +9,9 @@ Format of return from Arduino:
 '''
 import serial
 import re
-from control.datatype import datatypes as datatype
+import sys
+sys.path.append("..")
+import control.datatype.datatypes as datatype
 
 SERIAL_PORT = '/dev/ttyACM0'
 BAUD = 57600

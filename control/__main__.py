@@ -12,8 +12,8 @@ import logic
 import GlobalVars as globvar
 import logging
 from os import path
+import os
 import sys 
-print sys.path
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
