@@ -12,8 +12,7 @@ import logic
 import GlobalVars as globvar
 import logging
 from os import path
-import os
-import sys 
+import sched, time
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
@@ -37,23 +36,10 @@ def main(argv=None):
     else:
         arduino = mockard.arduino()
     i = 0
+    s = sched.scheduler(time.time, time.sleep)
+    s.enter(1, 1, setGlobVar, (arduino, s,))
+    thread.start_new_thread(s.run, ())
     while (globvar.run):
-        if ( i == 10000000):
-            print ("Steer at 80")
-            arduino.steer("asdf", 80)
-            print ("New Heading = " + str(globvar.currentData[0]))
-        if (i == 25000000):
-            print ("Adjust rudder to 90!")
-            arduino.adjust_rudder(90)
-        if (i == 30000000):
-            print ("Adjust rudder 0!")
-            arduino.adjust_rudder(0)
-            
-        if (i % 500000 == 0):
-            globvar.currentData = arduino.getFromArduino()
-        if (i % 2000000 == 0):
-            printArdArray(globvar.currentData)
-        
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
         i += 1
@@ -61,6 +47,11 @@ def main(argv=None):
             currentProcess = globvar.functionQueue.pop(0)
             currentParams = globvar.queueParameters.pop(0)
             thread.start_new_thread(currentProcess, currentParams)
+
+def setGlobVar(arduino, sc):
+    globvar.currentData = arduino.getFromArduino()
+    printArdArray(globvar.currentData)
+    sc.enter(1, 1, setGlobVar, (arduino, sc,))
     
 def printArdArray(arr):
     print("Heading: " + str(arr[0]) + ", COG: " + str(arr[1]) + ", SOG: " + str(arr[2]) + ", AWA: " + str(arr[3]) + ", GPS[ lat=" + str(arr[4]) + " ], Rudder: " + str(arr[5]) + ", Sheet Percent: " + str(arr[6]))
