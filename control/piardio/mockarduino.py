@@ -137,8 +137,8 @@ class arduino:
         heading = self.ardArray[sVars.HOG_INDEX]
         speed = self.ardArray[sVars.SOG_INDEX]
         
-        x = speed * math.sin(heading*math.pi/180) * 1.5
-        y = speed * math.cos(heading*math.pi/180) * 1.5
+        x = speed * math.sin(heading*math.pi/180)
+        y = speed * math.cos(heading*math.pi/180)
         
         lat = lat0 + 180 / math.pi * y / EARTH_RADIUS;
         lon = lon0 + 180 / math.pi / math.sin(lat0*math.pi/180) * x / EARTH_RADIUS;

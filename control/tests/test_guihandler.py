@@ -54,9 +54,10 @@ class TestGuiHandler(unittest.TestCase):
          
     def testGetCurrentData(self):
         self.resetGlobVar()
-        self.currdata = [1, 2, 3, 4, 5, 6, 7]
+        self.currdata = [0, 1, 2, 3, datatypes.GPSCoordinate(4, 4) , 5, 6]
         gVars.currentData = self.currdata
-        self.assertEquals(self.x.getData(), {"telemetry":{"Heading": self.currdata[0], "COG" : self.currdata[1], "SOG" : self.currdata[2], "AWA" : self.currdata[3], "latitude": datatypes.GPSCoordinate(self.currdata[4]).lat , "longitude" : datatypes.GPSCoordinate(self.currdata[4]).long, "Rudder" : self.currdata[5], "SheetPercent": self.currdata[6]}})
+        self.x.getData()
+        self.assertEquals(self.x.getData(), {"telemetry":{"Heading": self.currdata[0], "COG" : self.currdata[1], "SOG" : self.currdata[2], "AWA" : self.currdata[3], "latitude": self.currdata[4].lat , "longitude" : self.currdata[4].long, "Rudder" : self.currdata[5], "SheetPercent": self.currdata[6]}})
         
 if __name__ == '__main__':
     unittest.main()
