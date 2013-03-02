@@ -77,8 +77,8 @@ class arduino:
         wr = "TACK:"
         ser.write(wr)
      
-     # Calls gybe on the arduino
-     def gybe(self):
+    # Calls gybe on the arduino
+    def gybe(self):
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
         #    "GYBE:
