@@ -23,6 +23,7 @@ class GuiHandler:
     # When the remote control signals a switch to auto then the instructions are carried out
     def setInstructions(self, instructionsData):
         # Stores current boundaries
+        gVars.currentProcess = None
         gVars.boundaries = instructionsData.boundaries
         gVars.instructions = instructionsData
         # Stores function queue and parameter queue

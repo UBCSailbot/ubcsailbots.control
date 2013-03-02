@@ -13,6 +13,7 @@ import GlobalVars as globvar
 import logging
 from os import path
 import sched, time
+from serial.tools import list_ports
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
@@ -21,6 +22,15 @@ def main(argv=None):
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports
+    coms = list_ports.comports()
+    print(list_ports.comports())
+    usbserials = []
+    for com in coms:
+        for port in com:
+            if "usbserial" in port:
+                usbserials.append(port)
+    
+    print usbserials      
     mock = True
     if argv is None:
         argv = sys.argv
@@ -43,7 +53,7 @@ def main(argv=None):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
         i += 1
-        if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None and globvar.auto):
+        if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None):
             currentProcess = globvar.functionQueue.pop(0)
             currentParams = globvar.queueParameters.pop(0)
             thread.start_new_thread(currentProcess, currentParams)
@@ -57,4 +67,7 @@ def printArdArray(arr):
     print("Heading: " + str(arr[0]) + ", COG: " + str(arr[1]) + ", SOG: " + str(arr[2]) + ", AWA: " + str(arr[3]) + ", GPS[ lat=" + str(arr[4]) + " ], Rudder: " + str(arr[5]) + ", Sheet Percent: " + str(arr[6]))
     
 if __name__ == '__main__':
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        print ("\n Exit - Keyboard Interrupt")
