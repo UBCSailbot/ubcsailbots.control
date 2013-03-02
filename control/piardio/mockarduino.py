@@ -121,9 +121,9 @@ class arduino:
         
         if(abs(awa-previousAWA) >= 90):
             if(awa > previousAWA):
-                awa = awa + 2*math.pi
+                awa = awa + math.pi
             else:
-                awa = awa - 2*math.pi
+                awa = awa - math.pi
                 
         awa = awa * 180/math.pi
         self.ardArray[sVars.AWA_INDEX] = awa
