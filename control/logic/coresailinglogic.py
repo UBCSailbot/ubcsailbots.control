@@ -125,11 +125,14 @@ def pointToPoint(Dest, initialTack=None):
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
                 if(abs(-TWA-45)<abs(-TWA+45) and initialTack is None):
+                    aobject.adjust_sheets(list[TWA][glob.currentColumn])
                     aobject.steer(aobject,'AWA',hog-TWA-45)
                 elif(abs(-TWA-45)>=abs(-TWA+45) and initialTack is None):
+                    aobject.adjust_sheets(list[TWA][glob.currentColumn])
                     aobject.steer(aobject,'AWA',hog-TWA+45)
                     
             elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
+                aobject.adjust_sheets(list[TWA][glob.currentColumn])
                 aobject.steer(aobject,'compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
             
         else:

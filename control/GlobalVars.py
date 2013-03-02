@@ -21,4 +21,5 @@ boundaries = []
 run = True
 currentProcess = None
 currentParams = None
+currentColumn = 0;
 timerSet = False
