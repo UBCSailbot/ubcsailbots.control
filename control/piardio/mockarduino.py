@@ -63,6 +63,11 @@ class arduino:
         else:
             self.actualWindAngle += random.uniform(-.1, .1)
         
+        if (self.actualWindAngle < -180):
+            self.actualWindAngle += 360
+        if (self.actualWindAngle > 180):
+            self.actualWindAngle -= 360
+            
         # Makes the rudder turn the boat
         rud = self.ardArray[sVars.RUD_INDEX]
         
@@ -96,20 +101,9 @@ class arduino:
         
         
         # Sets the apparent wind angle
-        if (self.ardArray[sVars.HOG_INDEX] < -180):
-            boat_bearing = 360 + self.ardArray[sVars.HOG_INDEX]
-        else:
-            boat_bearing = self.ardArray[sVars.HOG_INDEX]
+        boat_bearing = self.ardArray[sVars.HOG_INDEX]
         boat_speed = self.ardArray[sVars.SOG_INDEX]
-        if (self.actualWindAngle < -180):
-            wind_bearing = 360 + self.actualWindAngle
-        else:
-            wind_bearing = self.actualWindAngle
-        
-        boat_bearing = boat_bearing - 180
-        if (boat_bearing < -180):
-            boat_bearing = 360 + boat_bearing
-             
+        wind_bearing = self.actualWindAngle
         wind_speed = self.actualWindSpeed
         
         boat_x = boat_speed * math.cos(boat_bearing)
