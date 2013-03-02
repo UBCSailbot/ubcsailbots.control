@@ -49,40 +49,40 @@ class arduino:
     def adjust_rudder(self, rudder_percent):                                                
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
-        #    "ADJUST_RUDDER:<rudder_percent>"
-        wr = "ADJUST_RUDDER:{rp}".format(rp=rudder_percent)
+        #    "ADJUST_RUDDER,<rudder_percent>"
+        wr = "ADJUST_RUDDER,{rp}".format(rp=rudder_percent)
         ser.write(wr)
         
     # calls adjust_sheets on arduino with sheet percentage
     def adjust_sheets(self, sheet_percent):                                                
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
-        #    "ADJUST_SHEETS:<sheet_percent>"
-        wr = "ADJUST_SHEETS:{sp}".format(sp=sheet_percent)
+        #    "ADJUST_SHEETS,<sheet_percent>"
+        wr = "ADJUST_SHEETS,{sp}".format(sp=sheet_percent)
         ser.write(wr)
         
     # calls steer on arduino with method and degree
     def steer(self, method, degree):
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
-        #    "STEER:<method>,<degree>"
-        wr = "STEER:{m},{d}".format(m=method, d=degree)
+        #    "STEER,<method>,<degree>"
+        wr = "STEER,{m},{d}".format(m=method, d=degree)
         ser.write(wr)
     
     # calls tack on arduino    
     def tack(self):
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
-        #    "TACK:
-        wr = "TACK:"
+        #    "TACK,"
+        wr = "TACK,"
         ser.write(wr)
      
     # Calls gybe on the arduino
     def gybe(self):
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
-        #    "GYBE:
-        wr = "GYBE:"
+        #    "GYBE,"
+        wr = "GYBE,"
         ser.write(wr)
     
     # returns the latest array of all info from the arduino
