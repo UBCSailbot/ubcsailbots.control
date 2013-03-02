@@ -30,6 +30,7 @@ class arduino:
         self.actualWindAngle = round(random.uniform(-179, 180), 2)
         self.actualWindSpeed = round(random.uniform(3, 6), 2)*self.windStrength
         self.idealBoatSpd = round(random.uniform(.5, 1), 2)*self.windStrength
+        self.previousAWA = None
         if (STRONG_CURRENT):
             self.currplusmin = round(random.uniform(-4, 4), 2)
         else:
@@ -110,13 +111,23 @@ class arduino:
         boat_y = boat_speed * math.sin(boat_bearing)
         wind_x = wind_speed * math.cos(wind_bearing)
         wind_y = wind_speed * math.sin(wind_bearing)
-        
         x = boat_x + wind_x
         y = boat_y + wind_y
         
+        if self.previousAWA is None:
+            previousAWA = math.atan(x/y)
+        
         awa = math.atan(x/y)
+        
+        if(abs(awa-previousAWA) >= 90):
+            if(awa > previousAWA):
+                awa = awa + 2*math.pi
+            else:
+                awa = awa - 2*math.pi
+                
         awa = awa * 180/math.pi
         self.ardArray[sVars.AWA_INDEX] = awa
+        self.previousAWA = awa
         
         # Calculation for change in GPS Coordinate
         heading = self.ardArray[sVars.HOG_INDEX]
