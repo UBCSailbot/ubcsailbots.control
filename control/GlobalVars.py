@@ -22,3 +22,5 @@ run = True
 auto = False
 currentProcess = None
 currentParams = None
+
+currentColumn = 0;

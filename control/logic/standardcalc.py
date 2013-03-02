@@ -8,6 +8,7 @@ import control.datatype.datatypes as datatype
 from control.parser import parsing
 from os import path
 from control import StaticVars as sVars
+from control import GlobalVars as gVars
 
 EARTH_RADIUS = 6378140
 
@@ -108,6 +109,7 @@ def getTrueWindAngle(awa, sog):
                 
             for x in range(len(SOGentries)):
                 if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
+                    gVars.currentColumn = column;
                     return index;
         
         SOG_THRESHOLD += 1
