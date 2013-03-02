@@ -18,7 +18,7 @@ import math
 EARTH_RADIUS = 6378140
 
 # Parameters which may be changed to affect how the simulation runs
-ALLOW_WIND_REVERSAL = False
+ALLOW_WIND_REVERSAL = True
 STRONG_CURRENT = False
 
 
@@ -40,7 +40,7 @@ class arduino:
         cog = round(random.uniform(-179, 180), 2)
         hog = cog - round(random.uniform(-2, 2), 2)
         self.ardArray = [hog, cog, 0,
-                          round(random.uniform(-179, 180), 2), datatype.GPSCoordinate(49, -121), 0, 
+                          round(random.uniform(-179, 180), 2), datatype.GPSCoordinate(49.27480, -123.18960), 0, 
                           round(random.uniform(0, 100), 2)]
         print(self.ardArray)
         
@@ -81,33 +81,33 @@ class arduino:
         if (math.fabs(self.ardArray[sVars.COG_INDEX]+self.currplusmin-self.ardArray[sVars.HOG_INDEX]) < .4):
             self.ardArray[sVars.COG_INDEX] += round(random.uniform(-.1, .1), 2)
         elif (self.ardArray[sVars.COG_INDEX]+self.currplusmin < self.ardArray[sVars.HOG_INDEX]):
-            self.ardArray[sVars.COG_INDEX] += round(random.uniform(0, .2), 2)
+            self.ardArray[sVars.COG_INDEX] += round(random.uniform(0, 5), 2)
         elif (self.ardArray[sVars.COG_INDEX]+self.currplusmin > self.ardArray[sVars.HOG_INDEX]):
-            self.ardArray[sVars.COG_INDEX] += round(random.uniform(-.2, 0), 2)
+            self.ardArray[sVars.COG_INDEX] += round(random.uniform(-5, 0), 2)
         
                 
         # Gets the boat up to speed and allows for a little variation
         if (math.fabs(self.ardArray[sVars.SOG_INDEX]-self.idealBoatSpd) < .2):
             self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-.1, .1), 2)
         elif (self.ardArray[sVars.SOG_INDEX] < self.idealBoatSpd):
-            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(0, 5), 2)
+            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(0, .2), 2)
         elif (self.ardArray[sVars.SOG_INDEX] >= self.idealBoatSpd):
-            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-5, 0), 2)
+            self.ardArray[sVars.SOG_INDEX] += round(random.uniform(-.2, 0), 2)
         
         
-        # Sets the apparent wind angle using vectors/magnitudes
-        if (self.ardArray[sVars.HOG_INDEX] < 0):
+        # Sets the apparent wind angle
+        if (self.ardArray[sVars.HOG_INDEX] < -180):
             boat_bearing = 360 + self.ardArray[sVars.HOG_INDEX]
         else:
             boat_bearing = self.ardArray[sVars.HOG_INDEX]
         boat_speed = self.ardArray[sVars.SOG_INDEX]
-        if (self.actualWindAngle < 0):
+        if (self.actualWindAngle < -180):
             wind_bearing = 360 + self.actualWindAngle
         else:
             wind_bearing = self.actualWindAngle
         
         boat_bearing = boat_bearing - 180
-        if (boat_bearing < 0):
+        if (boat_bearing < -180):
             boat_bearing = 360 + boat_bearing
              
         wind_speed = self.actualWindSpeed
@@ -122,8 +122,6 @@ class arduino:
         
         awa = math.atan(x/y)
         awa = awa * 180/math.pi
-        if (awa > 180):
-            awa = awa - 360
         self.ardArray[sVars.AWA_INDEX] = awa
         
         # Calculation for change in GPS Coordinate
@@ -137,8 +135,8 @@ class arduino:
         heading = self.ardArray[sVars.HOG_INDEX]
         speed = self.ardArray[sVars.SOG_INDEX]
         
-        x = speed * math.sin(heading*math.pi/180) * 1.5
-        y = speed * math.cos(heading*math.pi/180) * 1.5
+        x = speed * math.sin(heading*math.pi/180)
+        y = speed * math.cos(heading*math.pi/180)
         
         lat = lat0 + 180 / math.pi * y / EARTH_RADIUS;
         lon = lon0 + 180 / math.pi / math.sin(lat0*math.pi/180) * x / EARTH_RADIUS;

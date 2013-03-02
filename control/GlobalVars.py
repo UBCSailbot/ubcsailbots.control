@@ -19,8 +19,7 @@ functionQueue = []
 queueParameters = []
 boundaries = []
 run = True
-auto = False
 currentProcess = None
 currentParams = None
-
 currentColumn = 0;
+timerSet = False

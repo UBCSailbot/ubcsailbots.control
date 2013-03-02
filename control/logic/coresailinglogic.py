@@ -12,14 +12,14 @@ from control.logic import standardcalc
 from control import StaticVars as sVars
 from control.piardio import arduino
 
-hog_index=0
-cog_index=1
-sog_index=2
-awa_index=3
-gps_index=4
-rud_index=5
-sht_index=6
-tac_index=7
+hog_index=sVars.HOG_INDEX
+cog_index=sVars.COG_INDEX
+sog_index=sVars.SOG_INDEX
+awa_index=sVars.AWA_INDEX
+gps_index=sVars.GPS_INDEX
+rud_index=sVars.RUD_INDEX
+sht_index=sVars.SHT_INDEX
+tac_index=sVars.TAC_INDEX
 
 end_flag=0
 

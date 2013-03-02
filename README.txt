@@ -4,6 +4,13 @@ UBC Sailbot Control
 
 UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop which will continue to run until told otherwise by the GUI.
 
+Steps to get project running:
+1) Navigate to top level directory
+2) Run 'python setup.py install_lib' (May need sudo before)
+3) Run 'python setup.py test' (May need sudo before)
+4) Navigate to control directory
+5) Start code, run 'python __main__.py'
+
 Architecture of __main__
 ========================
 
@@ -62,10 +69,14 @@ Angles are always between -180 and 180
 Libraries
 ========
 
-To run the project you must have the mock and serial libraries installed. To do this, go to the control/lib folder and install the egg folder into site-packages by unzipping the folder, navigating to the directory and running "python setup.py install".
+From console in top level run: 'python setup.py install_lib'
+
+To run the project you must have the mock and serial libraries installed.
 
 Tests
 =====
+
+From console in top level run: 'python setup.py test'
 
 If a class is written which can be unit tested, it should be unit tested.  All tests must be added to control/tests package and named test_{file_being_tested}.py.  To run simulation tests, you may run the Mock Arudino as documented elsewhere in this document.
 
@@ -87,5 +98,7 @@ All static variables are contained within the StaticVars module.  If you wish to
 
 Mock Arduino
 ============
+
+To activate set mock bool in main.
 
 Mocks an arduino class which should feed back information as if the boat was in the water.  Use this class to test code in a simulation mode.  There are parameters which can be explicitly set in the class to test implementation code in different ways.

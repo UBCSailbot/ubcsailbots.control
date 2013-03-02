@@ -10,7 +10,7 @@ from os import path
 from control import StaticVars as sVars
 from control import GlobalVars as gVars
 
-EARTH_RADIUS = 6378140
+EARTH_RADIUS = 6378140.0
 
 #Implemented for the same reason as AWA_THRESHOLD, kept separate since this one will be changing.
 SOG_THRESHOLD = 0

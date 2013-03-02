@@ -12,6 +12,7 @@ import control.GlobalVars as gVars
 import control.StaticVars as sVars
 import control.challenge as challenge
 import control.logic.coresailinglogic as sl
+import control.datatype.datatypes as dt
 
 # GUI Handler Class
 #    * GUI can call any of these functions and rest will be taken care of
@@ -22,6 +23,7 @@ class GuiHandler:
     # When the remote control signals a switch to auto then the instructions are carried out
     def setInstructions(self, instructionsData):
         # Stores current boundaries
+        gVars.currentProcess = None
         gVars.boundaries = instructionsData.boundaries
         gVars.instructions = instructionsData
         # Stores function queue and parameter queue
@@ -47,7 +49,9 @@ class GuiHandler:
     # returns all the telemetry data as an object
     # ex. apparent wind, gps location, SOG, COG, heading, etc.
     def getData(self):
-        return gVars.currentData
+        arr = gVars.currentData
+        output = {"telemetry":{"Heading": arr[0], "COG" : arr[1], "SOG" : arr[2], "AWA" : arr[3], "latitude": arr[4].lat , "longitude" : arr[4].long, "Rudder" : arr[5], "SheetPercent": arr[6]}}
+        return output
     
     
     #returns a string of debug messages
