@@ -115,9 +115,9 @@ class arduino:
         y = boat_y + wind_y
         
         if self.previousAWA is None:
-            previousAWA = math.atan(x/y)
+            previousAWA = math.atan(y/x)
         
-        awa = math.atan(x/y)
+        awa = math.atan(y/x)
         
         if(abs(awa-previousAWA) >= 90):
             if(awa > previousAWA):
