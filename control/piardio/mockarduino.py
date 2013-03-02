@@ -119,7 +119,7 @@ class arduino:
         
         awa = math.atan(y/x)
         
-        if(abs(awa-previousAWA) >= 90):
+        if(abs(awa-self.previousAWA) >= 90):
             if(awa > previousAWA):
                 awa = awa + math.pi
             else:
