@@ -96,18 +96,18 @@ class arduino:
         
         
         # Sets the apparent wind angle
-        if (self.ardArray[sVars.HOG_INDEX] < 0):
+        if (self.ardArray[sVars.HOG_INDEX] < -180):
             boat_bearing = 360 + self.ardArray[sVars.HOG_INDEX]
         else:
             boat_bearing = self.ardArray[sVars.HOG_INDEX]
         boat_speed = self.ardArray[sVars.SOG_INDEX]
-        if (self.actualWindAngle < 0):
+        if (self.actualWindAngle < -180):
             wind_bearing = 360 + self.actualWindAngle
         else:
             wind_bearing = self.actualWindAngle
         
         boat_bearing = boat_bearing - 180
-        if (boat_bearing < 0):
+        if (boat_bearing < -180):
             boat_bearing = 360 + boat_bearing
              
         wind_speed = self.actualWindSpeed
