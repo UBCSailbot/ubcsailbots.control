@@ -142,6 +142,10 @@ def pointToPoint(Dest, initialTack=None):
                         cog = currentData[cog_index]
                         hog = currentData[hog_index]
                         sog = currentData[sog_index]
+                        
+                        #Just calling this to update currentColumn
+                        TWA = standardcalc.getTrueWindAngle(appWindAng, sog)
+                        
                         aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA+45)
                     
