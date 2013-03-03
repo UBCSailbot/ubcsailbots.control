@@ -4,7 +4,7 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 
-import control.GlobalVars as glob
+import control.GlobalVars as gVars
 import math
 from control.parser import parsing
 from os import path
@@ -27,7 +27,7 @@ end_flag=0
 # Input: TODO
 # Output: TODO
 def roundBuoyPort(BuoyLoc, FinalBearing):
-    currentData = glob.currentData
+    currentData = gVars.currentData
         
     GPSCoord = currentData[gps_index]
     appWindAng = currentData[awa_index]
@@ -62,7 +62,7 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
 # Input: TODO
 # Output: TODO
 def roundBuoyStbd(BuoyLoc, FinalBearing):
-    currentData = glob.currentData
+    currentData = gVars.currentData
         
     GPSCoord = currentData[gps_index]
     appWindAng = currentData[awa_index]
@@ -100,8 +100,7 @@ def pointToPoint(Dest, initialTack=None):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     end_flag = 0
     while(end_flag == 0):
-        currentData = glob.currentData
-        
+        currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
@@ -132,7 +131,7 @@ def pointToPoint(Dest, initialTack=None):
                         cog = currentData[cog_index]
                         hog = currentData[hog_index]
                         sog = currentData[sog_index]
-                        aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
+                        aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA-45)
                         
                     aobject.tack()
@@ -147,13 +146,13 @@ def pointToPoint(Dest, initialTack=None):
                         #Just calling this to update currentColumn
                         TWA = standardcalc.getTrueWindAngle(appWindAng, sog)
                         
-                        aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
+                        aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA+45)
                     
                     aobject.tack()
                     
             elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
-                aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
+                aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                 aobject.steer(aobject,'compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
             
         else:
