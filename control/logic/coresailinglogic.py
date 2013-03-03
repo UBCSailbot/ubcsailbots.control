@@ -98,6 +98,7 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
 # Output: Nothing
 def pointToPoint(Dest, initialTack=None):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
+    end_flag = 0
     while(end_flag == 0):
         currentData = glob.currentData
         
