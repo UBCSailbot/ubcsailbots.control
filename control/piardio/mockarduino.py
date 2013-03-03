@@ -26,11 +26,12 @@ class arduino:
     def __init__(self):
         
         # Sets initial vectors and magnitudes for wind and boat
+        self.flipflag = False
         self.windStrength = round(random.uniform(1, 5), 0)
         self.actualWindAngle = round(random.uniform(-179, 180), 2)
         self.actualWindSpeed = round(random.uniform(3, 6), 2)*self.windStrength
         self.idealBoatSpd = round(random.uniform(.5, 1), 2)*self.windStrength
-        self.previousAWA = None
+        self.previousx = None
         if (STRONG_CURRENT):
             self.currplusmin = round(random.uniform(-4, 4), 2)
         else:
@@ -60,7 +61,7 @@ class arduino:
     
     def _update(self):
         if (ALLOW_WIND_REVERSAL):
-            self.actualWindAngle += random.uniform(-.2, .1)
+            self.actualWindAngle += random.uniform(-.2, 0)
         else:
             self.actualWindAngle += random.uniform(-.1, .1)
         
@@ -103,31 +104,49 @@ class arduino:
         
         # Sets the apparent wind angle
         boat_bearing = self.ardArray[sVars.HOG_INDEX]
+        if (boat_bearing >= 0):
+            boat_bearing -= 180
+        else:
+            boat_bearing += 180
         boat_speed = self.ardArray[sVars.SOG_INDEX]
+        
         wind_bearing = self.actualWindAngle
+        if (wind_bearing >= 0):
+            wind_bearing -= 180
+        else:
+            wind_bearing += 180
+            
         wind_speed = self.actualWindSpeed
         
         boat_x = boat_speed * math.cos(boat_bearing)
         boat_y = boat_speed * math.sin(boat_bearing)
         wind_x = wind_speed * math.cos(wind_bearing)
         wind_y = wind_speed * math.sin(wind_bearing)
+        
         x = boat_x + wind_x
         y = boat_y + wind_y
         
-        if self.previousAWA is None:
-            previousAWA = math.atan(y/x)
+        if self.previousx is None:
+            self.previousx = x
         
+        print ("x:  " + str(x) + ",  y:  " + str(y) + ",  math.atan(y/x): " + str(math.atan(y/x)))
         awa = math.atan(y/x)
-        
-        if(abs(awa-self.previousAWA) >= 90):
-            if(awa > previousAWA):
-                awa = awa + math.pi
-            else:
-                awa = awa - math.pi
+
+        if(math.copysign(self.previousx, x) != self.previousx or self.flipflag): 
+            if (not self.flipflag):
+                self.flipflag = True
+            elif (math.copysign(self.previousx, x) != self.previousx):
+                self.flipflag = False
                 
+            print(str(self.previousx) + ", " + str(x))  
+            if(awa > 0):
+                awa -= math.pi
+            else:
+                awa += math.pi
+         
         awa = awa * 180/math.pi
         self.ardArray[sVars.AWA_INDEX] = awa
-        self.previousAWA = awa
+        self.previousx = x
         
         # Calculation for change in GPS Coordinate
         heading = self.ardArray[sVars.HOG_INDEX]

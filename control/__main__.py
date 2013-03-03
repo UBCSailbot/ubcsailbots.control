@@ -21,16 +21,7 @@ def main(argv=None):
     
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
-    #   - If false, mock will run off of an actual arduino through dev/tty ports
-    coms = list_ports.comports()
-    print(list_ports.comports())
-    usbserials = []
-    for com in coms:
-        for port in com:
-            if "usbserial" in port:
-                usbserials.append(port)
-    
-    print usbserials      
+    #   - If false, mock will run off of an actual arduino through dev/tty ports     
     mock = True
     if argv is None:
         argv = sys.argv
