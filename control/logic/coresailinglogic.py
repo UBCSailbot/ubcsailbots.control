@@ -97,7 +97,7 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
 # Input: Destination GPS Coordinate, initialTack: 0 for port, 1 for starboard, nothing calculates on own.
 # Output: Nothing
 def pointToPoint(Dest, initialTack=None):
-    list = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
+    sheetList = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     while(end_flag == 0):
         currentData = glob.currentData
         
@@ -125,14 +125,30 @@ def pointToPoint(Dest, initialTack=None):
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
                 if(abs(-TWA-45)<abs(-TWA+45) and initialTack is None):
-                    aobject.adjust_sheets(list[TWA][glob.currentColumn])
-                    aobject.steer(aobject,'AWA',hog-TWA-45)
+                    while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
+                        GPSCoord = currentData[gps_index]
+                        appWindAng = currentData[awa_index]
+                        cog = currentData[cog_index]
+                        hog = currentData[hog_index]
+                        sog = currentData[sog_index]
+                        aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
+                        aobject.steer(aobject,'AWA',hog-TWA-45)
+                        
+                    aobject.tack()
                 elif(abs(-TWA-45)>=abs(-TWA+45) and initialTack is None):
-                    aobject.adjust_sheets(list[TWA][glob.currentColumn])
-                    aobject.steer(aobject,'AWA',hog-TWA+45)
+                    while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
+                        GPSCoord = currentData[gps_index]
+                        appWindAng = currentData[awa_index]
+                        cog = currentData[cog_index]
+                        hog = currentData[hog_index]
+                        sog = currentData[sog_index]
+                        aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
+                        aobject.steer(aobject,'AWA',hog-TWA+45)
+                    
+                    aobject.tack()
                     
             elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
-                aobject.adjust_sheets(list[TWA][glob.currentColumn])
+                aobject.adjust_sheets(sheetList[TWA][glob.currentColumn])
                 aobject.steer(aobject,'compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
             
         else:
