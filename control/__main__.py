@@ -8,17 +8,18 @@ import thread
 from piardio import arduino as ard
 from piardio import mockarduino as mockard
 import challenge
-import logic
+import logic.coresailinglogic as sl
 import GlobalVars as globvar
 import logging
 from os import path
 import sched, time
 from serial.tools import list_ports
+import StaticVars as sVars
+from datatype import datatypes as dt
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
     logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
-    
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
@@ -44,10 +45,15 @@ def main(argv=None):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
         i += 1
+        if (i == 10000000):
+            globvar.functionQueue.append(sVars.GO_TO)
+            globvar.queueParameters.append((dt.GPSCoordinate(49.285891,-123.191414), ))
+            
         if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None):
+            print("HIT!!!!!")
             currentProcess = globvar.functionQueue.pop(0)
             currentParams = globvar.queueParameters.pop(0)
-            thread.start_new_thread(currentProcess, currentParams)
+            thread.start_new_thread(getattr(sl, currentProcess), currentParams)
 
 def setGlobVar(arduino, sc):
     globvar.currentData = arduino.getFromArduino()
