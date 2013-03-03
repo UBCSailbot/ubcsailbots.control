@@ -18,7 +18,7 @@ import math
 EARTH_RADIUS = 6378140
 
 # Parameters which may be changed to affect how the simulation runs
-ALLOW_WIND_REVERSAL = True
+ALLOW_WIND_REVERSAL = False
 STRONG_CURRENT = False
 
 
