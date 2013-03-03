@@ -26,10 +26,12 @@ class arduino:
     def __init__(self):
         
         # Sets initial vectors and magnitudes for wind and boat
+        self.flipflag = False
         self.windStrength = round(random.uniform(1, 5), 0)
         self.actualWindAngle = round(random.uniform(-179, 180), 2)
         self.actualWindSpeed = round(random.uniform(3, 6), 2)*self.windStrength
         self.idealBoatSpd = round(random.uniform(.5, 1), 2)*self.windStrength
+        self.previousx = None
         if (STRONG_CURRENT):
             self.currplusmin = round(random.uniform(-4, 4), 2)
         else:
@@ -59,10 +61,15 @@ class arduino:
     
     def _update(self):
         if (ALLOW_WIND_REVERSAL):
-            self.actualWindAngle += random.uniform(-.2, .1)
+            self.actualWindAngle += random.uniform(-.2, 0)
         else:
             self.actualWindAngle += random.uniform(-.1, .1)
         
+        if (self.actualWindAngle < -180):
+            self.actualWindAngle += 360
+        if (self.actualWindAngle > 180):
+            self.actualWindAngle -= 360
+            
         # Makes the rudder turn the boat
         rud = self.ardArray[sVars.RUD_INDEX]
         
@@ -96,20 +103,19 @@ class arduino:
         
         
         # Sets the apparent wind angle
-        if (self.ardArray[sVars.HOG_INDEX] < 0):
-            boat_bearing = 360 + self.ardArray[sVars.HOG_INDEX]
+        boat_bearing = self.ardArray[sVars.HOG_INDEX]
+        if (boat_bearing >= 0):
+            boat_bearing -= 180
         else:
-            boat_bearing = self.ardArray[sVars.HOG_INDEX]
+            boat_bearing += 180
         boat_speed = self.ardArray[sVars.SOG_INDEX]
-        if (self.actualWindAngle < 0):
-            wind_bearing = 360 + self.actualWindAngle
-        else:
-            wind_bearing = self.actualWindAngle
         
-        boat_bearing = boat_bearing - 180
-        if (boat_bearing < 0):
-            boat_bearing = 360 + boat_bearing
-             
+        wind_bearing = self.actualWindAngle
+        if (wind_bearing >= 0):
+            wind_bearing -= 180
+        else:
+            wind_bearing += 180
+            
         wind_speed = self.actualWindSpeed
         
         boat_x = boat_speed * math.cos(boat_bearing)
@@ -120,9 +126,27 @@ class arduino:
         x = boat_x + wind_x
         y = boat_y + wind_y
         
-        awa = math.atan(x/y)
+        if self.previousx is None:
+            self.previousx = x
+        
+        print ("x:  " + str(x) + ",  y:  " + str(y) + ",  math.atan(y/x): " + str(math.atan(y/x)))
+        awa = math.atan(y/x)
+
+        if(math.copysign(self.previousx, x) != self.previousx or self.flipflag): 
+            if (not self.flipflag):
+                self.flipflag = True
+            elif (math.copysign(self.previousx, x) != self.previousx):
+                self.flipflag = False
+                
+            print(str(self.previousx) + ", " + str(x))  
+            if(awa > 0):
+                awa -= math.pi
+            else:
+                awa += math.pi
+         
         awa = awa * 180/math.pi
         self.ardArray[sVars.AWA_INDEX] = awa
+        self.previousx = x
         
         # Calculation for change in GPS Coordinate
         heading = self.ardArray[sVars.HOG_INDEX]

@@ -25,3 +25,4 @@ SKStartTime = None
 SKMinLeft = None
 SKSecLeft = None
 SKMilliSecLeft = None
+currentColumn = 0;

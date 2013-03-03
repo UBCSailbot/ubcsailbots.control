@@ -12,10 +12,21 @@ import re
 import sys
 sys.path.append("..")
 import control.datatype.datatypes as datatype
+from serial.tools import list_ports
 
 SERIAL_PORT = '/dev/ttyACM0'
 BAUD = 57600
 
+coms = list_ports.comports()
+usbserials = []
+for com in coms:
+    for port in com:
+        if "usbserial" in port:
+            usbserials.append(port)
+
+if (len(usbserials) > 0):
+    SERIAL_PORT = usbserials[0]
+    
 class arduino:
     
     # returns Heading Over Ground
