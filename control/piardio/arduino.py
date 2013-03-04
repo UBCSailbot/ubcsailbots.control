@@ -73,6 +73,13 @@ class arduino:
         ser.write(wr)
         
     # calls steer on arduino with method and degree
+    # TODO:
+    #    Change documentation so method is type 0, 1, 2 based on:
+    #        enum sailByCourse {  
+    #                            compassMethod,
+    #                            cogMethod,
+    #                            apprentWindMethod  
+    #                           };  
     def steer(self, method, degree):
         ser = serial.Serial(SERIAL_PORT, BAUD)
         # Format
