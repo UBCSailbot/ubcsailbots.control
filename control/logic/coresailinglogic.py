@@ -10,7 +10,7 @@ from control.parser import parsing
 from os import path
 from control.logic import standardcalc
 from control import StaticVars as sVars
-from control.piardio import arduino
+from control.piardio import mockarduino as arduino
 from control import GlobalVars as gVars
 
 hog_index=sVars.HOG_INDEX
@@ -100,6 +100,7 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
 def pointToPoint(Dest, initialTack=None):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
     end_flag = 0
+    aobject = arduino.arduino()
     while(end_flag == 0):
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
@@ -108,14 +109,15 @@ def pointToPoint(Dest, initialTack=None):
         hog = currentData[hog_index]
         sog = currentData[sog_index]
         
-        aobject = arduino.arduino()
         
         if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
                     TWA = appWindAng
+                    TWA = int(TWA)
             else:
                     TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
+                    TWA = int(TWA)
                     
             if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
                 
@@ -146,7 +148,7 @@ def pointToPoint(Dest, initialTack=None):
                         
                         #Just calling this to update currentColumn
                         TWA = standardcalc.getTrueWindAngle(appWindAng, sog)
-                        
+                        TWA = int(TWA)
                         aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA+45)
                     
