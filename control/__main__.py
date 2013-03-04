@@ -9,11 +9,10 @@ from piardio import arduino as ard
 from piardio import mockarduino as mockard
 import challenge
 import logic.coresailinglogic as sl
-import GlobalVars as globvar
+import control.GlobalVars as globvar
 import logging
 from os import path
 import sched, time
-from serial.tools import list_ports
 import StaticVars as sVars
 from datatype import datatypes as dt
 
@@ -41,6 +40,7 @@ def main(argv=None):
     s = sched.scheduler(time.time, time.sleep)
     s.enter(1, 1, setGlobVar, (arduino, s,))
     thread.start_new_thread(s.run, ())
+    print globvar
     while (globvar.run):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)

@@ -129,7 +129,6 @@ class arduino:
         if self.previousx is None:
             self.previousx = x
         
-        print ("x:  " + str(x) + ",  y:  " + str(y) + ",  math.atan(y/x): " + str(math.atan(y/x)))
         awa = math.atan(y/x)
 
         if(math.copysign(self.previousx, x) != self.previousx or self.flipflag): 

@@ -97,6 +97,7 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
             return 0
 
 def getTrueWindAngle(awa, sog):
+    SOG_THRESHOLD = 0
     while(1):
         AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
         SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))

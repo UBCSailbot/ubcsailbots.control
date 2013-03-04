@@ -4,13 +4,14 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 
-import control.GlobalVars as gVars
 import math
+import sys
 from control.parser import parsing
 from os import path
 from control.logic import standardcalc
 from control import StaticVars as sVars
 from control.piardio import arduino
+from control import GlobalVars as gVars
 
 hog_index=sVars.HOG_INDEX
 cog_index=sVars.COG_INDEX
