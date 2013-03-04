@@ -156,7 +156,7 @@ def pointToPoint(Dest, initialTack=None):
                     
             elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
                 aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
-                aobject.steer(aobject,'compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
+                aobject.steer('compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
             
         else:
             end_flag = 1

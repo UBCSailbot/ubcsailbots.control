@@ -18,7 +18,11 @@ from datatype import datatypes as dt
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
+    with open(path.join(path.dirname(__file__),'log/sailbot.log'), 'w'):
+        pass
     logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    logger = logging.getLogger("sailbot.log")
+    globvar.logger = logger
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
@@ -40,7 +44,6 @@ def main(argv=None):
     s = sched.scheduler(time.time, time.sleep)
     s.enter(1, 1, setGlobVar, (arduino, s,))
     thread.start_new_thread(s.run, ())
-    print globvar
     while (globvar.run):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
