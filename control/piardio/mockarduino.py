@@ -64,9 +64,6 @@ class arduino:
             hog += 360
         
         self.ardArray[sVars.HOG_INDEX] = hog
-            
-    def adjust_rudder(self, rudder_angle):
-        self.ardArray[sVars.RUD_INDEX] = rudder_angle
     
     def adjust_sheets(self, sheet_percent):                                                
         self.ardArray[sVars.SHT_INDEX] = sheet_percent
@@ -83,20 +80,7 @@ class arduino:
         if (self.actualWindAngle < -180):
             self.actualWindAngle += 360
         if (self.actualWindAngle > 180):
-            self.actualWindAngle -= 360
-            
-        # Makes the rudder turn the boat
-        rud = self.ardArray[sVars.RUD_INDEX]
-        
-        if (rud != 0):
-            hog = self.ardArray[sVars.HOG_INDEX]
-            hog -= rud/6
-            if (hog > 180):
-                hog -= 360
-            elif (hog < -180):
-                hog += 360
-            self.ardArray[sVars.HOG_INDEX] = hog
-            
+            self.actualWindAngle -= 360            
                 
         self.ardArray[sVars.HOG_INDEX] += round(random.uniform(-.1, .1), 2)
 

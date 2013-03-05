@@ -18,9 +18,7 @@ cog_index=sVars.COG_INDEX
 sog_index=sVars.SOG_INDEX
 awa_index=sVars.AWA_INDEX
 gps_index=sVars.GPS_INDEX
-rud_index=sVars.RUD_INDEX
 sht_index=sVars.SHT_INDEX
-tac_index=sVars.TAC_INDEX
 
 end_flag=0
 

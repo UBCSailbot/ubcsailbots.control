@@ -28,3 +28,4 @@ SKMilliSecLeft = None
 currentColumn = 0;
 logger = None
 TrueWindAngle = 0;
+auto = 1;
