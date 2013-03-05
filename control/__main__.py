@@ -15,17 +15,22 @@ from os import path
 import sched, time
 import StaticVars as sVars
 from datatype import datatypes as dt
+import datetime
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
-    with open(path.join(path.dirname(__file__),'log/sailbot.log'), 'w'):
-        pass
+    #with open(path.join(path.dirname(__file__),'log/sailbot.log'), 'w'):
+    #    pass
     logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
     logger = logging.getLogger("sailbot.log")
     globvar.logger = logger
+    logger.info(datetime.datetime.now())
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
+    globvar.logger.warning("Warning Message")
+    globvar.logger.debug("Debug Message")
+    globvar.logger.critical("Critical Message")
     mock = True
     if argv is None:
         argv = sys.argv

@@ -114,10 +114,12 @@ def pointToPoint(Dest, initialTack=None):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
                     TWA = appWindAng
-                    TWA = int(TWA)
+                    TWA = abs(int(TWA))
+                    print ("TWA is: " + str(TWA))
             else:
                     TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
-                    TWA = int(TWA)
+                    TWA = abs(int(TWA))
+                    print ("TWA is: " + str(TWA))
                     
             if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
                 
@@ -148,7 +150,8 @@ def pointToPoint(Dest, initialTack=None):
                         
                         #Just calling this to update currentColumn
                         TWA = standardcalc.getTrueWindAngle(appWindAng, sog)
-                        TWA = int(TWA)
+                        TWA = abs(int(TWA))
+                        print ("TWA is: " + str(TWA))
                         aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA+45)
                     
