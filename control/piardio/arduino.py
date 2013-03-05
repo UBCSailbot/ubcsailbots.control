@@ -149,9 +149,10 @@ class arduino:
             return arr
         else:
             return None
-        
+    
+    # Takes an array from the arduino and maps it to the appropriate objects in the python array
     def interpretArr(self, ardArr):
-        arr = [0, 0, 0, 0, 0, 0, 0, 0]
+        arr = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         arr[sVars.HOG_INDEX] = ardArr[ARD_HOG]
         arr[sVars.COG_INDEX] = ardArr[ARD_COG]
         arr[sVars.SOG_INDEX] = ardArr[ARD_SOG]
@@ -160,4 +161,5 @@ class arduino:
         arr[sVars.SHT_INDEX] = ardArr[ARD_SHT]
         arr[sVars.SAT_INDEX] = ardArr[ARD_SAT]
         arr[sVars.ACC_INDEX] = ardArr[ARD_ACC]
+        arr[sVars.AUT_INDEX] = ardArr[ARD_AUT]
         return arr
