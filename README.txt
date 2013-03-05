@@ -102,3 +102,12 @@ Mock Arduino
 To activate set mock bool in main.
 
 Mocks an arduino class which should feed back information as if the boat was in the water.  Use this class to test code in a simulation mode.  There are parameters which can be explicitly set in the class to test implementation code in different ways.
+
+Logging
+=======
+
+There is support for logging throughout the entire project which logs to a file in log/sailbot.log.  To access the logger call functions on 'logger' in GlobalVar.
+Example Calls:
+	globvar.logger.warning("Warning Message")
+    	globvar.logger.debug("Debug Message")
+    	globvar.logger.critical("Critical Message")

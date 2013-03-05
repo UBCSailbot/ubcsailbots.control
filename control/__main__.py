@@ -28,9 +28,6 @@ def main(argv=None):
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
-    globvar.logger.warning("Warning Message")
-    globvar.logger.debug("Debug Message")
-    globvar.logger.critical("Critical Message")
     mock = True
     if argv is None:
         argv = sys.argv
@@ -54,6 +51,7 @@ def main(argv=None):
         # switch processes to the next function in the queue (FIFO)
         i += 1
         if (i == 10000000):
+            arduino.tack()
             globvar.functionQueue.append(sVars.GO_TO)
             globvar.queueParameters.append((dt.GPSCoordinate(49.285891,-123.191414), ))
             
