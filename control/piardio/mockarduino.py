@@ -14,6 +14,7 @@ import control.datatype.datatypes as datatype
 import control.StaticVars as sVars
 import random
 import math
+import thread
 
 EARTH_RADIUS = 6378140
 
@@ -50,6 +51,20 @@ class arduino:
         self._update()
         return self.ardArray
     
+    def tack(self):
+        hog = self.ardArray[sVars.HOG_INDEX]
+        if (self.actualWindAngle < hog):
+            hog = self.actualWindAngle - 45
+        else:
+            hog = self.actualWindAngle + 45
+        
+        if (hog > 180):
+            hog -= 360
+        elif (hog < -180):
+            hog += 360
+        
+        self.ardArray[sVars.HOG_INDEX] = hog
+            
     def adjust_rudder(self, rudder_angle):
         self.ardArray[sVars.RUD_INDEX] = rudder_angle
     
