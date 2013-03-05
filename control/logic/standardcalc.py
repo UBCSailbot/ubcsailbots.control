@@ -111,11 +111,15 @@ def getTrueWindAngle(awa, sog):
             for x in range(len(SOGentries)):
                 if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
                     gVars.currentColumn = column;
+                    if(awa < 0):
+                        gVars.trueWindAngle = -index;
+                    else:
+                        gVars.trueWindAngle = index;                        
                     return index;
         
         SOG_THRESHOLD += 1
         
-        if(SOG_THRESHOLD >= 5):
+        if(SOG_THRESHOLD >= 500):
             return None;    
     
 

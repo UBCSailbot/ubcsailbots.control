@@ -98,7 +98,7 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
 # Input: Destination GPS Coordinate, initialTack: 0 for port, 1 for starboard, nothing calculates on own.
 # Output: Nothing
 def pointToPoint(Dest, initialTack=None):
-    sheetList = parsing.parse(path.join(path.dirname(__file__), 'sheetSettings'))
+    sheetList = parsing.parse(path.join(path.dirname(__file__), 'apparentSheetSetting'))
     end_flag = 0
     aobject = arduino.arduino()
     while(end_flag == 0):
@@ -107,7 +107,7 @@ def pointToPoint(Dest, initialTack=None):
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
         hog = currentData[hog_index]
-        sog = currentData[sog_index]
+        sog = currentData[sog_index] * 100
         
         
         if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
@@ -115,12 +115,18 @@ def pointToPoint(Dest, initialTack=None):
             if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
                     TWA = appWindAng
                     TWA = abs(int(TWA))
-                    print ("TWA is: " + str(TWA))
+                    if(appWindAng < 0):
+                        gVars.TrueWindAngle = -TWA
+                    else:
+                        gVars.TrueWindAngle = TWA
+                    gVars.currentColumn = 0;
+                    print ("TWA is: " + str(gVars.TrueWindAngle))
             else:
                     TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
-                    TWA = abs(int(TWA))
-                    print ("TWA is: " + str(TWA))
-                    
+                   # TWA = abs(int(TWA))
+                    print ("Hit else statement")
+                    print ("TWA is: " + str(gVars.TrueWindAngle))
+                                
             if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
                 
                 #Trying to determine whether 45 degrees clockwise or counter clockwise of TWA wrt North is closer to current heading
@@ -135,7 +141,7 @@ def pointToPoint(Dest, initialTack=None):
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
                         hog = currentData[hog_index]
-                        sog = currentData[sog_index]
+                        sog = currentData[sog_index] * 100;
                         aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA-45)
                         
@@ -150,7 +156,7 @@ def pointToPoint(Dest, initialTack=None):
                         
                         #Just calling this to update currentColumn
                         TWA = standardcalc.getTrueWindAngle(appWindAng, sog)
-                        TWA = abs(int(TWA))
+                        #TWA = abs(int(TWA))
                         print ("TWA is: " + str(TWA))
                         aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
                         aobject.steer(aobject,'AWA',hog-TWA+45)

@@ -27,3 +27,4 @@ SKSecLeft = None
 SKMilliSecLeft = None
 currentColumn = 0;
 logger = None
+TrueWindAngle = 0;
