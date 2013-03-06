@@ -123,7 +123,7 @@ def pointToPoint(Dest, initialTack=None):
                     else:
                         gVars.TrueWindAngle = newTWA
                     gVars.currentColumn = 0;
-                    print ("TWA is: " + str(gVars.TrueWindAngle))
+                    #print ("TWA is: " + str(gVars.TrueWindAngle))
             else:
                     newTWA = standardcalc.getTrueWindAngle(abs(appWindAng),sog)
                     newTWA = abs(int(newTWA))
@@ -132,7 +132,7 @@ def pointToPoint(Dest, initialTack=None):
                     else:
                         gVars.TrueWindAngle = newTWA
                     print ("Hit else statement")
-                    print ("TWA is: " + str(gVars.TrueWindAngle))
+                    #print ("TWA is: " + str(gVars.TrueWindAngle))
                                 
             if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
                 
