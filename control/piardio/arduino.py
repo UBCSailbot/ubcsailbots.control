@@ -48,7 +48,7 @@ if (len(usbserials) > 0):
 class arduino:
     
     def __init__(self):
-        self.ser = serial.Serial(SERIAL_PORT, BAUD)
+        self.ser = serial.Serial('COM4', BAUD)
         
     # returns Heading Over Ground
     def getHOG(self):
@@ -117,33 +117,27 @@ class arduino:
     
     # returns the latest array of all info from the arduino
     def getFromArduino(self):
-        
-        # First parameter: serial port for the APM
-        #     * to get serial port for the APM, type ls /dev/tty* ont he pi
-        # Second parameter: baud rate on APM
-        
-        # Splits comma-separated string (ex-"1, 12, 123, 1234, 12345") into array
+
+        self.ser.flushInput()
         ardArr = []
-        # Waits for a response from the Arduino
-        timesTried = 0
-        while (len(ardArr) == 0 and timesTried < 10 and self.ser):
-            readarr = self.ser.read(600)
-            print readarr
-            newarr = ""
-            if '\n' in readarr:
-                lines = readarr.split('\n') # Guaranteed to have at least 2 entries
-                newarr = lines[-2]
-            print newarr
-            newarr = newarr.replace(" ", "")
-            if (newarr is not None):
-                ardArr = re.findall("[^,\s][^\,]*[^,\s]*", newarr)
-                i = 0
-                while (i < len(ardArr)):
-                    ardArr[i] = float(ardArr[i])
-                    i +=1
-                
-            timesTried += 1
-            
+        buffer = ''
+        for i in range(0,1):
+            buffer = buffer + self.ser.read(600)
+            if '\n' in buffer:
+                lines = buffer.split('\n') # Guaranteed to have at least 2 entries
+                ardArr = lines[-2]
+                #If the Arduino sends lots of empty lines, you'll lose the
+                #last filled line, so you could make the above statement conditional
+                #like so: if lines[-2]: last_received = lines[-2]
+                buffer = lines[-1]                
+        print ardArr
+        ardArr = ardArr.replace(" ", "")
+        if (ardArr is not None):
+            ardArr = re.findall("[^,\s][^\,]*[^,\s]*", ardArr)
+            i = 0
+            while (i < len(ardArr)):
+                ardArr[i] = float(ardArr[i])
+                i+=1     
         if (len(ardArr) > 0):
             arr = self.interpretArr(ardArr)
             return arr
@@ -157,7 +151,7 @@ class arduino:
         arr[sVars.COG_INDEX] = ardArr[ARD_COG]
         arr[sVars.SOG_INDEX] = ardArr[ARD_SOG]
         arr[sVars.AWA_INDEX] = ardArr[ARD_AWAV]
-        arr[sVars.GPS_INDEX] = datatype.GPSCoordinate(ARD_LAT, ARD_LONG)
+        arr[sVars.GPS_INDEX] = datatype.GPSCoordinate(ardArr[ARD_LAT], ardArr[ARD_LONG])
         arr[sVars.SHT_INDEX] = ardArr[ARD_SHT]
         arr[sVars.SAT_INDEX] = ardArr[ARD_SAT]
         arr[sVars.ACC_INDEX] = ardArr[ARD_ACC]
