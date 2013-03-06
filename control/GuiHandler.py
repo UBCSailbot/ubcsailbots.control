@@ -27,7 +27,7 @@ class GuiHandler:
         gVars.boundaries = instructionsData.boundaries
         gVars.instructions = instructionsData
         # Stores function queue and parameter queue
-        if (instructionsData.challenge == 0):
+        if (instructionsData.challenge == sVars.NO_CHALLENGE):
             for waypoint in instructionsData.waypoints:
                 gVars.functionQueue.append(getattr(sl, waypoint.wtype))
                 gVars.queueParameters.append(waypoint.coordinate)
@@ -41,7 +41,7 @@ class GuiHandler:
         elif (instructionsData.challenge == sVars.LONG_DISTANCE_CHALLENGE):
             gVars.functionQueue.append(getattr(challenge.longdistance, "run"))
             gVars.queueParameters.append(tuple(instructionsData.waypoints))
-            
+        print gVars.currentProcess
     # returns the  instructions object
     def getInstructions(self):        #main.returninstructionsdataforgui
         return gVars.instructions
