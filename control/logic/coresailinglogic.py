@@ -99,33 +99,35 @@ def pointToPoint(Dest, initialTack=None):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'apparentSheetSetting'))
     end_flag = 0
     aobject = arduino.arduino()
+    TWA = 0
+    oldColumn = 0
+    
     while(end_flag == 0):
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         cog = currentData[cog_index]
         hog = currentData[hog_index]
-        sog = currentData[sog_index] * 100
-        
+        sog = currentData[sog_index] * 100        
         
         if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
-                    TWA = appWindAng
-                    TWA = abs(int(TWA))
+                    newTWA = appWindAng
+                    newTWA = abs(int(newTWA))
                     if(appWindAng < 0):
-                        gVars.TrueWindAngle = -TWA
+                        gVars.TrueWindAngle = -newTWA
                     else:
-                        gVars.TrueWindAngle = TWA
+                        gVars.TrueWindAngle = newTWA
                     gVars.currentColumn = 0;
                     print ("TWA is: " + str(gVars.TrueWindAngle))
             else:
-                    TWA = standardcalc.getTrueWindAngle(abs(appWindAng),sog)
-                    TWA = abs(int(TWA))
+                    newTWA = standardcalc.getTrueWindAngle(abs(appWindAng),sog)
+                    newTWA = abs(int(newTWA))
                     if(appWindAng < 0):
-                        gVars.TrueWindAngle = -TWA
+                        gVars.TrueWindAngle = -newTWA
                     else:
-                        gVars.TrueWindAngle = TWA
+                        gVars.TrueWindAngle = newTWA
                     print ("Hit else statement")
                     print ("TWA is: " + str(gVars.TrueWindAngle))
                                 
@@ -137,37 +139,58 @@ def pointToPoint(Dest, initialTack=None):
                 #To get it wrt to current heading, we use hog-TWA-45-hog and hog-TWA+45-hog.  Both terms have hogs cancelling out.
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
-                if(abs(-TWA-45)<abs(-TWA+45) and initialTack is None):
+                if(abs(-newTWA-45)<abs(-newTWA+45) and initialTack is None):
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
                         hog = currentData[hog_index]
-                        sog = currentData[sog_index] * 100;
-                        aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
-                        aobject.steer(aobject,'AWA',hog-TWA-45)
+                        sog = currentData[sog_index] * 100
+                        
+                        if(sog > sVars.SOG_THRESHOLD):
+                            newTWA = standardcalc.getTrueWindAngle(appWindAng, sog)
+                        else:
+                            newTWA = appWindAng
+                            newTWA = abs(int(newTWA))
+                            
+                        
+                        if( TWA != newTWA or oldColumn != gVars.currentColumn):
+                            aobject.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                            aobject.steer(aobject,'AWA',hog-newTWA-45)
+                            TWA = newTWA
+                            oldColumn = gVars.currentColumn
                         
                     aobject.tack()
-                elif(abs(-TWA-45)>=abs(-TWA+45) and initialTack is None):
+                elif(abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None):
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
                         hog = currentData[hog_index]
-                        sog = currentData[sog_index]
+                        sog = currentData[sog_index]*100
                         
-                        #Just calling this to update currentColumn
-                        TWA = standardcalc.getTrueWindAngle(appWindAng, sog)
+                        if(sog > sVars.SOG_THRESHOLD):
+                            newTWA = standardcalc.getTrueWindAngle(appWindAng, sog)
+                        else:
+                            newTWA = appWindAng
+                            newTWA = abs(int(newTWA))
                         #TWA = abs(int(TWA))
-                        print ("TWA is: " + str(TWA))
-                        aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
-                        aobject.steer(aobject,'AWA',hog-TWA+45)
+                        print ("TWA is: " + str(newTWA))
+                        
+                        if(TWA != newTWA or oldColumn != gVars.currentColumn):
+                            aobject.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                            aobject.steer(aobject,'AWA',hog-newTWA+45)
+                            TWA = newTWA
+                            oldColumn = gVars.currentColumn
                     
                     aobject.tack()
                     
-            elif(abs(hog-TWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
-                aobject.adjust_sheets(sheetList[TWA][gVars.currentColumn])
-                aobject.steer('compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
+            elif(abs(hog-newTWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
+                if(TWA != newTWA or oldColumn != gVars.currentColumn):
+                    aobject.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                    aobject.steer('compass',standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
+                    TWA = newTWA
+                    gVars.currentColumn
             
         else:
             end_flag = 1
