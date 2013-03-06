@@ -10,6 +10,7 @@ Static Variables for the control logic and GUI
 '''
 
 # Constant names for challenges and logic
+NO_CHALLENGE = "NONE"
 NAVIGATION_CHALLENGE = "challenge.navigation"
 STATION_KEEPING_CHALLENGE = "challenge.stationkeeping"
 LONG_DISTANCE_CHALLENGE = "challenge.longdistance"
