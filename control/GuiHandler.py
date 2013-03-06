@@ -50,7 +50,7 @@ class GuiHandler:
     # ex. apparent wind, gps location, SOG, COG, heading, etc.
     def getData(self):
         arr = gVars.currentData
-        output = {"telemetry":{"Heading": arr[0], "COG" : arr[1], "SOG" : arr[2], "AWA" : arr[3], "latitude": arr[4].lat , "longitude" : arr[4].long, "Rudder" : arr[5], "SheetPercent": arr[6]}}
+        output = {"telemetry":{"Heading": arr[0], "COG" : arr[1], "SOG" : arr[2], "AWA" : arr[3], "latitude": arr[4].lat , "longitude" : arr[4].long, "SheetPercent": arr[5]}}
         return output
     
     

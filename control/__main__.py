@@ -52,9 +52,8 @@ def main(argv=None):
         # switch processes to the next function in the queue (FIFO)
         i += 1
         if (i == 10000000):
-            globvar.currentData = arduino.getFromArduino()
             #arduino.steer(2, 0)
-            arduino.adjust_sheets(0)
+            arduino.adjust_sheets(50)
             #arduino.tack()
             #globvar.functionQueue.append(sVars.GO_TO)
             #globvar.queueParameters.append((dt.GPSCoordinate(49.285891,-123.191414), ))
