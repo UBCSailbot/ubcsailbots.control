@@ -14,6 +14,7 @@ sys.path.append("..")
 import control.datatype.datatypes as datatype
 from serial.tools import list_ports
 import control.StaticVars as sVars
+import time
 
 SERIAL_PORT = '/dev/ttyACM0'
 BAUD = 57600
@@ -48,7 +49,7 @@ if (len(usbserials) > 0):
 class arduino:
     
     def __init__(self):
-        self.ser = serial.Serial('COM4', BAUD)
+        self.ser = serial.Serial('COM3', BAUD)
         
     # returns Heading Over Ground
     def getHOG(self):
@@ -84,6 +85,7 @@ class arduino:
         wr = "ADJUST_SHEETS,{sp}\r\n".format(sp=sheet_percent)
         print wr
         self.ser.write(wr)
+        time.sleep(.1)
         
     # calls steer on arduino with method and degree
     # TODO:
@@ -99,6 +101,7 @@ class arduino:
         wr = "STEER,{m},{d}\n".format(m=method, d=degree)
         print wr
         self.ser.write(wr)
+        time.sleep(.1)
     
     # calls tack on arduino    
     def tack(self):
@@ -151,7 +154,7 @@ class arduino:
         arr[sVars.COG_INDEX] = ardArr[ARD_COG]
         arr[sVars.SOG_INDEX] = ardArr[ARD_SOG]
         arr[sVars.AWA_INDEX] = ardArr[ARD_AWAV]
-        arr[sVars.GPS_INDEX] = datatype.GPSCoordinate(ardArr[ARD_LAT], ardArr[ARD_LONG])
+        arr[sVars.GPS_INDEX] = datatype.GPSCoordinate(ardArr[ARD_LAT]/10000000, ardArr[ARD_LONG]/10000000)
         arr[sVars.SHT_INDEX] = ardArr[ARD_SHT]
         arr[sVars.SAT_INDEX] = ardArr[ARD_SAT]
         arr[sVars.ACC_INDEX] = ardArr[ARD_ACC]
