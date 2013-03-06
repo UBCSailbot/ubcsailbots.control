@@ -13,6 +13,7 @@ Static Variables for the control logic and GUI
 NAVIGATION_CHALLENGE = "navigation"
 STATION_KEEPING_CHALLENGE = "stationkeeping"
 LONG_DISTANCE_CHALLENGE = "longdistance"
+NO_CHALLENGE = "NONE"
 
 # -- Logic Waypoint Types --
 # Point to Point waypoint types
