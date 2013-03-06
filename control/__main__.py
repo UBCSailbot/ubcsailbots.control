@@ -10,14 +10,14 @@ import sched
 import time
 import datetime
 from os import path
-from piardio import arduino
-from piardio import mockarduino
 from challenge import longdistance
 from challenge import navigation
 from challenge import stationkeeping
 from logic import coresailinglogic
 import control.GlobalVars as gVars
 import control.StaticVars as sVars
+import piardio.arduino
+import piardio.mockarduino
 
 
 # Main - pass challenge or logic function name as argument
@@ -42,9 +42,9 @@ def main(argv=None):
     
     print("Mock Enabled: " + str(mock))
     if (mock == False):        
-        arduino = arduino.arduino()
+        arduino = piardio.arduino.arduino()
     else:
-        arduino = mockarduino.arduino()
+        arduino = piardio.mockarduino.arduino()
     s = sched.scheduler(time.time, time.sleep)
     s.enter(1, 1, setGlobVar, (arduino, s,))
     thread.start_new_thread(s.run, ())
