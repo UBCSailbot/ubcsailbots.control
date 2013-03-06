@@ -101,7 +101,7 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
 def pointToPoint(Dest, initialTack=None):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'apparentSheetSetting'))
     end_flag = 0
-    aobject = gVars.arduino
+    arduino = gVars.arduino
     TWA = 0
     oldColumn = 0
     
@@ -158,12 +158,12 @@ def pointToPoint(Dest, initialTack=None):
                             
                         
                         if( TWA != newTWA or oldColumn != gVars.currentColumn):
-                            aobject.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
-                            aobject.steer(AWA_METHOD,hog-newTWA-45)
+                            arduino.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                            arduino.steer(AWA_METHOD,hog-newTWA-45)
                             TWA = newTWA
                             oldColumn = gVars.currentColumn
                         
-                    aobject.tack()
+                    arduino.tack()
                 elif(abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None):
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
                         GPSCoord = currentData[gps_index]
@@ -181,17 +181,17 @@ def pointToPoint(Dest, initialTack=None):
                         print ("TWA is: " + str(newTWA))
                         
                         if(TWA != newTWA or oldColumn != gVars.currentColumn):
-                            aobject.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
-                            aobject.steer(AWA_METHOD,hog-newTWA+45)
+                            arduino.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                            arduino.steer(AWA_METHOD,hog-newTWA+45)
                             TWA = newTWA
                             oldColumn = gVars.currentColumn
                     
-                    aobject.tack()
+                    arduino.tack()
                     
             elif(abs(hog-newTWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
                 if(TWA != newTWA or oldColumn != gVars.currentColumn):
-                    aobject.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
-                    aobject.steer(COMPASS_METHOD,standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
+                    arduino.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                    arduino.steer(COMPASS_METHOD,standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
                     TWA = newTWA
                     gVars.currentColumn
             
