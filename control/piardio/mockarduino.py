@@ -10,7 +10,7 @@ boat data that can be used by the control logic and gui.
 @author: joshandrews
 '''
 
-import control.datatype.datatypes as datatype
+from control.datatype import datatypes
 import control.StaticVars as sVars
 import random
 import math
@@ -43,7 +43,7 @@ class arduino:
         cog = round(random.uniform(-179, 180), 2)
         hog = cog - round(random.uniform(-2, 2), 2)
         self.ardArray = [hog, cog, 0,
-                          round(random.uniform(-179, 180), 2), datatype.GPSCoordinate(49.27480, -123.18960), 0, 
+                          round(random.uniform(-179, 180), 2), datatypes.GPSCoordinate(49.27480, -123.18960), 0, 
                           round(random.uniform(0, 100), 2), 1, 2]
         print(self.ardArray)
         

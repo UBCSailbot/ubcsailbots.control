@@ -27,4 +27,5 @@ SKSecLeft = None
 SKMilliSecLeft = None
 currentColumn = 0;
 logger = None
+arduino = None
 TrueWindAngle = 0;

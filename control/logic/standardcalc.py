@@ -4,9 +4,9 @@ Created on Jan 20, 2013
 @author: joshandrews
 '''
 import math
-import control.datatype.datatypes as datatype
-from control.parser import parsing
 from os import path
+from control.datatype import datatypes
+from control.parser import parsing
 from control import StaticVars as sVars
 from control import GlobalVars as gVars
 
@@ -15,7 +15,7 @@ EARTH_RADIUS = 6378140.0
 #returns gpscoordinate distance in meters away from starting point.
 #positive yDist = North, positive xDist = East
 def GPSDistAway(coord, xDist, yDist):
-    result = datatype.GPSCoordinate()
+    result = datatypes.GPSCoordinate()
     result.long = coord.long + (180.0/math.pi)*(float(xDist)/EARTH_RADIUS)/math.cos(math.radians(coord.lat))
     result.lat = coord.lat + (180.0/math.pi)*(float(yDist)/EARTH_RADIUS)
     return result
@@ -34,7 +34,7 @@ def distBetweenTwoCoords(coord1, coord2):
 
 #Returns the angle in degrees
 def angleBetweenTwoCoords(sourceCoord, destCoord):
-    GPSCoord = datatype.GPSCoordinate
+    GPSCoord = datatypes.GPSCoordinate
     
     if(sourceCoord.lat > destCoord.lat):
         GPSCoord.lat = sourceCoord.lat

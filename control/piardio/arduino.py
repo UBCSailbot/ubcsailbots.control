@@ -7,11 +7,12 @@ Data interpreter: Returns values for current state passed from the arduino
 Format of return from Arduino:
     TODO
 '''
+
 import serial
 import re
 import sys
 sys.path.append("..")
-import control.datatype.datatypes as datatype
+from control.datatype import datatypes
 from serial.tools import list_ports
 import control.StaticVars as sVars
 import time
@@ -50,33 +51,6 @@ class arduino:
     
     def __init__(self):
         self.ser = serial.Serial('COM3', BAUD)
-        
-    # returns Heading Over Ground
-    def getHOG(self):
-        # Example
-        #     HOG = getFromArduino()[0]
-        #     return datatypes.Angle(HOG)
-        return datatype.Angle()
-    
-    # returns Course Over Ground
-    def getCOG(self):
-        return datatype.Angle()
-    
-    # returns Apparent Wind Angle
-    def getAWA(self):
-        return datatype.Angle()
-    
-    # returns GPS coordinate
-    def getGPSCoordinate(self): 
-        return datatype.GPSCoordinate()
-    
-    # returns Rudder Angle
-    def getRudderAngle(self):
-        return datatype.Angle()
-    
-    # returns Sheet Percentage
-    def getSheetPercentage(self):
-        return 0
         
     # calls adjust_sheets on arduino with sheet percentage
     def adjust_sheets(self, sheet_percent):                                                
@@ -154,7 +128,7 @@ class arduino:
         arr[sVars.COG_INDEX] = ardArr[ARD_COG]
         arr[sVars.SOG_INDEX] = ardArr[ARD_SOG]
         arr[sVars.AWA_INDEX] = ardArr[ARD_AWAV]
-        arr[sVars.GPS_INDEX] = datatype.GPSCoordinate(ardArr[ARD_LAT]/10000000, ardArr[ARD_LONG]/10000000)
+        arr[sVars.GPS_INDEX] = datatypes.GPSCoordinate(ardArr[ARD_LAT]/10000000, ardArr[ARD_LONG]/10000000)
         arr[sVars.SHT_INDEX] = ardArr[ARD_SHT]
         arr[sVars.SAT_INDEX] = ardArr[ARD_SAT]
         arr[sVars.ACC_INDEX] = ardArr[ARD_ACC]

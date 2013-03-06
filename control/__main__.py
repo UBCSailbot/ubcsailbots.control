@@ -5,20 +5,20 @@ Created on Jan 19, 2013
 '''
 import sys
 import thread
-from piardio import arduino as ard
-from piardio import mockarduino as mockard
-import challenge.longdistance
-import challenge.navigation
-import challenge.stationkeeping
-import logic.coresailinglogic
-import logic.standardcalc as sc
-import control.GlobalVars as globvar
 import logging
-from os import path
-import sched, time
-import StaticVars as sVars
-from datatype import datatypes as dt
+import sched
+import time
 import datetime
+from os import path
+from piardio import arduino
+from piardio import mockarduino
+from challenge import longdistance
+from challenge import navigation
+from challenge import stationkeeping
+from logic import coresailinglogic
+import control.GlobalVars as gVars
+import control.StaticVars as sVars
+
 
 # Main - pass challenge or logic function name as argument
 def main(argv=None):
@@ -26,7 +26,7 @@ def main(argv=None):
     #    pass
     logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
     logger = logging.getLogger("sailbot.log")
-    globvar.logger = logger
+    gVars.logger = logger
     logger.info(datetime.datetime.now())
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
@@ -42,36 +42,35 @@ def main(argv=None):
     
     print("Mock Enabled: " + str(mock))
     if (mock == False):        
-        arduino = ard.arduino()
+        arduino = arduino.arduino()
     else:
-        arduino = mockard.arduino()
-    i = 0
+        arduino = mockarduino.arduino()
     s = sched.scheduler(time.time, time.sleep)
     s.enter(1, 1, setGlobVar, (arduino, s,))
     thread.start_new_thread(s.run, ())
-    while (globvar.run):
+    while (gVars.run):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
-        if (len(globvar.functionQueue) > 0 and globvar.currentProcess is None):
-            currentProcess = globvar.functionQueue.pop(0)
-            currentParams = globvar.queueParameters.pop(0)
+        if (len(gVars.functionQueue) > 0 and gVars.currentProcess is None):
+            currentProcess = gVars.functionQueue.pop(0)
+            currentParams = gVars.queueParameters.pop(0)
             if (currentProcess == sVars.GO_AROUND_PORT or currentProcess == sVars.GO_AROUND_STBD or currentProcess == sVars.GO_TO):
-                thread.start_new_thread(getattr(logic.coresailinglogic, currentProcess), currentParams)
+                thread.start_new_thread(getattr(coresailinglogic, currentProcess), currentParams)
                 getattr()
             elif (currentProcess == sVars.NAVIGATION_CHALLENGE):
-                thread.start_new_thread(challenge.navigation.run, currentParams)
+                thread.start_new_thread(navigation.run, currentParams)
             elif (currentProcess == sVars.STATION_KEEPING_CHALLENGE):
-                thread.start_new_thread(challenge.stationkeeping.run, currentParams)
+                thread.start_new_thread(stationkeeping.run, currentParams)
             elif (currentProcess == sVars.LONG_DISTANCE_CHALLENGE):
-                thread.start_new_thread(challenge.navigation.run, currentParams)
+                thread.start_new_thread(longdistance.run, currentParams)
             else:
-                globvar.logger.warning("No instruction task named " + str(currentProcess))
+                gVars.logger.warning("No instruction task named " + str(currentProcess))
                 currentProcess = None
                 currentParams = None
 
 def setGlobVar(arduino, sc):
-    globvar.currentData = arduino.getFromArduino()
-    printArdArray(globvar.currentData)
+    gVars.currentData = arduino.getFromArduino()
+    printArdArray(gVars.currentData)
     sc.enter(1, 1, setGlobVar, (arduino, sc,))
     
 def printArdArray(arr):

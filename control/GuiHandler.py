@@ -11,8 +11,6 @@ GUI Handler for the control logic
 import control.GlobalVars as gVars
 import control.StaticVars as sVars
 import control.challenge as challenge
-import control.logic.coresailinglogic as sl
-import control.datatype.datatypes as dt
 
 # GUI Handler Class
 #    * GUI can call any of these functions and rest will be taken care of
