@@ -55,8 +55,8 @@ def main(argv=None):
             currentProcess = gVars.functionQueue.pop(0)
             currentParams = gVars.queueParameters.pop(0)
             if (currentProcess == sVars.GO_AROUND_PORT or currentProcess == sVars.GO_AROUND_STBD or currentProcess == sVars.GO_TO):
+                print ("starting new point to point thread")
                 thread.start_new_thread(getattr(coresailinglogic, currentProcess), currentParams)
-                getattr()
             elif (currentProcess == sVars.NAVIGATION_CHALLENGE):
                 thread.start_new_thread(navigation.run, currentParams)
             elif (currentProcess == sVars.STATION_KEEPING_CHALLENGE):
