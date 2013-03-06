@@ -29,8 +29,8 @@ class GuiHandler:
         # Stores function queue and parameter queue
         if (instructionsData.challenge == 0):
             for waypoint in instructionsData.waypoints:
-                gVars.functionQueue.append(getattr(sl, waypoint.wtype))
-                gVars.queueParameters.append(waypoint.coordinate)
+                gVars.functionQueue.append(waypoint.wtype)
+                gVars.queueParameters.append(tuple(waypoint.coordinate, ))
                 
         elif (instructionsData.challenge == sVars.NAVIGATION_CHALLENGE):
             gVars.functionQueue.append(getattr(challenge.navigation, "run"))

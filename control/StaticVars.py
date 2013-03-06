@@ -10,9 +10,9 @@ Static Variables for the control logic and GUI
 '''
 
 # Constant names for challenges and logic
-NAVIGATION_CHALLENGE = "challenge.navigation"
-STATION_KEEPING_CHALLENGE = "challenge.stationkeeping"
-LONG_DISTANCE_CHALLENGE = "challenge.longdistance"
+NAVIGATION_CHALLENGE = "navigation"
+STATION_KEEPING_CHALLENGE = "stationkeeping"
+LONG_DISTANCE_CHALLENGE = "longdistance"
 
 # -- Logic Waypoint Types --
 # Point to Point waypoint types
