@@ -122,8 +122,12 @@ def pointToPoint(Dest, initialTack=None):
                     gVars.currentColumn = 0;
                     print ("TWA is: " + str(gVars.TrueWindAngle))
             else:
-                    TWA = standardcalc.getTrueWindAngle(appWindAng,sog)
-                   # TWA = abs(int(TWA))
+                    TWA = standardcalc.getTrueWindAngle(abs(appWindAng),sog)
+                    TWA = abs(int(TWA))
+                    if(appWindAng < 0):
+                        gVars.TrueWindAngle = -TWA
+                    else:
+                        gVars.TrueWindAngle = TWA
                     print ("Hit else statement")
                     print ("TWA is: " + str(gVars.TrueWindAngle))
                                 

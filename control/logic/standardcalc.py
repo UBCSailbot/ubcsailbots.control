@@ -12,9 +12,6 @@ from control import GlobalVars as gVars
 
 EARTH_RADIUS = 6378140.0
 
-#Implemented for the same reason as AWA_THRESHOLD, kept separate since this one will be changing.
-SOG_THRESHOLD = 0
-
 #returns gpscoordinate distance in meters away from starting point.
 #positive yDist = North, positive xDist = East
 def GPSDistAway(coord, xDist, yDist):
@@ -97,7 +94,7 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
             return 0
 
 def getTrueWindAngle(awa, sog):
-    SOG_THRESHOLD = 0
+    sVars.SOG_THRESHOLD = 0.9
     while(1):
         AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
         SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))
@@ -114,12 +111,14 @@ def getTrueWindAngle(awa, sog):
                     if(awa < 0):
                         gVars.trueWindAngle = -index;
                     else:
-                        gVars.trueWindAngle = index;                        
+                        gVars.trueWindAngle = index;       
+                    sVars.SOG_THRESHOLD = 0.9                 
                     return index;
         
-        SOG_THRESHOLD += 1
+        sVars.SOG_THRESHOLD += 1
         
-        if(SOG_THRESHOLD >= 500):
+        if(sVars.SOG_THRESHOLD >= 500):
+            print ("Hit Threshold")
             return None;    
     
 
@@ -142,23 +141,23 @@ def searchAWAIndex(number, list1):
             
     return indcol_list
 
-def searchSOGIndex(number, list1):
-    number = abs(number)
-    big_list = list()
-    indcol_list = list()
+def searchSOGIndex(numberSOG, list1SOG):
+    numberSOG = abs(numberSOG)
+    big_listSOG = list()
+    indcol_listSOG = list()
     
-    for i in range(len(list1)):
-        for j in range(len(list1[i])):
-            big_list.append(list1[i][j])    
+    for i in range(len(list1SOG)):
+        for j in range(len(list1SOG[i])):
+            big_listSOG.append(list1SOG[i][j])    
     
-    for n in range(len(big_list)):
-        if( math.fabs(big_list[n]-number) <= SOG_THRESHOLD ):
-            index = math.floor(n/4)
-            column = n%4
-            small_list = [index,column]
-            indcol_list.append(small_list)
+    for n in range(len(big_listSOG)):
+        if( math.fabs(big_listSOG[n]-numberSOG) <= sVars.SOG_THRESHOLD ):
+            indexSOG = math.floor(n/4)
+            columnSOG = n%4
+            small_listSOG = [indexSOG,columnSOG]
+            indcol_listSOG.append(small_listSOG)
             
-    return indcol_list
+    return indcol_listSOG
     
 def findCosLawAngle(a, b, c):  #cos law: c^2 = a^2 + b^2 - 2*a*b*cos(theta):
     return math.acos((math.pow(a, 2) + math.pow(b, 2) - math.pow(c, 2)) / (2*a*b))
