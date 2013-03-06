@@ -52,19 +52,19 @@ def main(argv=None):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
         if (len(gVars.functionQueue) > 0 and gVars.currentProcess is None):
-            currentProcess = gVars.functionQueue.pop(0)
-            currentParams = gVars.queueParameters.pop(0)
-            if (currentProcess == sVars.GO_AROUND_PORT or currentProcess == sVars.GO_AROUND_STBD or currentProcess == sVars.GO_TO):
+            gVars.currentProcess = gVars.functionQueue.pop(0)
+            gVars.currentParams = gVars.queueParameters.pop(0)
+            if (gVars.currentProcess == sVars.GO_AROUND_PORT or gVars.currentProcess == sVars.GO_AROUND_STBD or gVars.currentProcess == sVars.GO_TO):
                 print ("starting new point to point thread")
-                thread.start_new_thread(getattr(coresailinglogic, currentProcess), currentParams)
-            elif (currentProcess == sVars.NAVIGATION_CHALLENGE):
-                thread.start_new_thread(navigation.run, currentParams)
-            elif (currentProcess == sVars.STATION_KEEPING_CHALLENGE):
-                thread.start_new_thread(stationkeeping.run, currentParams)
-            elif (currentProcess == sVars.LONG_DISTANCE_CHALLENGE):
-                thread.start_new_thread(longdistance.run, currentParams)
+                thread.start_new_thread(getattr(coresailinglogic, gVars.currentProcess), gVars.currentParams)
+            elif (gVars.currentProcess == sVars.NAVIGATION_CHALLENGE):
+                thread.start_new_thread(navigation.run, gVars.currentParams)
+            elif (gVars.currentProcess == sVars.STATION_KEEPING_CHALLENGE):
+                thread.start_new_thread(stationkeeping.run, gVars.currentParams)
+            elif (gVars.currentProcess == sVars.LONG_DISTANCE_CHALLENGE):
+                thread.start_new_thread(longdistance.run, gVars.currentParams)
             else:
-                gVars.logger.warning("No instruction task named " + str(currentProcess))
+                gVars.logger.warning("No instruction task named " + str(gVars.currentProcess))
                 currentProcess = None
                 currentParams = None
 
