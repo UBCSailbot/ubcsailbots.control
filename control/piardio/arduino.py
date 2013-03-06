@@ -4,8 +4,7 @@ Created on Jan 19, 2013
 @author: joshandrews
 
 Data interpreter: Returns values for current state passed from the arduino
-Format of return from Arduino:
-    TODO
+Format of return from Arduino is defined by index in StaticVars
 '''
 
 import serial
@@ -62,13 +61,9 @@ class arduino:
         time.sleep(.1)
         
     # calls steer on arduino with method and degree
-    # TODO:
-    #    Change documentation so method is type 0, 1, 2 based on:
-    #        enum sailByCourse {  
-    #                            compassMethod,
-    #                            cogMethod,
-    #                            apprentWindMethod  
-    #                           };  
+    # COMPASS_METHOD = 0
+    # COG_METHOD = 1
+    # AWA_METHOD = 2 
     def steer(self, method, degree):
         # Format
         #    "STEER,<method>,<degree>"

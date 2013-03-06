@@ -65,8 +65,8 @@ def main(argv=None):
                 thread.start_new_thread(longdistance.run, gVars.currentParams)
             else:
                 gVars.logger.warning("No instruction task named " + str(gVars.currentProcess))
-                currentProcess = None
-                currentParams = None
+                gVars.currentProcess = None
+                gVars.currentParams = None
 
 def setGlobVar(arduino, sc):
     gVars.currentData = arduino.getFromArduino()
