@@ -50,9 +50,9 @@ class GuiHandler:
     # ex. apparent wind, gps location, SOG, COG, heading, etc.
     def getData(self):
         arr = gVars.currentData
-        output = {"telemetry":{"Heading": arr[0], "COG" : arr[1], "SOG" : arr[2], "AWA" : arr[3], "latitude": arr[4].lat , "longitude" : arr[4].long, "SheetPercent": arr[5]}}
+        output = {"telemetry":{"Heading": arr[sVars.HOG_INDEX], "COG" : arr[sVars.COG_INDEX], "SOG" : arr[sVars.SOG_INDEX], "AWA" : arr[sVars.AWA_INDEX], "latitude": arr[sVars.GPS_INDEX].lat , "longitude" : arr[sVars.GPS_INDEX].long, "SheetPercent": arr[sVars.SHT_INDEX]},
+                  "connectionStatus":{"gpsSat":arr[sVars.SAT_INDEX],"HDOP":arr[sVars.ACC_INDEX]}, "automode":arr[sVars.AUT_INDEX]}
         return output
-    
     
     #returns a string of debug messages
     def getDebugMessages(self):
