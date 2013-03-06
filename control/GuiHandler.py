@@ -30,17 +30,17 @@ class GuiHandler:
         if (instructionsData.challenge == sVars.NO_CHALLENGE):
             for waypoint in instructionsData.waypoints:
                 gVars.functionQueue.append(waypoint.wtype)
-                gVars.queueParameters.append(tuple(waypoint.coordinate, ))
+                gVars.queueParameters.append((waypoint.coordinate, ))
                 
         elif (instructionsData.challenge == sVars.NAVIGATION_CHALLENGE):
             gVars.functionQueue.append(getattr(challenge.navigation, "run"))
-            gVars.queueParameters.append(tuple(instructionsData.waypoints))
+            gVars.queueParameters.append((instructionsData.waypoints, ))
         elif (instructionsData.challenge == sVars.STATION_KEEPING_CHALLENGE):
             gVars.functionQueue.append(getattr(challenge.stationkeeping, "run"))
-            gVars.queueParameters.append(tuple(instructionsData.waypoints))
+            gVars.queueParameters.append((instructionsData.waypoints, ))
         elif (instructionsData.challenge == sVars.LONG_DISTANCE_CHALLENGE):
             gVars.functionQueue.append(getattr(challenge.longdistance, "run"))
-            gVars.queueParameters.append(tuple(instructionsData.waypoints))
+            gVars.queueParameters.append((instructionsData.waypoints, ))
         print gVars.currentProcess
     # returns the  instructions object
     def getInstructions(self):        #main.returninstructionsdataforgui
