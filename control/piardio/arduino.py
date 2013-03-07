@@ -19,21 +19,17 @@ import time
 SERIAL_PORT = '/dev/ttyACM0'
 BAUD = 57600
 
-ARD_AUT = 0
-ARD_LONG = 1
-ARD_LAT = 2
-ARD_COG = 3
-ARD_HOG = 4
-ARD_AWA = 5
-#Apparent Wind Average
-ARD_AWAV = 6
-#Sheet Percentage
-ARD_SHT = 7
-#Num Satalites
-ARD_SAT = 8
-#GPS Accuracy
-ARD_ACC = 9
-ARD_SOG = 10
+ARD_AUT = 0     # Auto Mode
+ARD_LONG = 1    # GPS Longitude
+ARD_LAT = 2     # GPS Latitude
+ARD_COG = 3     # Course over Ground
+ARD_HOG = 4     # Heading over Ground
+ARD_AWA = 5     # Apparent Wind Angle
+ARD_AWAV = 6    # Apparent Wind Angle Average
+ARD_SHT = 7     # Sheet Percentage
+ARD_SAT = 8     # Number of Satellites
+ARD_ACC = 9     # GPS Accuracy
+ARD_SOG = 10    # Speed over Ground
 
 coms = list_ports.comports()
 print coms
@@ -51,7 +47,7 @@ class arduino:
     def __init__(self):
         self.ser = serial.Serial('COM3', BAUD)
         
-    # calls adjust_sheets on arduino with sheet percentage
+    # Calls adjust_sheets on arduino with sheet percentage
     def adjust_sheets(self, sheet_percent):                                                
         # Format
         #    "ADJUST_SHEETS,<sheet_percent>"
@@ -60,7 +56,7 @@ class arduino:
         self.ser.write(wr)
         time.sleep(.1)
         
-    # calls steer on arduino with method and degree
+    # Calls steer on arduino with method and degree
     # COMPASS_METHOD = 0
     # COG_METHOD = 1
     # AWA_METHOD = 2 
@@ -72,7 +68,7 @@ class arduino:
         self.ser.write(wr)
         time.sleep(.1)
     
-    # calls tack on arduino    
+    # Calls tack on arduino    
     def tack(self):
         # Format
         #    "TACK,"
@@ -87,21 +83,21 @@ class arduino:
         wr = "GYBE,"
         self.ser.write(wr)
     
-    # returns the latest array of all info from the arduino
+    # Returns the latest array of all info from the arduino
     def getFromArduino(self):
 
         self.ser.flushInput()
         ardArr = []
-        buffer = ''
+        ardBuffer = ''
         for i in range(0,1):
-            buffer = buffer + self.ser.read(600)
+            ardBuffer = ardBuffer + self.ser.read(600)
             if '\n' in buffer:
-                lines = buffer.split('\n') # Guaranteed to have at least 2 entries
+                lines = ardBuffer.split('\n') # Guaranteed to have at least 2 entries
                 ardArr = lines[-2]
                 #If the Arduino sends lots of empty lines, you'll lose the
                 #last filled line, so you could make the above statement conditional
                 #like so: if lines[-2]: last_received = lines[-2]
-                buffer = lines[-1]                
+                ardBuffer = lines[-1]                
         print ardArr
         ardArr = ardArr.replace(" ", "")
         if (ardArr is not None):
