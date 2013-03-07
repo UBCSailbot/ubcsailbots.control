@@ -18,6 +18,7 @@ import time
 
 SERIAL_PORT = '/dev/ttyACM0'
 BAUD = 57600
+PC = True
 
 ARD_AUT = 0     # Auto Mode
 ARD_LONG = 1    # GPS Longitude
@@ -41,6 +42,9 @@ for com in coms:
 
 if (len(usbserials) > 0):
     SERIAL_PORT = usbserials[0]
+
+if (PC):
+    SERIAL_PORT = 'COM3' 
     
 class arduino:
     
