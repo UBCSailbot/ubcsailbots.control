@@ -45,7 +45,7 @@ if (len(usbserials) > 0):
 class arduino:
     
     def __init__(self):
-        self.ser = serial.Serial('COM3', BAUD)
+        self.ser = serial.Serial(SERIAL_PORT, BAUD)
         
     # Calls adjust_sheets on arduino with sheet percentage
     def adjust_sheets(self, sheet_percent):                                                

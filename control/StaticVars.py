@@ -44,18 +44,13 @@ AWA_THRESHOLD = 0.9         #Since the table has non-realistic values for AWA, t
 SOG_THRESHOLD = 0.9
 SPEED_AFFECTION_THRESHOLD = 119     #Speed threshold at which lower speeds are shown to note have a significant variation between AWA and TWA
 
-# Methods for the Arduino Steer function
-ARD_STEER_COMPASS = "compass"
-ARD_STEER_COG = "cog"
-ARD_STEER_APPARENT_WIND = "apparent_wind"
-
 # Indices for current_data
-HOG_INDEX=0
-COG_INDEX=1
-SOG_INDEX=2
-AWA_INDEX=3
-GPS_INDEX=4
-SHT_INDEX=5
-SAT_INDEX=6
-ACC_INDEX=7
-AUT_INDEX=8
+HOG_INDEX=0     # Heading over Ground
+COG_INDEX=1     # Course over Ground
+SOG_INDEX=2     # Speed over Ground
+AWA_INDEX=3     # Apparent Wind Angle Average
+GPS_INDEX=4     # GPS Coordinate
+SHT_INDEX=5     # Sheet Percentage
+SAT_INDEX=6     # GPS Number of Satellites
+ACC_INDEX=7     # GPS Accuracy (HDOP)
+AUT_INDEX=8     # Auto Mode
