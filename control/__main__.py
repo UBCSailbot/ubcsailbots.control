@@ -31,7 +31,7 @@ def main(argv=None):
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
-    mock = False
+    mock = True
     if argv is None:
         argv = sys.argv
         print"Started: synchronous"
@@ -45,6 +45,7 @@ def main(argv=None):
         arduino = piardio.arduino.arduino()
     else:
         arduino = piardio.mockarduino.arduino()
+    gVars.arduino = arduino
     s = sched.scheduler(time.time, time.sleep)
     s.enter(1, 1, setGlobVar, (arduino, s,))
     thread.start_new_thread(s.run, ())
@@ -66,6 +67,7 @@ def main(argv=None):
                 gVars.logger.warning("No instruction task named " + str(gVars.currentProcess))
                 gVars.currentProcess = None
                 gVars.currentParams = None
+        time.sleep(1)
 
 def setGlobVar(arduino, sc):
     gVars.currentData = arduino.getFromArduino()

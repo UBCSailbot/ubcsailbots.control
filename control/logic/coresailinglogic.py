@@ -9,7 +9,6 @@ import sys
 from os import path
 from control.parser import parsing
 from control.logic import standardcalc
-from control.piardio import arduino
 from control import StaticVars as sVars
 from control import GlobalVars as gVars
 
