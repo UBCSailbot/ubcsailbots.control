@@ -10,13 +10,13 @@ from control import ez_setup
 try:
     from setuptools.command import easy_install
 except ImportError:
-    print "\n Installed missing dependencies.  Rerun test script \n"    
+    print "\n Installed missing dependencies.  Rerun \n"    
     ez_setup.main()
     sys.exit()
     
 
 # Any library dependencies must be added here
-LIB_DEPENDENCIES = ['mock == 1.0.1', 'pyserial == 2.6', 'nose']
+LIB_DEPENDENCIES = ['mock == 1.0.1', 'pyserial == 2.6', 'nose == 1.2.1']
 # Name of top level directory
 TEST_PACKAGE = "control"
 # Setup options - any added functionality must be added here
