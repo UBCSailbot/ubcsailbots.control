@@ -55,7 +55,7 @@ class GuiHandler:
     
     #returns a string of debug messages
     def getDebugMessages(self):
-        #debug messages should be appended to a string buffer
-        #this buffer will be cleared every time this function is called
-        #a limit could be placed on the length of this buffer (ex. 100 lines)
-        pass
+        logger = gVars.logger
+        buff = logger.buffer
+        logger.clear()
+        return buff

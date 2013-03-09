@@ -14,6 +14,7 @@ from challenge import longdistance
 from challenge import navigation
 from challenge import stationkeeping
 from logic import coresailinglogic
+from control import sailbotlogger
 import control.GlobalVars as gVars
 import control.StaticVars as sVars
 import piardio.arduino
@@ -24,10 +25,10 @@ import piardio.mockarduino
 def main(argv=None):
     #with open(path.join(path.dirname(__file__),'log/sailbot.log'), 'w'):
     #    pass
-    logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
-    logger = logging.getLogger("sailbot.log")
-    gVars.logger = logger
-    logger.info(datetime.datetime.now())
+    #logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    #logger = logging.getLogger("sailbot.log")
+    gVars.logger = sailbotlogger.logger()
+    gVars.logger.info(str(datetime.datetime.now()))
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
