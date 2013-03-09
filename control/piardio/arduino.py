@@ -81,13 +81,16 @@ class arduino:
         wr = "TACK,{w},{t}".format(w=weather, t=tack)
         print wr
         self.ser.write(wr)
+        time.sleep(.1)
      
     # Calls gybe on the arduino
-    def gybe(self):
+    def gybe(self, weather, tack):
         # Format
-        #    "GYBE,"
-        wr = "GYBE,"
+        #     Gybe: Port=0 Stbd=1
+        #    "GYBE,<Weather>, <Tack>"
+        wr = "GYBE,{w},{t}".format(w=weather, t=tack)
         self.ser.write(wr)
+        time.sleep(.1)
     
     # Returns the latest array of all info from the arduino
     def getFromArduino(self):
