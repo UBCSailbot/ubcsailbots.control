@@ -31,6 +31,7 @@ ARD_SHT = 7     # Sheet Percentage
 ARD_SAT = 8     # Number of Satellites
 ARD_ACC = 9     # GPS Accuracy
 ARD_SOG = 10    # Speed over Ground
+ARD_RUD = 10    # Rudder Angle
 
 coms = list_ports.comports()
 print coms
@@ -132,4 +133,5 @@ class arduino:
         arr[sVars.SAT_INDEX] = ardArr[ARD_SAT]
         arr[sVars.ACC_INDEX] = ardArr[ARD_ACC]
         arr[sVars.AUT_INDEX] = ardArr[ARD_AUT]
+        arr[sVars.RUD_INDEX] = ardArr[ARD_RUD]
         return arr

@@ -54,3 +54,4 @@ SHT_INDEX=5     # Sheet Percentage
 SAT_INDEX=6     # GPS Number of Satellites
 ACC_INDEX=7     # GPS Accuracy (HDOP)
 AUT_INDEX=8     # Auto Mode
+RUD_INDEX=9     # Rudder
