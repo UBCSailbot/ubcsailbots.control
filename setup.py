@@ -3,10 +3,17 @@ Created on Feb 28, 2013
 
 @author: joshandrews
 '''
-from setuptools.command import easy_install
 from os import path
 import sys
 import os
+from control import ez_setup
+try:
+    from setuptools.command import easy_install
+except ImportError:
+    print "\n Installed missing dependencies.  Rerun test script \n"    
+    ez_setup.main()
+    sys.exit()
+    
 
 # Any library dependencies must be added here
 LIB_DEPENDENCIES = ['mock == 1.0.1', 'pyserial == 2.6', 'nose']
@@ -22,7 +29,7 @@ SETUP_OPTIONS = {
 
 # Installs all library dependencies defined in the LIB_DEPENDENCIES list
 def install_lib():
-    print ("Installing all library dependencies")
+    print ("Installing all library dependencies")        
     easy_install.main(LIB_DEPENDENCIES)
 
 # Uses the nose library to run unit tests.  Installs missing dependencies.
