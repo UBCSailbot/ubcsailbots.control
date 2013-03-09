@@ -44,7 +44,7 @@ class GuiHandler:
     def getData(self):
         arr = gVars.currentData
         output = {"telemetry":{"Heading": arr[sVars.HOG_INDEX], "COG" : arr[sVars.COG_INDEX], "SOG" : arr[sVars.SOG_INDEX], "AWA" : arr[sVars.AWA_INDEX], "latitude": arr[sVars.GPS_INDEX].lat , "longitude" : arr[sVars.GPS_INDEX].long, "SheetPercent": arr[sVars.SHT_INDEX], "Rudder": arr[sVars.RUD_INDEX]},
-                  "connectionStatus":{"gpsSat":arr[sVars.SAT_INDEX],"HDOP":arr[sVars.ACC_INDEX]}, "automode":arr[sVars.AUT_INDEX], 
+                  "connectionStatus":{"gpsSat":arr[sVars.SAT_INDEX],"HDOP":arr[sVars.ACC_INDEX], "automode":arr[sVars.AUT_INDEX]}, 
                   "currentProcess":{"name":gVars.currentProcess}}
         return output
     
