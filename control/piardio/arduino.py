@@ -73,10 +73,11 @@ class arduino:
         time.sleep(.1)
     
     # Calls tack on arduino    
-    def tack(self):
+    def tack(self, weather, tack):
         # Format
-        #    "TACK,"
-        wr = "TACK,"
+        #     Tack: Port=0 Stbd=1
+        #    "TACK,<Weather>, <Tack>"
+        wr = "TACK,{w},{t}".format(w=weather, t=tack)
         print wr
         self.ser.write(wr)
      
@@ -94,18 +95,21 @@ class arduino:
         ardArr = []
         ardBuffer = ''
         for i in range(0,1):
-            ardBuffer = ardBuffer + self.ser.read(600)
-            if '\n' in buffer:
+            buff = self.ser.read(600)
+            if (buff):
+                ardBuffer = ardBuffer + buff
+            if '\n' in ardBuffer:
                 lines = ardBuffer.split('\n') # Guaranteed to have at least 2 entries
                 ardArr = lines[-2]
                 #If the Arduino sends lots of empty lines, you'll lose the
                 #last filled line, so you could make the above statement conditional
                 #like so: if lines[-2]: last_received = lines[-2]
                 ardBuffer = lines[-1]                
-        print ardArr
-        ardArr = ardArr.replace(" ", "")
-        if (ardArr is not None):
-            ardArr = re.findall("[^,\s][^\,]*[^,\s]*", ardArr)
+        print ardBuffer
+        if (len(ardBuffer) >0):
+            ardArr = ardArr.replace(" ", "")
+        if (ardBuffer is not None):
+            ardArr = re.findall("[^,\s][^\,]*[^,\s]*", ardBuffer)
             i = 0
             while (i < len(ardArr)):
                 ardArr[i] = float(ardArr[i])
