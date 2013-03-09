@@ -6,22 +6,22 @@ Created on Jan 19, 2013
 import math
 from datetime import datetime
 import control.logic.standardcalc as standardcalc
-import control.GlobalVars as GlobalVars
-import control.StaticVars as StaticVars
+import control.GVars as GVars
+import control.SVars as SVars
 
 def setWayPtCoords(boxCoords): #sets the waypoints of the challenge
     wayPtCoords = []    #order = top face, right face, bottom face, left face
     if (boxCoords[0].lat == boxCoords[1].lat):    #square
-        wayPtCoords[0] = standardcalc.GPSDistAway(boxCoords[0], 30.0, 100.0)
-        wayPtCoords[1] = standardcalc.GPSDistAway(boxCoords[1], 100.0, -30.0)
-        wayPtCoords[2] = standardcalc.GPSDistAway(boxCoords[2], -30.0, -100.0)
-        wayPtCoords[3] = standardcalc.GPSDistAway(boxCoords[3], -100.0, 30.0)
+        wayPtCoords[0] = standardcalc.GPSDistAway(boxCoords[0], 20.0, 100.0)
+        wayPtCoords[1] = standardcalc.GPSDistAway(boxCoords[1], 100.0, -20.0)
+        wayPtCoords[2] = standardcalc.GPSDistAway(boxCoords[2], -20.0, -100.0)
+        wayPtCoords[3] = standardcalc.GPSDistAway(boxCoords[3], -100.0, 20.0)
     elif (boxCoords[0].lat < boxCoords[1].lat):     #diamond or tilted left square
         cAngle = standardcalc.angleBetweenTwoCoords(boxCoords[0],boxCoords[1])
         wayPntDist1 = 100.0*math.cos(cAngle)
         wayPntDist2 = 100.0*math.sin(cAngle)
-        midDist1 = 30.0*math.cos(90 - cAngle)
-        midDist2 = 30.0*math.sin(90 - cAngle)
+        midDist1 = 20.0*math.cos(90 - cAngle)
+        midDist2 = 20.0*math.sin(90 - cAngle)
         
         topMidpnt = standardcalc.GPSDistAway(boxCoords[0], midDist1, midDist2)
         rightMidpnt = standardcalc.GPSDistAway(boxCoords[1], midDist2, -midDist1)
@@ -35,8 +35,8 @@ def setWayPtCoords(boxCoords): #sets the waypoints of the challenge
         cAngle = 180 - standardcalc.angleBetweenTwoCoords(boxCoords[0],boxCoords[1])
         wayPntDist1 = 100.0*math.cos(cAngle)
         wayPntDist2 = 100.0*math.sin(cAngle)
-        midDist1 = 30.0*math.cos(90 - cAngle)
-        midDist2 = 30.0*math.sin(90 - cAngle)
+        midDist1 = 20.0*math.cos(90 - cAngle)
+        midDist2 = 20.0*math.sin(90 - cAngle)
         
         topMidpnt = standardcalc.GPSDistAway(boxCoords[0], midDist1, -midDist2)
         rightMidpnt = standardcalc.GPSDistAway(boxCoords[1], -midDist2, -midDist1)
@@ -119,43 +119,51 @@ def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most we
         finalCoordList.append(coordList[2])
     return finalCoordList
 
+def SKTimer():
+    GVars.SKMinLeft = ((datetime.now() - GVars.SKStartTime ).seconds) / 60
+    GVars.SKSecLeft = ((datetime.now() - GVars.SKStartTime ).seconds) - GVars.SKMinLeft*60
+    GVars.SKMilliSecLeft = ((datetime.now() - GVars.SKStartTime).microseconds) / 1000
+
+def getBoxDist(boxCoords):
+    boxDistList = []  #top, right, bottom, left
+    TL2Boat = standardcalc.distBetweenTwoCoords(GVars.currentData[SVars.GPS_INDEX], boxCoords[0]) #top left to boat
+    TR2Boat = standardcalc.distBetweenTwoCoords(GVars.currentData[SVars.GPS_INDEX], boxCoords[1]) #top right to boat
+    BR2Boat = standardcalc.distBetweenTwoCoords(GVars.currentData[SVars.GPS_INDEX], boxCoords[2]) #bottom right to boat
+    TL2TR = standardcalc.distBetweenTwoCoords(boxCoords[0], boxCoords[1]) #top left to top right
+    TR2BR = standardcalc.distBetweenTwoCoords(boxCoords[1], boxCoords[2]) #top right to bottom right
+        
+    topLeftAngle = standardcalc.findCosLawAngle(TL2TR, TL2Boat, TR2Boat)
+    rightTopAngle = standardcalc.findCosLawAngle(TR2BR, TR2Boat, BR2Boat)
+        
+    boxDistList[0] = TL2Boat * math.sin(topLeftAngle)   #top dist
+    boxDistList[1] = TR2Boat * math.sin(rightTopAngle)   #right dist
+    boxDistList[2] = 40 - boxDistList[0] #bottom dist
+    boxDistList[3] = 40 - boxDistList[1] #left dist
+    return boxDistList
+
 def stationKeepInit(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord):
+    arduino = GVars.arduino
     boxCoords = setBoxCoords(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord)   #boxCoords[0] = TL, boxCoords[1] = TR, boxCoords[2] = BR, boxCoords[3] = BL
-    wayPtCoords = setWayPtCoords(boxCoords)
-    GlobalVars.SKStartTime = datetime.now()
+    wayPtCoords = setWayPtCoords(boxCoords)  #top, right, bottom, left
+    GVars.SKStartTime = datetime.now()
+    boxDistList = getBoxDist(boxCoords)  #top, right, bottom, left
+    GVars.SKCurrentWaypnt = boxDistList.index(min(boxDistList))
     run(boxCoords, wayPtCoords)
     return
-
-def SKTimer():
-    GlobalVars.SKMinLeft = ((datetime.now() - GlobalVars.SKStartTime ).seconds) / 60
-    GlobalVars.SKSecLeft = ((datetime.now() - GlobalVars.SKStartTime ).seconds) - GlobalVars.SKMinLeft*60
-    GlobalVars.SKMilliSecLeft = ((datetime.now() - GlobalVars.SKStartTime).microseconds) / 1000
     
 def run(boxCoords, wayPtCoords):
-    while ((datetime.now() - GlobalVars.SKStartTime).seconds < 300):
+    while ((datetime.now() - GVars.SKStartTime).seconds < 300):
         SKTimer();
-        TL2Boat = standardcalc.distBetweenTwoCoords(GlobalVars.currentData[StaticVars.GPS_INDEX], boxCoords[0]) #top left to boat
-        TR2Boat = standardcalc.distBetweenTwoCoords(GlobalVars.currentData[StaticVars.GPS_INDEX], boxCoords[1]) #top right to boat
-        BR2Boat = standardcalc.distBetweenTwoCoords(GlobalVars.currentData[StaticVars.GPS_INDEX], boxCoords[2]) #bottom right to boat
-        TL2TR = standardcalc.distBetweenTwoCoords(boxCoords[0], boxCoords[1]) #top left to top right
-        TR2BR = standardcalc.distBetweenTwoCoords(boxCoords[1], boxCoords[2]) #top right to bottom right
-        
-        topLeftAngle = standardcalc.findCosLawAngle(TL2TR, TL2Boat, TR2Boat)
-        rightTopAngle = standardcalc.findCosLawAngle(TR2BR, TR2Boat, BR2Boat)
-        
-        topDist = TL2Boat * math.sin(topLeftAngle)
-        rightDist = TR2Boat * math.sin(rightTopAngle)
-        
-        if ((topDist < 5) or (topDist > 95)):
-            #jibe
-            print "jibe"
-        elif ((rightDist < 5) or (rightDist > 95)):
-            #jibe
-            print "jibe"
+        boxDistList = getBoxDist(boxCoords)
+        if (standardcalc.isWPNoGo(GVars.currentData[SVars.AWA_INDEX],GVars.currentData[SVars.HOG_INDEX], GVars.SKCurrentWaypnt, GVars.currentData[SVars.SOG_INDEX], GVars.currentData[SVars.GPS_INDEX])):
+            GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 1) % 4
+        if (boxDistList[GVars.SKCurrentWaypnt] < 5):
+            GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 2) % 4
         #perhaps keep track of which side heading to.
         #need to figure time it takes to do turn
         #need to add if statements for which sides closest to
-    GlobalVars.SKMinLeft = 0
-    GlobalVars.SKSecLeft = 0
-    GlobalVars.SKMilliSecLeft = 0
+    GVars.SKMinLeft = 0
+    GVars.SKSecLeft = 0
+    GVars.SKMilliSecLeft = 0
+    GVars.SKCurrentWaypnt = None
     return
