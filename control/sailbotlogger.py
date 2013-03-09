@@ -15,27 +15,27 @@ class logger:
     
     def warn(self, msg):
         self.logger.warn(msg)
-        self.buffer += ("[WARN]:" + msg)
+        self.buffer += ("[WARN]:" + msg + "\n")
         
     def warning(self, msg):
         self.logger.warning(msg)
-        self.buffer += ("[WARNING]:" + msg)    
+        self.buffer += ("[WARNING]:" + msg + "\n")    
         
     def critical(self, msg):
         self.logger.critical(msg)
-        self.buffer += ("[CRITICAL]:" + msg)
+        self.buffer += ("[CRITICAL]:" + msg + "\n")
     
     def debug(self, msg):
         self.logger.debug(msg)
-        self.buffer += ("[DEBUG]:" + msg)
+        self.buffer += ("[DEBUG]:" + msg + "\n")
     
     def error(self, msg):
         self.logger.error(msg)
-        self.buffer += ("[ERROR]:" + msg)  
+        self.buffer += ("[ERROR]:" + msg + "\n")  
           
     def info(self, msg):
         self.logger.info(msg)
-        self.buffer += ("[INFO]:" + msg)  
+        self.buffer += ("[INFO]:" + msg + "\n")  
         
     def clearBuffer(self):
         self.buffer = ""
