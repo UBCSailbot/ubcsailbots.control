@@ -25,6 +25,7 @@ SKStartTime = None
 SKMinLeft = None
 SKSecLeft = None
 SKMilliSecLeft = None
+SKCurrentWaypnt = None
 currentColumn = 0;
 logger = None
 arduino = None
