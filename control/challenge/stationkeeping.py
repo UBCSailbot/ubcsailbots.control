@@ -156,9 +156,9 @@ def run(boxCoords, wayPtCoords):
         SKTimer();
         boxDistList = getBoxDist(boxCoords)
         if (standardcalc.isWPNoGo(GVars.currentData[SVars.AWA_INDEX],GVars.currentData[SVars.HOG_INDEX], GVars.SKCurrentWaypnt, GVars.currentData[SVars.SOG_INDEX], GVars.currentData[SVars.GPS_INDEX])):
-            GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 1) % 4
+            GVars.SKCurrentWaypnt = (GVars.SKCurrentWaypnt + 1) % 4
         if (boxDistList[GVars.SKCurrentWaypnt] < 5):
-            GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 2) % 4
+            GVars.SKCurrentWaypnt = (GVars.SKCurrentWaypnt + 2) % 4
         #perhaps keep track of which side heading to.
         #need to figure time it takes to do turn
         #need to add if statements for which sides closest to
