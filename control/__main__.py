@@ -32,7 +32,7 @@ def main(argv=None):
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
-    mock = True
+    mock = False
     if argv is None:
         argv = sys.argv
         print"Started: synchronous"
