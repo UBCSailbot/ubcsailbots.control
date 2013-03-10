@@ -6,8 +6,8 @@ Created on Jan 19, 2013
 import math
 from datetime import datetime
 import control.logic.standardcalc as standardcalc
-import control.GVars as GVars
-import control.SVars as SVars
+import control.GlobalVars as GVars
+import control.StaticVars as SVars
 
 def setWayPtCoords(boxCoords): #sets the waypoints of the challenge
     wayPtCoords = []    #order = top face, right face, bottom face, left face
