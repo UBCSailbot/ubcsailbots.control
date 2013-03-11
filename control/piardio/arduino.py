@@ -84,11 +84,10 @@ class arduino:
         time.sleep(.1)
      
     # Calls gybe on the arduino
-    def gybe(self, weather, tack):
+    def gybe(self, direction):
         # Format
-        #     Gybe: Port=0 Stbd=1
-        #    "GYBE,<Weather>, <Tack>"
-        wr = "GYBE,{w},{t}".format(w=weather, t=tack)
+        #    "GYBE,<Direction>"
+        wr = "GYBE,{d}".format(d=direction)
         self.ser.write(wr)
         time.sleep(.1)
     
