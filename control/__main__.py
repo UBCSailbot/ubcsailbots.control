@@ -28,18 +28,11 @@ def main(argv=None):
     #logging.basicConfig(filename=path.join(path.dirname(__file__),'log/sailbot.log'), format='%(levelname)s:%(message)s', level=logging.DEBUG)
     #logger = logging.getLogger("sailbot.log")
     gVars.logger = sailbotlogger.logger()
-    gVars.logger.info(str(datetime.datetime.now()))
+    gVars.logger.info("Start")
     # Mock:
     #   - If true, mock will run from a mock arduino class which simulates boat and wind conditions (see readme)
     #   - If false, mock will run off of an actual arduino through dev/tty ports     
-    mock = False
-    if argv is None:
-        argv = sys.argv
-        print"Started: synchronous"
-    else:
-        print"Started: asynchronous"
-        if (argv[1]):
-            mock = argv[1]
+    mock = True
     
     print("Mock Enabled: " + str(mock))
     if (mock == False):        
@@ -71,9 +64,9 @@ def main(argv=None):
         time.sleep(1)
 
 def setGlobVar(arduino, sc):
-    gVars.currentData = arduino.getFromArduino()
+    gVars.currentData = gVars.arduino.getFromArduino()
     printArdArray(gVars.currentData)
-    sc.enter(1, 1, setGlobVar, (arduino, sc,))
+    sc.enter(1, 1, setGlobVar, (gVars.arduino, sc,))
     
 def printArdArray(arr):
     print("Heading: " + str(arr[sVars.HOG_INDEX]) + ", COG: " + str(arr[sVars.COG_INDEX]) + ", SOG: " + str(arr[sVars.SOG_INDEX]) + ", AWA: " + str(arr[sVars.AWA_INDEX]) + ", GPS[" + str(arr[sVars.GPS_INDEX]) + "]" + ", Sheet Percent: " + str(arr[sVars.SHT_INDEX]) + ", Num of Satellites: " + str(arr[sVars.SAT_INDEX]) + ", Accuracy: " + str(arr[sVars.ACC_INDEX]) + ", Rudder: " + str(arr[sVars.RUD_INDEX]))
