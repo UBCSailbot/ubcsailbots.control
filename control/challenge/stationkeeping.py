@@ -4,8 +4,10 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 import math
+import sys
+sys.path.append("..")
 from datetime import datetime
-import control.logic.standardcalc as standardcalc
+from control.logic import standardcalc
 import control.GlobalVars as GVars
 import control.StaticVars as SVars
 
