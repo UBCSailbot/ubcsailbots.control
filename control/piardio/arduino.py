@@ -86,6 +86,7 @@ class arduino:
     # Calls gybe on the arduino
     def gybe(self, direction):
         # Format
+        #    Gybe: Stbd=0 Port=1
         #    "GYBE,<Direction>"
         wr = "GYBE,{d}".format(d=direction)
         self.ser.write(wr)
