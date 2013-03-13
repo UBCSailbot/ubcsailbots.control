@@ -109,9 +109,9 @@ class arduino:
                 #like so: if lines[-2]: last_received = lines[-2]
                 ardBuffer = lines[-1]                
         print ardArr
-        if (len(ardBuffer) >0):
+        if (len(ardBuffer) > 0):
             ardArr = ardArr.replace(" ", "")
-        if (ardBuffer is not None):
+        if (len(ardArr) > 0):
             ardArr = re.findall("[^,\s][^\,]*[^,\s]*", ardArr)
             i = 0
             while (i < len(ardArr)):
