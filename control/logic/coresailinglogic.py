@@ -29,7 +29,6 @@ end_flag=0
 # Output: TODO
 def roundBuoyPort(BuoyLoc, FinalBearing):
     currentData = gVars.currentData
-        
     GPSCoord = currentData[gps_index]
     appWindAng = currentData[awa_index]
     cog = currentData[cog_index] # Course  over ground    
@@ -108,7 +107,12 @@ def pointToPoint(Dest, initialTack=None):
     TWA = 0
     oldColumn = 0
     print "Started point to point"
+<<<<<<< HEAD
     while(end_flag == 0 and gVars.kill_flag == 0):
+=======
+    gVars.logger.info("Started point to point")
+    while(end_flag == 0):
+>>>>>>> 0e6ee18c682f29f2965dcd031e62f678548e9959
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
@@ -167,6 +171,7 @@ def pointToPoint(Dest, initialTack=None):
                             oldColumn = gVars.currentColumn
                         
                     arduino.tack()
+                    print ("tack")
                 elif(abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None):
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flag == 0):
                         GPSCoord = currentData[gps_index]
@@ -184,12 +189,13 @@ def pointToPoint(Dest, initialTack=None):
                         print ("TWA is: " + str(newTWA))
                         
                         if(TWA != newTWA or oldColumn != gVars.currentColumn):
-                            arduino.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                            arduino.adjust_sheets(sheetList[int(newTWA)][gVars.currentColumn])
                             arduino.steer(AWA_METHOD,hog-newTWA+45)
                             TWA = newTWA
                             oldColumn = gVars.currentColumn
                     
                     arduino.tack()
+                    print "tack"
                     
             elif(abs(hog-newTWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
                 if(TWA != newTWA or oldColumn != gVars.currentColumn):
@@ -201,5 +207,6 @@ def pointToPoint(Dest, initialTack=None):
         else:
             end_flag = 1
             print ("Finished Point to Point")
+            gVars.logger.info("Finished Point to Point")
     
     return 0

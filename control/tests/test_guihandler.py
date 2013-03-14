@@ -51,12 +51,12 @@ class TestGuiHandler(unittest.TestCase):
          
     def testGetCurrentData(self):
         self.resetGlobVar()
-        self.currdata = [0, 1, 2, 3, datatypes.GPSCoordinate(4, 4) , 5, 6, 7, 8, 0]
+        self.currdata = [0, 1, 2, 3, datatypes.GPSCoordinate(4, 4) , 5, 6, 7, 8, 0, 20]
         gVars.currentData = self.currdata
         self.x.getData()
-        self.assertEquals(self.x.getData(), {"telemetry":{"Heading": self.currdata[sVars.HOG_INDEX], "COG" : self.currdata[sVars.COG_INDEX], "SOG" : self.currdata[sVars.SOG_INDEX], "AWA" : self.currdata[sVars.AWA_INDEX], "latitude": self.currdata[sVars.GPS_INDEX].lat , "longitude" : self.currdata[sVars.GPS_INDEX].long, "SheetPercent": self.currdata[sVars.SHT_INDEX]},
-                  "connectionStatus":{"gpsSat":self.currdata[sVars.SAT_INDEX],"HDOP":self.currdata[sVars.ACC_INDEX]}, "automode":self.currdata[sVars.AUT_INDEX], 
-                  "currentProcess":{"name":gVars.currentProcess}})
+        self.assertEquals(self.x.getData(), {"telemetry":{"Heading": self.currdata[sVars.HOG_INDEX], "COG" : self.currdata[sVars.COG_INDEX], "SOG" : self.currdata[sVars.SOG_INDEX], "AWA" : self.currdata[sVars.AWA_INDEX], "latitude": self.currdata[sVars.GPS_INDEX].lat , "longitude" : self.currdata[sVars.GPS_INDEX].long, "SheetPercent": self.currdata[sVars.SHT_INDEX], "Rudder":self.currdata[sVars.RUD_INDEX]},
+                  "connectionStatus":{"gpsSat":self.currdata[sVars.SAT_INDEX],"HDOP":self.currdata[sVars.ACC_INDEX], "automode":self.currdata[sVars.AUT_INDEX]},
+                  "currentProcess":{"name":gVars.currentProcess,"Starttime":gVars.challengeStartTime}})
         
 if __name__ == '__main__':
     unittest.main()

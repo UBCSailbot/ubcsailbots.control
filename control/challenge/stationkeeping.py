@@ -4,8 +4,14 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 import math
+import sys
+sys.path.append("..")
 from datetime import datetime
+<<<<<<< HEAD
 import control.logic.standardcalc as standardcalc
+=======
+from control.logic import standardcalc
+>>>>>>> 0e6ee18c682f29f2965dcd031e62f678548e9959
 import control.GlobalVars as GVars
 import control.StaticVars as SVars
 
@@ -120,9 +126,9 @@ def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most we
     return finalCoordList
 
 def SKTimer():
-    GVars.SKMinLeft = ((datetime.now() - GVars.SKStartTime ).seconds) / 60
-    GVars.SKSecLeft = ((datetime.now() - GVars.SKStartTime ).seconds) - GVars.SKMinLeft*60
-    GVars.SKMilliSecLeft = ((datetime.now() - GVars.SKStartTime).microseconds) / 1000
+    GVars.SKMinLeft = ((datetime.now() - GVars.challengeStartTime ).seconds) / 60
+    GVars.SKSecLeft = ((datetime.now() - GVars.challengeStartTime ).seconds) - GVars.SKMinLeft*60
+    GVars.SKMilliSecLeft = ((datetime.now() - GVars.challengeStartTime).microseconds) / 1000
 
 def getBoxDist(boxCoords):
     boxDistList = []  #top, right, bottom, left
@@ -145,14 +151,14 @@ def stationKeepInit(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord):
     arduino = GVars.arduino
     boxCoords = setBoxCoords(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord)   #boxCoords[0] = TL, boxCoords[1] = TR, boxCoords[2] = BR, boxCoords[3] = BL
     wayPtCoords = setWayPtCoords(boxCoords)  #top, right, bottom, left
-    GVars.SKStartTime = datetime.now()
+    GVars.challengeStartTime = datetime.now()
     boxDistList = getBoxDist(boxCoords)  #top, right, bottom, left
     GVars.SKCurrentWaypnt = boxDistList.index(min(boxDistList))
     run(boxCoords, wayPtCoords)
     return
     
 def run(boxCoords, wayPtCoords):
-    while ((datetime.now() - GVars.SKStartTime).seconds < 300):
+    while ((datetime.now() - GVars.challengeStartTime).seconds < 300):
         SKTimer();
         boxDistList = getBoxDist(boxCoords)
         if (standardcalc.isWPNoGo(GVars.currentData[SVars.AWA_INDEX],GVars.currentData[SVars.HOG_INDEX], GVars.SKCurrentWaypnt, GVars.currentData[SVars.SOG_INDEX], GVars.currentData[SVars.GPS_INDEX])):

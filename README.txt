@@ -6,8 +6,8 @@ UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop
 
 Steps to get project running:
 1) Navigate to top level directory
-2) Run 'python setup.py install_lib' (May need sudo before)
-3) Run 'python setup.py test' (May need sudo before)
+2) Run 'python setup.py install_lib' (May need sudo before or run as admin)
+3) Run 'python setup.py test' (May need sudo before or run as admin)
 4) Navigate to control directory
 5) Start code, run 'python __main__.py'
 
@@ -71,7 +71,7 @@ Libraries
 
 From console in top level run: 'python setup.py install_lib'
 
-To run the project you must have the mock and serial libraries installed.
+To run the project you must have all libraries installed
 
 Tests
 =====

@@ -31,7 +31,7 @@ ARD_SHT = 7     # Sheet Percentage
 ARD_SAT = 8     # Number of Satellites
 ARD_ACC = 9     # GPS Accuracy
 ARD_SOG = 10    # Speed over Ground
-ARD_RUD = 10    # Rudder Angle
+ARD_RUD = 11    # Rudder Angle
 
 coms = list_ports.comports()
 print coms
@@ -77,18 +77,18 @@ class arduino:
     def tack(self, weather, tack):
         # Format
         #     Tack: Port=0 Stbd=1
-        #    "TACK,<Weather>, <Tack>"
+        #    "TACK,<Weather>, <WindwardSideOfBoat>"
         wr = "TACK,{w},{t}".format(w=weather, t=tack)
         print wr
         self.ser.write(wr)
         time.sleep(.1)
      
     # Calls gybe on the arduino
-    def gybe(self, weather, tack):
+    def gybe(self, tack):
         # Format
-        #     Gybe: Port=0 Stbd=1
-        #    "GYBE,<Weather>, <Tack>"
-        wr = "GYBE,{w},{t}".format(w=weather, t=tack)
+        #    Gybe: Port=0 Stbd=1
+        #    "GYBE,<WindwardSideOfBoat>"
+        wr = "GYBE,{t}".format(t=tack)
         self.ser.write(wr)
         time.sleep(.1)
     
@@ -109,11 +109,11 @@ class arduino:
                 #last filled line, so you could make the above statement conditional
                 #like so: if lines[-2]: last_received = lines[-2]
                 ardBuffer = lines[-1]                
-        print ardBuffer
-        if (len(ardBuffer) >0):
+        print ardArr
+        if (len(ardBuffer) > 0):
             ardArr = ardArr.replace(" ", "")
-        if (ardBuffer is not None):
-            ardArr = re.findall("[^,\s][^\,]*[^,\s]*", ardBuffer)
+        if (len(ardArr) > 0):
+            ardArr = re.findall("[^,\s][^\,]*[^,\s]*", ardArr)
             i = 0
             while (i < len(ardArr)):
                 ardArr[i] = float(ardArr[i])
@@ -126,7 +126,7 @@ class arduino:
     
     # Takes an array from the arduino and maps it to the appropriate objects in the python array
     def interpretArr(self, ardArr):
-        arr = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        arr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         arr[sVars.HOG_INDEX] = ardArr[ARD_HOG]
         arr[sVars.COG_INDEX] = ardArr[ARD_COG]
         arr[sVars.SOG_INDEX] = ardArr[ARD_SOG]
