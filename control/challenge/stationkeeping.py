@@ -10,6 +10,7 @@ from datetime import datetime
 import control.logic.standardcalc as standardcalc
 import control.GlobalVars as GVars
 import control.StaticVars as SVars
+import thread
 
 def setWayPtCoords(boxCoords): #sets the waypoints of the challenge
     wayPtCoords = []    #order = top face, right face, bottom face, left face
@@ -143,27 +144,34 @@ def getBoxDist(boxCoords):
     boxDistList[3] = 40 - boxDistList[1] #left dist
     return boxDistList
 
-def stationKeepInit(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord):
-    arduino = GVars.arduino
+def stationKeepInit(topLeftWaypnt, topRightWaypnt, botLeftWaypnt, botRightWaypnt):
+    topLeftCoord = topLeftWaypnt.coordinate
+    topRightCoord = topRightWaypnt.coordinate
+    botLeftCoord = botLeftWaypnt.coordinate
+    botRightCoord = botRightWaypnt.coordinate
     boxCoords = setBoxCoords(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord)   #boxCoords[0] = TL, boxCoords[1] = TR, boxCoords[2] = BR, boxCoords[3] = BL
     wayPtCoords = setWayPtCoords(boxCoords)  #top, right, bottom, left
     GVars.challengeStartTime = datetime.now()
     boxDistList = getBoxDist(boxCoords)  #top, right, bottom, left
     GVars.SKCurrentWaypnt = boxDistList.index(min(boxDistList))
+    thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
     run(boxCoords, wayPtCoords)
     return
     
 def run(boxCoords, wayPtCoords):
+    arduino = GVars.arduino
     while ((datetime.now() - GVars.challengeStartTime).seconds < 300):
         SKTimer();
         boxDistList = getBoxDist(boxCoords)
         if (standardcalc.isWPNoGo(GVars.currentData[SVars.AWA_INDEX],GVars.currentData[SVars.HOG_INDEX], GVars.SKCurrentWaypnt, GVars.currentData[SVars.SOG_INDEX], GVars.currentData[SVars.GPS_INDEX])):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 1) % 4
-            
+            GVars.kill_flag = 1
+            thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
         if (boxDistList[GVars.SKCurrentWaypnt] < 5):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 2) % 4
-            #jybe
-        #move towards point
+            GVars.kill_flag = 1
+            thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
+            #gybe
     GVars.SKMinLeft = 0
     GVars.SKSecLeft = 0
     GVars.SKMilliSecLeft = 0

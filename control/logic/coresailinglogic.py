@@ -107,12 +107,7 @@ def pointToPoint(Dest, initialTack=None):
     TWA = 0
     oldColumn = 0
     print "Started point to point"
-<<<<<<< HEAD
     while(end_flag == 0 and gVars.kill_flag == 0):
-=======
-    gVars.logger.info("Started point to point")
-    while(end_flag == 0):
->>>>>>> 0e6ee18c682f29f2965dcd031e62f678548e9959
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
