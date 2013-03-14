@@ -7,11 +7,7 @@ import math
 import sys
 sys.path.append("..")
 from datetime import datetime
-<<<<<<< HEAD
 import control.logic.standardcalc as standardcalc
-=======
-from control.logic import standardcalc
->>>>>>> 0e6ee18c682f29f2965dcd031e62f678548e9959
 import control.GlobalVars as GVars
 import control.StaticVars as SVars
 
