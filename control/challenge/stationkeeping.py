@@ -6,8 +6,8 @@ Created on Jan 19, 2013
 import math
 from datetime import datetime
 import control.logic.standardcalc as standardcalc
-import control.GVars as GVars
-import control.SVars as SVars
+import control.GlobalVars as GVars
+import control.StaticVars as SVars
 
 def setWayPtCoords(boxCoords): #sets the waypoints of the challenge
     wayPtCoords = []    #order = top face, right face, bottom face, left face
@@ -157,13 +157,15 @@ def run(boxCoords, wayPtCoords):
         boxDistList = getBoxDist(boxCoords)
         if (standardcalc.isWPNoGo(GVars.currentData[SVars.AWA_INDEX],GVars.currentData[SVars.HOG_INDEX], GVars.SKCurrentWaypnt, GVars.currentData[SVars.SOG_INDEX], GVars.currentData[SVars.GPS_INDEX])):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 1) % 4
+            
         if (boxDistList[GVars.SKCurrentWaypnt] < 5):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 2) % 4
-        #perhaps keep track of which side heading to.
-        #need to figure time it takes to do turn
-        #need to add if statements for which sides closest to
+            #jybe
+        #move towards point
     GVars.SKMinLeft = 0
     GVars.SKSecLeft = 0
     GVars.SKMilliSecLeft = 0
+    
     GVars.SKCurrentWaypnt = None
+    
     return

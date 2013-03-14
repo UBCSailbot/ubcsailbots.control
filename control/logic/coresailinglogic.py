@@ -94,17 +94,21 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
     moveLong *= -1 # Convert back to actual coordinates
     return 0
 
+def killPointToPoint():
+    gVars.kill_flag = 1
+
 # --- Point to Point ---
 # Input: Destination GPS Coordinate, initialTack: 0 for port, 1 for starboard, nothing calculates on own.
 # Output: Nothing
 def pointToPoint(Dest, initialTack=None):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'apparentSheetSetting'))
+    gVars.kill_flag = 0
     end_flag = 0
     arduino = gVars.arduino
     TWA = 0
     oldColumn = 0
     print "Started point to point"
-    while(end_flag == 0):
+    while(end_flag == 0 and gVars.kill_flag == 0):
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
@@ -142,7 +146,7 @@ def pointToPoint(Dest, initialTack=None):
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
                 if(abs(-newTWA-45)<abs(-newTWA+45) and initialTack is None):
-                    while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
+                    while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flag ==0):
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
@@ -164,7 +168,7 @@ def pointToPoint(Dest, initialTack=None):
                         
                     arduino.tack()
                 elif(abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None):
-                    while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80):
+                    while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flag == 0):
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
