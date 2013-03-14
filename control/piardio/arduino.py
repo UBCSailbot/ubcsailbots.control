@@ -77,18 +77,18 @@ class arduino:
     def tack(self, weather, tack):
         # Format
         #     Tack: Port=0 Stbd=1
-        #    "TACK,<Weather>, <Tack>"
+        #    "TACK,<Weather>, <WindwardSideOfBoat>"
         wr = "TACK,{w},{t}".format(w=weather, t=tack)
         print wr
         self.ser.write(wr)
         time.sleep(.1)
      
     # Calls gybe on the arduino
-    def gybe(self, direction):
+    def gybe(self, tack):
         # Format
-        #    Gybe: Stbd=0 Port=1
-        #    "GYBE,<Direction>"
-        wr = "GYBE,{d}".format(d=direction)
+        #    Gybe: Port=0 Stbd=1
+        #    "GYBE,<WindwardSideOfBoat>"
+        wr = "GYBE,{t}".format(t=tack)
         self.ser.write(wr)
         time.sleep(.1)
     
