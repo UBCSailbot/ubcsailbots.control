@@ -106,7 +106,10 @@ def pointToPoint(Dest, initialTack=None):
     arduino = gVars.arduino
     TWA = 0
     oldColumn = 0
+    tackDirection = 0
     print "Started point to point"
+    gVars.logger.info("Started point to point")
+    
     while(end_flag == 0 and gVars.kill_flag == 0):
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
@@ -125,7 +128,7 @@ def pointToPoint(Dest, initialTack=None):
                     else:
                         gVars.TrueWindAngle = newTWA
                     gVars.currentColumn = 0;
-                    print ("TWA is: " + str(gVars.TrueWindAngle))
+                    #print ("TWA is: " + str(gVars.TrueWindAngle))
             else:
                     newTWA = standardcalc.getTrueWindAngle(abs(appWindAng),sog)
                     newTWA = abs(int(newTWA))
@@ -133,8 +136,8 @@ def pointToPoint(Dest, initialTack=None):
                         gVars.TrueWindAngle = -newTWA
                     else:
                         gVars.TrueWindAngle = newTWA
-                    print ("Hit else statement")
-                    print ("TWA is: " + str(gVars.TrueWindAngle))
+                    #print ("Hit else statement")
+                    #print ("TWA is: " + str(gVars.TrueWindAngle))
                                 
             if(standardcalc.isWPNoGo(appWindAng,hog,Dest,sog,GPSCoord)):
                 
@@ -144,7 +147,7 @@ def pointToPoint(Dest, initialTack=None):
                 #To get it wrt to current heading, we use hog-TWA-45-hog and hog-TWA+45-hog.  Both terms have hogs cancelling out.
                 #We are left with -TWA-45 and -TWA+45, which makes sense since the original TWA was always with respect to the boat.
                 #Since we are trying to figure out which one is closest to turn to, we use absolute values.
-                if(abs(-newTWA-45)<abs(-newTWA+45) and initialTack is None):
+                if((abs(-newTWA-45)<abs(-newTWA+45) and initialTack is None) or initialTack == 1):
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flag ==0):
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
@@ -164,11 +167,17 @@ def pointToPoint(Dest, initialTack=None):
                             arduino.steer(AWA_METHOD,hog-newTWA-45)
                             TWA = newTWA
                             oldColumn = gVars.currentColumn
+                            
+                        if(appWindAng > 0):
+                            tackDirection = 1
+                        else:
+                            tackDirection = 0
                         
-                    arduino.tack()
-                    print ("tack")
-                elif(abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None):
+                    arduino.tack(gVars.currentColumn,tackDirection)
+                    
+                elif((abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None) or initialTack == 0):
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flag == 0):
+                        
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
@@ -181,16 +190,20 @@ def pointToPoint(Dest, initialTack=None):
                             newTWA = appWindAng
                             newTWA = abs(int(newTWA))
                         #TWA = abs(int(TWA))
-                        print ("TWA is: " + str(newTWA))
+                        #print ("TWA is: " + str(newTWA))
                         
                         if(TWA != newTWA or oldColumn != gVars.currentColumn):
                             arduino.adjust_sheets(sheetList[int(newTWA)][gVars.currentColumn])
                             arduino.steer(AWA_METHOD,hog-newTWA+45)
                             TWA = newTWA
                             oldColumn = gVars.currentColumn
-                    
-                    arduino.tack()
-                    print "tack"
+                            
+                        if(appWindAng > 0):
+                            tackDirection = 1
+                        else:
+                            tackDirection = 0
+                        
+                    arduino.tack(gVars.currentColumn,tackDirection)
                     
             elif(abs(hog-newTWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
                 if(TWA != newTWA or oldColumn != gVars.currentColumn):
