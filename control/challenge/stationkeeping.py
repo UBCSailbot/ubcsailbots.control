@@ -154,15 +154,16 @@ def stationKeepInit(topLeftWaypnt, topRightWaypnt, botLeftWaypnt, botRightWaypnt
     wayPtCoords = setWayPtCoords(boxCoords)  #top, right, bottom, left
     spdList = [0.75]*10
     boxDistList = getBoxDist(boxCoords)  #top, right, bottom, left
+    meanSpd = 0.75
+    arduino = gVars.arduino
     gVars.SKCurrentWaypnt = boxDistList.index(min(boxDistList))
     thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
-    run(boxCoords, wayPtCoords, spdList)
+    run(boxCoords, wayPtCoords, spdList, meanSpd, arduino)
     return
     
-def run(boxCoords, wayPtCoords, spdList):
-    arduino = gVars.arduino
-    meanSpd = 0.75
+def run(boxCoords, wayPtCoords, spdList, meanSpd, arduino):
     while ((datetime.now() - gVars.taskStartTime).seconds < 300):
+        secLeft = 300 - (datetime.now() - gVars.taskStartTime).seconds
         turning = 0
         SKTimer();
         boxDistList = getBoxDist(boxCoords)
@@ -183,11 +184,21 @@ def run(boxCoords, wayPtCoords, spdList):
         if (turning == 0):
             spdList = standardcalc.changeSpdList(spdList)
             meanSpd = standardcalc.meanOfList(spdList)
+        if (boxDistList[gVars.SKCurrentWaypnt] >= meanSpd*(secLeft+2)):  #leeway of 2 seconds
+            break
+        elif (boxDistList[(gVars.SKCurrentWaypnt + 2) % 4] >= meanSpd*(secLeft+2+4) ): #leeway of 2 seconds, 4 seconds for gybe
+            gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 2) % 4
+            if (gVars.currentData[sVars.AWA_INDEX] < 0):
+                arduino.gybe(1)
+            else:
+                arduino.gybe(0)
+            thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
+            break
 
     boxDistList = getBoxDist(boxCoords)
-    gVars.SKMinLeft = 0
+    '''gVars.SKMinLeft = 0
     gVars.SKSecLeft = 0
-    gVars.SKMilliSecLeft = 0
+    gVars.SKMilliSecLeft = 0'''
     
     gVars.SKCurrentWaypnt = None
     
