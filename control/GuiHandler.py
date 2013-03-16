@@ -45,10 +45,15 @@ class GuiHandler:
     # ex. apparent wind, gps location, SOG, COG, heading, etc.
     def getData(self):
         arr = gVars.currentData
-        seconds = (gVars.taskStartTime - datetime.now()).total_seconds()
+        if (not gVars.taskStartTime):
+            seconds = None
+        else:
+            seconds = (datetime.now() - gVars.taskStartTime).total_seconds()
+            seconds = round(seconds)
+            
         output = {"telemetry":{"Heading": arr[sVars.HOG_INDEX], "COG" : arr[sVars.COG_INDEX], "SOG" : arr[sVars.SOG_INDEX], "AWA" : arr[sVars.AWA_INDEX], "latitude": arr[sVars.GPS_INDEX].lat , "longitude" : arr[sVars.GPS_INDEX].long, "SheetPercent": arr[sVars.SHT_INDEX], "Rudder": arr[sVars.RUD_INDEX]},
                   "connectionStatus":{"gpsSat":arr[sVars.SAT_INDEX],"HDOP":arr[sVars.ACC_INDEX], "automode":arr[sVars.AUT_INDEX]}, 
-                  "currentProcess":{"name":gVars.currentProcess, "Starttime":round(seconds)}}
+                  "currentProcess":{"name":gVars.currentProcess, "Starttime":seconds}}
         return output
     
     #returns a string of debug messages
