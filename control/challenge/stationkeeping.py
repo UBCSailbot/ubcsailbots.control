@@ -151,22 +151,26 @@ def stationKeepInit(topLeftWaypnt, topRightWaypnt, botLeftWaypnt, botRightWaypnt
     botRightCoord = botRightWaypnt.coordinate
     boxCoords = setBoxCoords(topLeftCoord, topRightCoord, botLeftCoord, botRightCoord)   #boxCoords[0] = TL, boxCoords[1] = TR, boxCoords[2] = BR, boxCoords[3] = BL
     wayPtCoords = setWayPtCoords(boxCoords)  #top, right, bottom, left
+    spdList = [0.75]*10
     GVars.challengeStartTime = datetime.now()
     boxDistList = getBoxDist(boxCoords)  #top, right, bottom, left
     GVars.SKCurrentWaypnt = boxDistList.index(min(boxDistList))
     thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
-    run(boxCoords, wayPtCoords)
+    run(boxCoords, wayPtCoords, spdList)
     return
     
-def run(boxCoords, wayPtCoords):
+def run(boxCoords, wayPtCoords, spdList):
     arduino = GVars.arduino
+    meanSpd = 0.75
     while ((datetime.now() - GVars.challengeStartTime).seconds < 300):
-        SKTimer();
+        turning = 0
+        SKTimer()
         boxDistList = getBoxDist(boxCoords)
         if (standardcalc.isWPNoGo(GVars.currentData[SVars.AWA_INDEX],GVars.currentData[SVars.HOG_INDEX], GVars.SKCurrentWaypnt, GVars.currentData[SVars.SOG_INDEX], GVars.currentData[SVars.GPS_INDEX])):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 1) % 4
             GVars.kill_flag = 1
             thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
+            turning = 1
         if (boxDistList[GVars.SKCurrentWaypnt] < 5):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 2) % 4
             GVars.kill_flag = 1
@@ -175,6 +179,10 @@ def run(boxCoords, wayPtCoords):
             else:
                 arduino.gybe(0)
             thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
+            turning = 1
+        if (turning == 0):
+            spdList = standardcalc.changeSpdList(spdList)
+            meanSpd = standardcalc.meanOfList(spdList)
     boxDistList = getBoxDist(boxCoords)
     GVars.SKMinLeft = 0
     GVars.SKSecLeft = 0

@@ -120,7 +120,19 @@ def getTrueWindAngle(awa, sog):
         if(sVars.SOG_THRESHOLD >= 500):
             print ("Hit Threshold")
             return None;    
-    
+
+# takes in a list of speeds. Deletes first element and appends the current speed to the end
+def changeSpdList(spdList):
+    del spdList[0]
+    spdList.append(gVars.currentData[sVars.SOG_INDEX])
+    return spdList
+
+def meanOfList(numberList):
+    if len(numberList) == 0:
+        return float('nan')
+ 
+    floatNums = [float(x) for x in numberList]
+    return sum(floatNums) / len(numberList)
 
 #Only works with tables with 4 columns!!!!!        
 def searchAWAIndex(number, list1):
