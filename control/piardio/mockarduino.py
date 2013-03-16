@@ -145,6 +145,8 @@ class arduino:
                 awa += math.pi
          
         awa = awa * 180/math.pi
+        awa = awa - [sVars.HOG_INDEX]
+        
         self.ardArray[sVars.AWA_INDEX] = awa
         self.previousx = x
         
