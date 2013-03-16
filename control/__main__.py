@@ -8,7 +8,7 @@ import thread
 import logging
 import sched
 import time
-import datetime
+from datetime import datetime
 from os import path
 from challenge import longdistance
 from challenge import navigation
@@ -50,22 +50,23 @@ def main(argv=None):
             gVars.currentProcess = gVars.functionQueue.pop(0)
             gVars.currentParams = gVars.queueParameters.pop(0)
             if (gVars.currentProcess == sVars.GO_AROUND_PORT or gVars.currentProcess == sVars.GO_AROUND_STBD or gVars.currentProcess == sVars.GO_TO):
-                gVars.taskStartTime = datetime.datetime.now()
+                gVars.taskStartTime = datetime.now()
                 thread.start_new_thread(getattr(coresailinglogic, gVars.currentProcess), gVars.currentParams)
             elif (gVars.currentProcess == sVars.NAVIGATION_CHALLENGE):
-                gVars.taskStartTime = datetime.datetime.now()
+                gVars.taskStartTime = datetime.now()
                 thread.start_new_thread(navigation.run, gVars.currentParams)
             elif (gVars.currentProcess == sVars.STATION_KEEPING_CHALLENGE):
-                gVars.taskStartTime = datetime.datetime.now()
+                gVars.taskStartTime = datetime.now()
                 thread.start_new_thread(stationkeeping.run, gVars.currentParams)
             elif (gVars.currentProcess == sVars.LONG_DISTANCE_CHALLENGE):
-                gVars.taskStartTime = datetime.datetime.now()
+                gVars.taskStartTime = datetime.now()
                 thread.start_new_thread(longdistance.run, gVars.currentParams)
             else:
                 gVars.logger.warning("No instruction task named " + str(gVars.currentProcess))
                 gVars.currentProcess = None
                 gVars.currentParams = None
         time.sleep(1)
+        
 
 def setGlobVar(arduino, sc):
     gVars.currentData = gVars.arduino.getFromArduino()
