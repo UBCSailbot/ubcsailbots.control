@@ -51,7 +51,7 @@ class arduino:
         self._update()
         return self.ardArray
     
-    def tack(self):
+    def tack(self, x, y):
         hog = self.ardArray[sVars.HOG_INDEX]
         if (self.actualWindAngle < hog):
             hog = self.actualWindAngle - 45
@@ -65,6 +65,8 @@ class arduino:
         
         self.ardArray[sVars.HOG_INDEX] = hog
     
+    def gybe(self, x):
+        pass
     def adjust_sheets(self, sheet_percent):                                                
         self.ardArray[sVars.SHT_INDEX] = sheet_percent
         
