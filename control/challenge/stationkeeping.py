@@ -188,6 +188,7 @@ def run(boxCoords, wayPtCoords, spdList, meanSpd, arduino):
             break
         elif (boxDistList[(gVars.SKCurrentWaypnt + 2) % 4] >= meanSpd*(secLeft+2+4) ): #leeway of 2 seconds, 4 seconds for gybe
             gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 2) % 4
+            gVars.kill_flag = 1
             if (gVars.currentData[sVars.AWA_INDEX] < 0):
                 arduino.gybe(1)
             else:

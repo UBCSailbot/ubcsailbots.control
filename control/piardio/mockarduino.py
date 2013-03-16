@@ -145,7 +145,13 @@ class arduino:
                 awa += math.pi
          
         awa = awa * 180/math.pi
-        awa = awa - [sVars.HOG_INDEX]
+            
+        awa -= self.ardArray[sVars.HOG_INDEX]
+        
+        if (awa > 180):
+            awa -= 360
+        elif (awa < -180):
+            awa += 360
         
         self.ardArray[sVars.AWA_INDEX] = awa
         self.previousx = x
