@@ -170,8 +170,12 @@ def run(boxCoords, wayPtCoords):
         if (boxDistList[GVars.SKCurrentWaypnt] < 5):
             GVars.SKCurrentWaypnt = (Gvars.SKCurrentWaypnt + 2) % 4
             GVars.kill_flag = 1
+            if (GVARS.currentData[SVars.AWA_INDEX] < 0):
+                arduino.gybe(1)
+            else:
+                arduino.gybe(0)
             thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[GVars.SKCurrentWaypnt])
-            #gybe
+    boxDistList = getBoxDist(boxCoords)
     GVars.SKMinLeft = 0
     GVars.SKSecLeft = 0
     GVars.SKMilliSecLeft = 0
