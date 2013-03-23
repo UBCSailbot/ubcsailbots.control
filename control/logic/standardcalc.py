@@ -123,6 +123,8 @@ def getTrueWindAngle(awa, sog):
 
 # takes in a list of speeds. Deletes first element and appends the current speed to the end
 def changeSpdList(spdList):
+    if (len(spdList) == 0):
+        return -1
     del spdList[0]
     spdList.append(gVars.currentData[sVars.SOG_INDEX])
     return spdList

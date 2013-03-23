@@ -4,6 +4,8 @@ import unittest
 import math
 from control.logic import standardcalc
 from control.datatype import datatypes
+from control import StaticVars as sVars
+from control import GlobalVars as gVars
 
 class TestGPSDistAway(unittest.TestCase):
     def setUp(self):
@@ -142,5 +144,14 @@ class TestMeanOfList(unittest.TestCase):
         self.assertEqual(standardcalc.meanOfList(self.list2), 2.5)
         self.assertEqual(standardcalc.meanOfList(self.list3), 0.35)
         self.assertEqual(standardcalc.meanOfList(self.list4), 2)
-    
-    
+        
+class TestChangeSpdList(unittest.TestCase):
+    def setUp(self):
+        self.list1 = []
+        self.list2 = [1,2,3]
+        self.list3 = standardcalc.changeSpdList(self.list2)
+        
+    def testChangeSpdList1(self):
+        self.assertEqual(standardcalc.changeSpdList(self.list1), -1)
+        self.assertEqual(self.list3[0] != 1, 1)
+        self.assertEqual(self.list3[2] == gVars.currentData[sVars.SOG_INDEX], 1)
