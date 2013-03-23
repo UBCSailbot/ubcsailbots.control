@@ -4,7 +4,9 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 import math
+import thread
 from control.logic import standardcalc
+from control.logic import coresailinglogic
 from control import GlobalVars as gVars
 from control import StaticVars as sVars
 
@@ -25,17 +27,18 @@ end_flag=0
 #Output: None
 def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
     end_flag = 0
-    while(end_flag == 0 and gVars.kill_flag == 0):
-        currentData = gVars.currentData
-        GPSCoord = currentData[gps_index]
-        appWindAng = currentData[awa_index]
-        cog = currentData[cog_index]
-        hog = currentData[hog_index]
-        sog = currentData[sog_index] * 100
-        
+    currentData = gVars.currentData
+    GPSCoord = currentData[gps_index]
+    
+    buoySailPoint = setNavigationBuoyPoint(BuoyCoords, GPSCoord, 10)
+    
+    coresailinglogic.pointToPoint(buoySailPoint)
+    
+    coresailinglogic.roundBuoyStbd(BuoyCoords,standardcalc.angleBetweenTwoCoords(BuoyCoords,GPSCoord))
+    
     return 0
 
-def setNavigatonBuoyPoint(buoyLocation, boatCoords, distFromBuoy):
+def setNavigationBuoyPoint(buoyLocation, boatCoords, distFromBuoy):
     interpoAngle = 90 - standardcalc.angleBetweenTwoCoords(buoyLocation, boatCoords)
     xDelta = distFromBuoy*math.cos(interpoAngle)
     yDelta = distFromBuoy*math.sin(interpoAngle)
