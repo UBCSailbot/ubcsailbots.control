@@ -125,3 +125,22 @@ class TestGetTrueWindAngle(unittest.TestCase):
         
     def testGetTrueWindAngle2(self):
         self.assertEqual(self.TWA2, 2)
+class TestFindCosLawAngle(unittest.TestCase):
+    self.assertEqual(standardcalc.findCosLawAngle(0,1,2),0)
+    self.assertEqual(standardcalc.findCosLawAngle(1,-1,2),0)
+    self.assertEqual((standardcalc.findCosLawAngle(2,3,4) - 104.477) <=0.001, 1)
+    
+class TestMeanOfList(unittest.TestCase):
+    def setUp(self):
+        self.list1 = []
+        self.list2 = [1,2,3,4]
+        self.list3 = [-0.2, 0, 0.7, 0.9]
+        self.list4 = [2]
+        
+    def testMeanofList1(self):
+        self.assertEqual(standardcalc.meanOfList(self.list1), float('nan'))
+        self.assertEqual(standardcalc.meanOfList(self.list2), 2.5)
+        self.assertEqual(standardcalc.meanOfList(self.list3), 0.35)
+        self.assertEqual(standardcalc.meanOfList(self.list4), 2)
+    
+    

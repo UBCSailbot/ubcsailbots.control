@@ -172,6 +172,8 @@ def searchSOGIndex(numberSOG, list1SOG):
     return indcol_listSOG
     
 def findCosLawAngle(a, b, c):  #cos law: c^2 = a^2 + b^2 - 2*a*b*cos(theta):
+    if ((a < 1) or (b < 1) or (c < 1)):
+        return 0
     return math.acos((math.pow(a, 2) + math.pow(b, 2) - math.pow(c, 2)) / (2*a*b))
         
     

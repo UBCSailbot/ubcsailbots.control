@@ -162,44 +162,46 @@ def stationKeepInit(topLeftWaypnt, topRightWaypnt, botLeftWaypnt, botRightWaypnt
     return
     
 def run(boxCoords, wayPtCoords, spdList, meanSpd, arduino):
+    exiting = 0
     while ((datetime.now() - gVars.taskStartTime).seconds < 300):
         secLeft = 300 - (datetime.now() - gVars.taskStartTime).seconds
         turning = 0
-        SKTimer();
+        SKTimer()
         boxDistList = getBoxDist(boxCoords)
-        if (standardcalc.isWPNoGo(gVars.currentData[sVars.AWA_INDEX],gVars.currentData[sVars.HOG_INDEX], gVars.SKCurrentWaypnt, gVars.currentData[sVars.SOG_INDEX], gVars.currentData[sVars.GPS_INDEX])):
-            gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 1) % 4
-            gVars.kill_flag = 1
-            thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
-            turning = 1
-        if (boxDistList[gVars.SKCurrentWaypnt] < 5):
-            gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 2) % 4
-            gVars.kill_flag = 1
-            if (gVars.currentData[sVars.AWA_INDEX] < 0):
-                arduino.gybe(1)
-            else:
-                arduino.gybe(0)
-            thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
-            turning = 1
-        if (turning == 0):
-            spdList = standardcalc.changeSpdList(spdList)
-            meanSpd = standardcalc.meanOfList(spdList)
-        if (boxDistList[gVars.SKCurrentWaypnt] >= meanSpd*(secLeft+2)):  #leeway of 2 seconds
-            break
-        elif (boxDistList[(gVars.SKCurrentWaypnt + 2) % 4] >= meanSpd*(secLeft+2+4) ): #leeway of 2 seconds, 4 seconds for gybe
-            gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 2) % 4
-            gVars.kill_flag = 1
-            if (gVars.currentData[sVars.AWA_INDEX] < 0):
-                arduino.gybe(1)
-            else:
-                arduino.gybe(0)
-            thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
-            break
+        if (exiting == 0):
+            if (standardcalc.isWPNoGo(gVars.currentData[sVars.AWA_INDEX],gVars.currentData[sVars.HOG_INDEX], gVars.SKCurrentWaypnt, gVars.currentData[sVars.SOG_INDEX], gVars.currentData[sVars.GPS_INDEX])):
+                gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 1) % 4
+                gVars.kill_flag = 1
+                thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
+                turning = 1
+            if (boxDistList[gVars.SKCurrentWaypnt] < 5):
+                gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 2) % 4
+                gVars.kill_flag = 1
+                if (gVars.currentData[sVars.AWA_INDEX] < 0):
+                    arduino.gybe(1)
+                else:
+                    arduino.gybe(0)
+                thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
+                turning = 1
+            if (turning == 0):
+                spdList = standardcalc.changeSpdList(spdList)
+                meanSpd = standardcalc.meanOfList(spdList)
+            if (boxDistList[gVars.SKCurrentWaypnt] >= meanSpd*(secLeft+2)):  #leeway of 2 seconds
+                exiting = 1
+            elif (boxDistList[(gVars.SKCurrentWaypnt + 2) % 4] >= meanSpd*(secLeft+2+4) ): #leeway of 2 seconds, 4 seconds for gybe
+                gVars.SKCurrentWaypnt = (gVars.SKCurrentWaypnt + 2) % 4
+                gVars.kill_flag = 1
+                if (gVars.currentData[sVars.AWA_INDEX] < 0):
+                    arduino.gybe(1)
+                else:
+                    arduino.gybe(0)
+                thread.start_new_thread(coresailinglogic.pointToPoint, boxCoords[gVars.SKCurrentWaypnt])
+                exiting = 1
 
     boxDistList = getBoxDist(boxCoords)
-    '''gVars.SKMinLeft = 0
+    gVars.SKMinLeft = 0
     gVars.SKSecLeft = 0
-    gVars.SKMilliSecLeft = 0'''
+    gVars.SKMilliSecLeft = 0
     
     gVars.SKCurrentWaypnt = None
     
