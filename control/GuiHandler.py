@@ -34,7 +34,7 @@ class GuiHandler:
                 
         else:
             gVars.functionQueue.append(instructionsData.challenge)
-            gVars.queueParameters.append(instructionsData.waypoints[0])
+            gVars.queueParameters.append(tuple(instructionsData.waypoints))
             
         print gVars.currentProcess
     # returns the  instructions object
