@@ -2,6 +2,8 @@
 
 import unittest
 import math
+import sys
+sys.path.append("..")
 from control.logic import standardcalc
 from control.datatype import datatypes
 from control import StaticVars as sVars
@@ -128,9 +130,10 @@ class TestGetTrueWindAngle(unittest.TestCase):
     def testGetTrueWindAngle2(self):
         self.assertEqual(self.TWA2, 2)
 class TestFindCosLawAngle(unittest.TestCase):
-    self.assertEqual(standardcalc.findCosLawAngle(0,1,2),0)
-    self.assertEqual(standardcalc.findCosLawAngle(1,-1,2),0)
-    self.assertEqual((standardcalc.findCosLawAngle(2,3,4) - 104.477) <=0.001, 1)
+    def testFindCosLawAngle(self):
+        self.assertEqual(standardcalc.findCosLawAngle(0,1,2),0)
+        self.assertEqual(standardcalc.findCosLawAngle(1,-1,2),0)
+        self.assertEqual((standardcalc.findCosLawAngle(2,3,4) - 104.477) <=0.001, 1)
     
 class TestMeanOfList(unittest.TestCase):
     def setUp(self):
@@ -140,7 +143,7 @@ class TestMeanOfList(unittest.TestCase):
         self.list4 = [2]
         
     def testMeanofList1(self):
-        self.assertEqual(standardcalc.meanOfList(self.list1), float('nan'))
+        self.assertEqual(standardcalc.meanOfList(self.list1), -1)
         self.assertEqual(standardcalc.meanOfList(self.list2), 2.5)
         self.assertEqual(standardcalc.meanOfList(self.list3), 0.35)
         self.assertEqual(standardcalc.meanOfList(self.list4), 2)

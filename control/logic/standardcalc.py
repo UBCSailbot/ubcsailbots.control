@@ -131,7 +131,7 @@ def changeSpdList(spdList):
 
 def meanOfList(numberList):
     if len(numberList) == 0:
-        return float('nan')
+        return -1
  
     floatNums = [float(x) for x in numberList]
     return sum(floatNums) / len(numberList)
