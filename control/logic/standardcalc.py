@@ -176,5 +176,9 @@ def findCosLawAngle(a, b, c):  #cos law: c^2 = a^2 + b^2 - 2*a*b*cos(theta):
         return 0
     return math.acos((math.pow(a, 2) + math.pow(b, 2) - math.pow(c, 2)) / (2*a*b))
         
+def setNavigatonBuoyPoint(buoyLocation, boatCoords, distFromBuoy):
+    interpoAngle = 90 - angleBetweenTwoCoords(buoyLocation, boatCoords)
+    xDelta = distFromBuoy*math.cos(interpoAngle)
+    yDelta = distFromBuoy*math.sin(interpoAngle)
     
-                    
+    return GPSDistAway(buoyLocation, xDelta, yDelta)              
