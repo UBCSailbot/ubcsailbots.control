@@ -28,8 +28,8 @@ setuptools.egg-info/PKG-INFO
 setuptools.egg-info/SOURCES.txt
 setuptools.egg-info/dependency_links.txt
 setuptools.egg-info/entry_points.txt
-setuptools.egg-info/not-zip-safe
 setuptools.egg-info/top_level.txt
+setuptools.egg-info/zip-safe
 setuptools/command/__init__.py
 setuptools/command/alias.py
 setuptools/command/bdist_egg.py
