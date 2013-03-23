@@ -218,9 +218,3 @@ def pointToPoint(Dest, initialTack=None):
             gVars.logger.info("Finished Point to Point")
     
     return 0
-
-# ---    Navigation Challenge    ---
-#Input: Buoy GPS Coordinates (Latitude and Longitude of the Buoy), Left Inner Point (The coordinates of the left innermost gate), Right Inner Point (The coordinates of the right innermost gate)
-#Output: None
-def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
-    return 0
