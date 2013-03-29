@@ -93,33 +93,55 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
         else:
             return 0
 
+#Determines whether the waypoint can be reached with our current coordinates using AWA
+#Returns 1 if waypoint can't be reached
+#Returns 0 if waypoint can be reached
+def isWPNoGoAWA (AWA, hog, dest, sog, GPS):
+    if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+        if(hog-AWA-45 < angleBetweenTwoCoords(GPS,dest) and angleBetweenTwoCoords(GPS,dest) < hog-AWA+45):
+            return 1
+        else:
+            return 0
+    else:
+        if(hog-AWA-34 < angleBetweenTwoCoords(GPS,dest) and angleBetweenTwoCoords(GPS,dest) < hog-AWA+34):
+            return 1
+        else:
+            return 0
+
 def getTrueWindAngle(awa, sog):
-    sVars.SOG_THRESHOLD = 0.9
+    sVars.AWA_THRESHOLD = 0.9
     while(1):
-        AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
-        SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))
-        AWAentries = searchAWAIndex(awa, AWAList)
-        SOGentries = searchSOGIndex(sog, SOGList)
-    
-        for i in range(len(AWAentries)):
-            index = AWAentries[i][0]
-            column = AWAentries[i][1]
-                
-            for x in range(len(SOGentries)):
-                if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
-                    gVars.currentColumn = column;
-                    if(awa < 0):
-                        gVars.trueWindAngle = -index;
-                    else:
-                        gVars.trueWindAngle = index;       
-                    sVars.SOG_THRESHOLD = 0.9                 
-                    return index;
+        sVars.SOG_THRESHOLD = 0.9
+        while(1):
+            AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
+            SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))
+            AWAentries = searchAWAIndex(awa, AWAList)
+            SOGentries = searchSOGIndex(sog, SOGList)
         
-        sVars.SOG_THRESHOLD += 1
+            for i in range(len(AWAentries)):
+                index = AWAentries[i][0]
+                column = AWAentries[i][1]
+                    
+                for x in range(len(SOGentries)):
+                    if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
+                        gVars.currentColumn = column
+                        if(awa < 0):
+                            gVars.trueWindAngle = -index
+                        else:
+                            gVars.trueWindAngle = index       
+                        sVars.SOG_THRESHOLD = 0.9                 
+                        return index
+            
+            sVars.SOG_THRESHOLD += 10
+            
+            if(sVars.SOG_THRESHOLD >= 500):
+                print ("Hit Threshold")
+                break
+            
+        sVars.AWA_THRESHOLD += 1
         
-        if(sVars.SOG_THRESHOLD >= 500):
-            print ("Hit Threshold")
-            return None;    
+        if(sVars.AWA_THRESHOLD >= 100):
+            return None    
 
 # takes in a list of speeds. Deletes first element and appends the current speed to the end
 def changeSpdList(spdList):

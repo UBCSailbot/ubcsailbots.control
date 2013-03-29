@@ -20,13 +20,10 @@ COMPASS_METHOD = 0
 COG_METHOD = 1
 AWA_METHOD = 2 
 
-end_flag=0
-
 # ---    Navigation Challenge    ---
 #Input: Buoy GPS Coordinates (Latitude and Longitude of the Buoy), Left Inner Point (The coordinates of the left innermost gate), Right Inner Point (The coordinates of the right innermost gate)
 #Output: None
 def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
-    end_flag = 0
     currentData = gVars.currentData
     GPSCoord = currentData[gps_index]
     

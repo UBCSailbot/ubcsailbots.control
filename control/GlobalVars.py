@@ -30,5 +30,5 @@ currentColumn = 0;
 logger = None
 arduino = None
 TrueWindAngle = 0
-kill_flag = 0
+kill_flagPTP = 0
 logBuffer = ""
