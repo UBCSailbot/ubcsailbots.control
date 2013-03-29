@@ -164,6 +164,11 @@ def pointToPointAWA(Dest, initialTack = None):
                         else:
                             tackDirection = 0
                         
+                        if( len(gVars.boundaries) > 0 ):
+                            for boundary in gVars.boundaries:
+                                if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
+                                    arduino.tack(gVars.currentColumn,tackDirection)
+                                    
                     arduino.tack(gVars.currentColumn,tackDirection)
                     
                 elif((abs(-newappWindAng-43)>=abs(-newappWindAng+43) and initialTack is None) or initialTack == 0):
@@ -190,6 +195,11 @@ def pointToPointAWA(Dest, initialTack = None):
                             tackDirection = 1
                         else:
                             tackDirection = 0
+                            
+                        if( len(gVars.boundaries) > 0 ):
+                            for boundary in gVars.boundaries:
+                                if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
+                                    arduino.tack(gVars.currentColumn,tackDirection)
                         
                     arduino.tack(gVars.currentColumn,tackDirection)
                     
@@ -281,6 +291,11 @@ def pointToPointTWA(Dest, initialTack=None):
                             tackDirection = 1
                         else:
                             tackDirection = 0
+                            
+                        if( len(gVars.boundaries) > 0 ):
+                            for boundary in gVars.boundaries:
+                                if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
+                                    arduino.tack(gVars.currentColumn,tackDirection)
                         
                     arduino.tack(gVars.currentColumn,tackDirection)
                     
@@ -312,6 +327,11 @@ def pointToPointTWA(Dest, initialTack=None):
                             tackDirection = 1
                         else:
                             tackDirection = 0
+                            
+                        if( len(gVars.boundaries) > 0 ):
+                            for boundary in gVars.boundaries:
+                                if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
+                                    arduino.tack(gVars.currentColumn,tackDirection)
                         
                     arduino.tack(gVars.currentColumn,tackDirection)
                     
