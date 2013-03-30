@@ -145,7 +145,7 @@ def pointToPointAWA(Dest, initialTack = None):
                 if((abs(-newappWindAng-43)<abs(-newappWindAng+43) and initialTack is None) or initialTack == 1):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP ==0):
-                        tacked_flag = 0
+                        gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         newappWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
@@ -169,9 +169,9 @@ def pointToPointAWA(Dest, initialTack = None):
                             for boundary in gVars.boundaries:
                                 if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
                                     arduino.tack(gVars.currentColumn,tackDirection)
-                                    tacked_flag = 1
+                                    gVars.tacked_flag = 1
                                     break
-                        if(tacked_flag):
+                        if(gVars.tacked_flag):
                             break
                                                             
                     arduino.tack(gVars.currentColumn,tackDirection)
@@ -179,7 +179,7 @@ def pointToPointAWA(Dest, initialTack = None):
                 elif((abs(-newappWindAng-43)>=abs(-newappWindAng+43) and initialTack is None) or initialTack == 0):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP == 0):
-                        tacked_flag = 0
+                        gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         newappWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
@@ -205,10 +205,10 @@ def pointToPointAWA(Dest, initialTack = None):
                             for boundary in gVars.boundaries:
                                 if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
                                     arduino.tack(gVars.currentColumn,tackDirection)
-                                    tacked_flag = 1
+                                    gVars.tacked_flag = 1
                                     break
                         
-                        if(tacked_flag):
+                        if(gVars.tacked_flag):
                             break
                         
                     arduino.tack(gVars.currentColumn,tackDirection)
@@ -278,7 +278,7 @@ def pointToPointTWA(Dest, initialTack=None):
                 if((abs(-newTWA-45)<abs(-newTWA+45) and initialTack is None) or initialTack == 1):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP ==0):
-                        tacked_flag = 0
+                        gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
@@ -307,10 +307,10 @@ def pointToPointTWA(Dest, initialTack=None):
                             for boundary in gVars.boundaries:
                                 if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
                                     arduino.tack(gVars.currentColumn,tackDirection)
-                                    tacked_flag = 1
+                                    gVars.tacked_flag = 1
                                     break
                                 
-                        if(tacked_flag):
+                        if(gVars.tacked_flag):
                             break
                         
                     arduino.tack(gVars.currentColumn,tackDirection)
@@ -318,7 +318,7 @@ def pointToPointTWA(Dest, initialTack=None):
                 elif((abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None) or initialTack == 0):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP == 0):
-                        tacked_flag = 0
+                        gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
                         cog = currentData[cog_index]
@@ -348,10 +348,10 @@ def pointToPointTWA(Dest, initialTack=None):
                             for boundary in gVars.boundaries:
                                 if(standardcalc.distBetweenTwoCoords(boundary, GPSCoord) <= boundary.radius):
                                     arduino.tack(gVars.currentColumn,tackDirection)
-                                    tacked_flag = 1
+                                    gVars.tacked_flag = 1
                                     break
                         
-                        if(tacked_flag):
+                        if(gVars.tacked_flag):
                             break
                         
                     arduino.tack(gVars.currentColumn,tackDirection)
