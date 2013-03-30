@@ -117,18 +117,14 @@ class TestSearchSOGIndex(unittest.TestCase):
 
 class TestGetTrueWindAngle(unittest.TestCase):
     def setUp(self):
-        self.sog1 = 214
-        self.awa1 = 82
+        self.sog1 = 127
+        self.awa1 = 95
         
-        #self.TWA1 = standardcalc.getTrueWindAngle(self.awa1, self.sog1)
-        self.TWA2 = standardcalc.getTrueWindAngle(2.49, 249)
-        print (self.TWA2)
+        self.TWA1 = standardcalc.getTrueWindAngle(self.awa1, self.sog1)
         
-    #def testGetTrueWindAngle1(self):
-       # self.assertEqual(self.TWA1, 82)
+    def testGetTrueWindAngle1(self):
+        self.assertEqual(self.TWA1, 141)
         
-    def testGetTrueWindAngle2(self):
-        self.assertEqual(self.TWA2, 2)
 class TestFindCosLawAngle(unittest.TestCase):
     def testFindCosLawAngle(self):
         self.assertEqual(standardcalc.findCosLawAngle(0,1,2),0)
