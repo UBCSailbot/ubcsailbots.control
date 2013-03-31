@@ -32,7 +32,7 @@ class TestGuiHandler(unittest.TestCase):
         self.x.setInstructions(self.instructions)
         self.assertTrue(gVars.instructions, self.instructions)
         self.assertListEqual(gVars.functionQueue, [sVars.NAVIGATION_CHALLENGE])
-        self.assertEqual(gVars.queueParameters[0].coordinate.lat, 1)
+        self.assertEqual(gVars.queueParameters[0][0].coordinate.lat, 1)
     
     def testSetInstructionsWithStationKeepChallenge(self):
         self.resetGlobVar()
@@ -40,7 +40,7 @@ class TestGuiHandler(unittest.TestCase):
         self.x.setInstructions(self.instructions)
         self.assertTrue(gVars.instructions, self.instructions)
         self.assertListEqual(gVars.functionQueue, [sVars.STATION_KEEPING_CHALLENGE])
-        self.assertEqual(gVars.queueParameters[0].coordinate.lat, 1)
+        self.assertEqual(gVars.queueParameters[0][0].coordinate.lat, 1)
     
     def testSetInstructionsWithLDChallenge(self):
         self.resetGlobVar()
@@ -48,7 +48,7 @@ class TestGuiHandler(unittest.TestCase):
         self.x.setInstructions(self.instructions)
         self.assertTrue(gVars.instructions, self.instructions)
         self.assertListEqual(gVars.functionQueue, [sVars.LONG_DISTANCE_CHALLENGE])
-        self.assertEqual(gVars.queueParameters[0].coordinate.lat, 1)
+        self.assertEqual(gVars.queueParameters[0][0].coordinate.lat, 1)
          
     def testGetCurrentData(self):
         self.resetGlobVar()
