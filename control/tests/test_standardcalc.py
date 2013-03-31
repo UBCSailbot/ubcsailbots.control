@@ -147,6 +147,7 @@ class TestMeanOfList(unittest.TestCase):
 class TestChangeSpdList(unittest.TestCase):
     def setUp(self):
         self.list1 = []
+        gVars.currentData = [1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
         self.list2 = [1,2,3]
         self.list3 = standardcalc.changeSpdList(self.list2)
         
@@ -154,3 +155,21 @@ class TestChangeSpdList(unittest.TestCase):
         self.assertEqual(standardcalc.changeSpdList(self.list1), -1)
         self.assertEqual(self.list3[0] != 1, 1)
         self.assertEqual(self.list3[2] == gVars.currentData[sVars.SOG_INDEX], 1)
+        
+class TestBoundto180(unittest.TestCase):
+    def setUp(self):
+        self.num1 = 5
+        self.num1bounded = 5
+        self.num2 = 200
+        self.num2bounded = -160
+        self.num3 = -200
+        self.num3bounded = 160
+    
+    def testNoChange(self):
+        self.assertEqual(standardcalc.boundTo180(self.num1), self.num1bounded)
+    
+    def testGreaterThan180(self):
+        self.assertEqual(standardcalc.boundTo180(self.num2), self.num2bounded)
+    
+    def testLessThan180(self):
+        self.assertEqual(standardcalc.boundTo180(self.num3), self.num3bounded)
