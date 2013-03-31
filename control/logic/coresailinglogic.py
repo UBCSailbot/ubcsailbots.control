@@ -99,17 +99,17 @@ def killPointToPoint():
 # --- Point to Point ---
 # Input: Destination GPS Coordinate, initialTack: 0 for port, 1 for starboard, nothing calculates on own, TWA = 0 for sailing using only AWA and 1 for attempting to find TWA.
 # Output: Nothing
-def pointToPoint(Dest, initialTack = None, TWA = 0):
+def pointToPoint(Dest, initialTack = None, ACCEPTANCE_DISTANCE = sVars.ACCEPTANCE_DISTANCE_DEFAULT, TWA = 0):
     if(TWA == 1):
         print("Running pointToPointTWA!")
-        pointToPointTWA(Dest, initialTack)
+        pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE)
     else:
         print("Running pointToPointAWA!")
-        pointToPointAWA(Dest, initialTack)
+        pointToPointAWA(Dest, initialTack, ACCEPTANCE_DISTANCE)
         
     return 0
 
-def pointToPointAWA(Dest, initialTack = None):
+def pointToPointAWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'apparentSheetSetting'))
     gVars.kill_flagPTP = 0
     end_flag = 0
@@ -121,6 +121,7 @@ def pointToPointAWA(Dest, initialTack = None):
     gVars.logger.info("Started point to point")
     
     while(end_flag == 0 and gVars.kill_flagPTP == 0):
+        print('hello')
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         newappWindAng = currentData[awa_index]
@@ -128,9 +129,9 @@ def pointToPointAWA(Dest, initialTack = None):
         hog = currentData[hog_index]
         sog = currentData[sog_index] * 100        
         
-        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
+        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
-            arbitraryTWA = standardcalc.getTrueWindAngle()
+            arbitraryTWA = standardcalc.getTrueWindAngle(newappWindAng,sog)
                 #print ("Hit else statement")
                 #print ("TWA is: " + str(gVars.TrueWindAngle))
                                 
@@ -155,7 +156,7 @@ def pointToPointAWA(Dest, initialTack = None):
                         arbitraryTWA = standardcalc.getTrueWindAngle(newappWindAng, sog)                            
                         
                         if( appWindAng != newappWindAng or oldColumn != gVars.currentColumn):
-                            arduino.adjust_sheets(sheetList[arbitraryTWA][gVars.currentColumn])
+                            arduino.adjust_sheets(sheetList[abs(int(arbitraryTWA))][gVars.currentColumn])
                             arduino.steer(AWA_METHOD,hog-newappWindAng-43)
                             appWindAng = newappWindAng
                             oldColumn = gVars.currentColumn
@@ -191,7 +192,7 @@ def pointToPointAWA(Dest, initialTack = None):
                         #print ("TWA is: " + str(newTWA))
                         
                         if(appWindAng != newappWindAng or oldColumn != gVars.currentColumn):
-                            arduino.adjust_sheets(sheetList[arbitraryTWA][gVars.currentColumn])
+                            arduino.adjust_sheets(sheetList[abs(int(arbitraryTWA))][gVars.currentColumn])
                             arduino.steer(AWA_METHOD,hog-newappWindAng+43)
                             appWindAng = newappWindAng
                             oldColumn = gVars.currentColumn
@@ -215,7 +216,7 @@ def pointToPointAWA(Dest, initialTack = None):
                     
             elif(abs(hog-arbitraryTWA-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))>90):
                 if(appWindAng != newappWindAng or oldColumn != gVars.currentColumn):
-                    arduino.adjust_sheets(sheetList[arbitraryTWA][gVars.currentColumn])
+                    arduino.adjust_sheets(sheetList[abs(int(arbitraryTWA))][gVars.currentColumn])
                     arduino.steer(COMPASS_METHOD,standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
                     appWindAng = newappWindAng
                     gVars.currentColumn
@@ -227,7 +228,7 @@ def pointToPointAWA(Dest, initialTack = None):
     
     return 0
     
-def pointToPointTWA(Dest, initialTack=None):
+def pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
     sheetList = parsing.parse(path.join(path.dirname(__file__), 'apparentSheetSetting'))
     gVars.kill_flagPTP = 0
     end_flag = 0
@@ -246,7 +247,7 @@ def pointToPointTWA(Dest, initialTack=None):
         hog = currentData[hog_index]
         sog = currentData[sog_index] * 100        
         
-        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > sVars.ACCEPTANCE_DISTANCE):
+        if(standardcalc.distBetweenTwoCoords(GPSCoord, Dest) > ACCEPTANCE_DISTANCE):
             #This if statement determines the sailing method we are going to use based on apparent wind angle
             if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
                 newTWA = appWindAng
@@ -258,7 +259,7 @@ def pointToPointTWA(Dest, initialTack=None):
                 gVars.currentColumn = 0
                 #print ("TWA is: " + str(gVars.TrueWindAngle))
             else:
-                newTWA = standardcalc.getTrueWindAngle(abs(appWindAng),sog)
+                newTWA = standardcalc.getTrueWindAngle(abs(int(appWindAng)),sog)
                 newTWA = abs(int(newTWA))
                 if(appWindAng < 0):
                     gVars.TrueWindAngle = -newTWA

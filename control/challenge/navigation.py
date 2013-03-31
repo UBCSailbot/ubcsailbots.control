@@ -5,6 +5,8 @@ Created on Jan 19, 2013
 '''
 import math
 import thread
+import sys
+sys.path.append("..")
 from control.logic import standardcalc
 from control.logic import coresailinglogic
 from control.datatype import datatypes
@@ -35,11 +37,35 @@ def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
     
     bound_dist = math.sqrt(HORIZ_BOUNDARY_DISTANCE^2+30^2)
     
+    netAngleLeft = boundAngle - angleOfCourse
+    netAngleRight = boundAngle + angleOfCourse
+    
+    leftBoundaryPoint = standardcalc.GPSDistAway(RightInnerPoint, bound_dist*math.sin(netAngleLeft), bound_dist*math.cos(netAngleLeft))
+    
+    rightBoundaryPoint = standardcalc.GPSDistAway(LeftInnerPoint, bound_dist*math.sin(netAngleRight), bound_dist*math.cos(netAngleRight))
+    
+    
+    
     buoySailPoint = setNavigationBuoyPoint(BuoyCoords, GPSCoord, 10)
     
     coresailinglogic.pointToPoint(buoySailPoint)
     
     coresailinglogic.roundBuoyStbd(BuoyCoords,standardcalc.angleBetweenTwoCoords(BuoyCoords,GPSCoord))
+    
+    thread.start_new_thread(coresailinglogic.pointToPoint, interpolatedPoint)
+    
+    while(standardcalc.distBetweenTwoCoords(GPSCoord, interpolatedPoint)>sVars.ACCEPTANCE_DISTANCE_DEFAULT):
+        GPSCoord = currentData[gps_index]
+        appWindAng = currentData[awa_index]
+        
+        if(standardcalc.distBetweenTwoCoords(GPSCoord,leftBoundaryPoint) > bound_dist or standardcalc.distBetweenTwoCoords(GPSCoord,rightBoundaryPoint) > bound_dist):
+            if(appWindAng > 0):
+                tackDirection = 1
+            else:
+                tackDirection = 0
+                
+            gVars.arduino.tack(gVars.currentColumn,tackDirection)
+            gVars.tacked_flag = 1
     
     return 0
 
