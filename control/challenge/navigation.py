@@ -28,7 +28,7 @@ HORIZ_BOUNDARY_DISTANCE = 60
 # ---    Navigation Challenge    ---
 #Input: Buoy GPS Coordinates (Latitude and Longitude of the Buoy), Left Inner Point (The coordinates of the left innermost gate), Right Inner Point (The coordinates of the right innermost gate)
 #Output: None
-def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
+def run(BuoyCoords,LeftInnerPoint,RightInnerPoint):
     currentData = gVars.currentData
     GPSCoord = currentData[gps_index]
     interpolatedPoint = datatypes.GPSCoordinate((LeftInnerPoint.latitude+RightInnerPoint.latitude)/2,(LeftInnerPoint.longitude+RightInnerPoint.longitude)/2)
