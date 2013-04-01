@@ -2,8 +2,12 @@
 
 import unittest
 import math
+import sys
+sys.path.append("..")
 from control.logic import standardcalc
 from control.datatype import datatypes
+from control import StaticVars as sVars
+from control import GlobalVars as gVars
 
 class TestGPSDistAway(unittest.TestCase):
     def setUp(self):
@@ -63,7 +67,7 @@ class TestAngleBetweenTwoCoords(unittest.TestCase):
         self.assertEqual(round(self.angle3,0), 45)
         self.assertEqual(round(self.angle4,0), -135)
         
-class TestSearchIndex(unittest.TestCase):
+class TestSearchAWAIndex(unittest.TestCase):
     def setUp(self):
         self.list1 = [0,1,2,3]
         self.list2 = [0,1,2,3]
@@ -86,13 +90,86 @@ class TestSearchIndex(unittest.TestCase):
         self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[2][1], 2)
         self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[3][0], 1)
         self.assertEqual(standardcalc.searchAWAIndex(self.value2, self.big_list)[3][1], 3)
+        
+class TestSearchSOGIndex(unittest.TestCase):
+    def setUp(self):
+        self.list1 = [0,1,2,3]
+        self.list2 = [0,1,2,3]
+        self.big_list = list()
+        self.big_list = [self.list1,self.list2]
+        self.value1 = 2
+        self.value2 = 2.3
+        self.value3 = 20
+        
+    def testSearchSOG1(self):
+        self.assertEqual(standardcalc.searchSOGIndex(self.value1, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value1, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value1, self.big_list)[1][0], 1)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value1, self.big_list)[1][1], 2)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[0][0], 0)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[0][1], 2)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[1][0], 0)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[1][1], 3)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[2][0], 1)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[2][1], 2)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[3][0], 1)
+        self.assertEqual(standardcalc.searchSOGIndex(self.value2, self.big_list)[3][1], 3)
 
 class TestGetTrueWindAngle(unittest.TestCase):
     def setUp(self):
-        self.sog1 = 214
-        self.awa1 = 82
+        self.sog1 = 127
+        self.awa1 = 95
         
         self.TWA1 = standardcalc.getTrueWindAngle(self.awa1, self.sog1)
         
     def testGetTrueWindAngle1(self):
-        self.assertEqual(self.TWA1, 114)
+        self.assertEqual(self.TWA1, 141)
+        
+class TestFindCosLawAngle(unittest.TestCase):
+    def testFindCosLawAngle(self):
+        self.assertEqual(standardcalc.findCosLawAngle(0,1,2),0)
+        self.assertEqual(standardcalc.findCosLawAngle(1,-1,2),0)
+        self.assertEqual((standardcalc.findCosLawAngle(2,3,4) - 104.477) <=0.001, 1)
+    
+class TestMeanOfList(unittest.TestCase):
+    def setUp(self):
+        self.list1 = []
+        self.list2 = [1,2,3,4]
+        self.list3 = [-0.2, 0, 0.7, 0.9]
+        self.list4 = [2]
+        
+    def testMeanofList1(self):
+        self.assertEqual(standardcalc.meanOfList(self.list1), -1)
+        self.assertEqual(standardcalc.meanOfList(self.list2), 2.5)
+        self.assertEqual(standardcalc.meanOfList(self.list3), 0.35)
+        self.assertEqual(standardcalc.meanOfList(self.list4), 2)
+        
+class TestChangeSpdList(unittest.TestCase):
+    def setUp(self):
+        self.list1 = []
+        gVars.currentData = [1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        self.list2 = [1,2,3]
+        self.list3 = standardcalc.changeSpdList(self.list2)
+        
+    def testChangeSpdList1(self):
+        self.assertEqual(standardcalc.changeSpdList(self.list1), -1)
+        self.assertEqual(self.list3[0] != 1, 1)
+        self.assertEqual(self.list3[2] == gVars.currentData[sVars.SOG_INDEX], 1)
+        
+class TestBoundto180(unittest.TestCase):
+    def setUp(self):
+        self.num1 = 5
+        self.num1bounded = 5
+        self.num2 = 200
+        self.num2bounded = -160
+        self.num3 = -200
+        self.num3bounded = 160
+    
+    def testNoChange(self):
+        self.assertEqual(standardcalc.boundTo180(self.num1), self.num1bounded)
+    
+    def testGreaterThan180(self):
+        self.assertEqual(standardcalc.boundTo180(self.num2), self.num2bounded)
+    
+    def testLessThan180(self):
+        self.assertEqual(standardcalc.boundTo180(self.num3), self.num3bounded)

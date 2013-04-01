@@ -4,20 +4,18 @@ Created on Jan 20, 2013
 @author: joshandrews
 '''
 import math
-import control.datatype.datatypes as datatype
-from control.parser import parsing
 from os import path
+from control.datatype import datatypes
+from control.parser import parsing
 from control import StaticVars as sVars
+from control import GlobalVars as gVars
 
 EARTH_RADIUS = 6378140.0
-
-#Implemented for the same reason as AWA_THRESHOLD, kept separate since this one will be changing.
-SOG_THRESHOLD = 0
 
 #returns gpscoordinate distance in meters away from starting point.
 #positive yDist = North, positive xDist = East
 def GPSDistAway(coord, xDist, yDist):
-    result = datatype.GPSCoordinate()
+    result = datatypes.GPSCoordinate()
     result.long = coord.long + (180.0/math.pi)*(float(xDist)/EARTH_RADIUS)/math.cos(math.radians(coord.lat))
     result.lat = coord.lat + (180.0/math.pi)*(float(yDist)/EARTH_RADIUS)
     return result
@@ -36,7 +34,7 @@ def distBetweenTwoCoords(coord1, coord2):
 
 #Returns the angle in degrees
 def angleBetweenTwoCoords(sourceCoord, destCoord):
-    GPSCoord = datatype.GPSCoordinate
+    GPSCoord = datatypes.GPSCoordinate
     
     if(sourceCoord.lat > destCoord.lat):
         GPSCoord.lat = sourceCoord.lat
@@ -95,26 +93,70 @@ def isWPNoGo (AWA, hog, dest, sog, GPS):
         else:
             return 0
 
+#Determines whether the waypoint can be reached with our current coordinates using AWA
+#Returns 1 if waypoint can't be reached
+#Returns 0 if waypoint can be reached
+def isWPNoGoAWA (AWA, hog, dest, sog, GPS):
+    if(sog < sVars.SPEED_AFFECTION_THRESHOLD):
+        if(hog-AWA-45 < angleBetweenTwoCoords(GPS,dest) and angleBetweenTwoCoords(GPS,dest) < hog-AWA+45):
+            return 1
+        else:
+            return 0
+    else:
+        if(hog-AWA-34 < angleBetweenTwoCoords(GPS,dest) and angleBetweenTwoCoords(GPS,dest) < hog-AWA+34):
+            return 1
+        else:
+            return 0
+
 def getTrueWindAngle(awa, sog):
+    sVars.AWA_THRESHOLD = 0.9
     while(1):
-        AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
-        SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))
-        AWAentries = searchAWAIndex(awa, AWAList)
-        SOGentries = searchSOGIndex(sog, SOGList)
-    
-        for i in range(len(AWAentries)):
-            index = AWAentries[i][0]
-            column = AWAentries[i][1]
-                
-            for x in range(len(SOGentries)):
-                if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
-                    return index;
+        sVars.SOG_THRESHOLD = 0.9
+        while(1):
+            AWAList = parsing.parse(path.join(path.dirname(__file__), 'AWA.txt'))
+            SOGList = parsing.parse(path.join(path.dirname(__file__), 'SOGarray'))
+            AWAentries = searchAWAIndex(awa, AWAList)
+            SOGentries = searchSOGIndex(sog, SOGList)
         
-        SOG_THRESHOLD += 1
+            for i in range(len(AWAentries)):
+                index = AWAentries[i][0]
+                column = AWAentries[i][1]
+                    
+                for x in range(len(SOGentries)):
+                    if (SOGentries[x][0] == index) and (SOGentries[x][1] == column):
+                        gVars.currentColumn = column
+                        if(awa < 0):
+                            gVars.trueWindAngle = -index
+                        else:
+                            gVars.trueWindAngle = index       
+                        sVars.SOG_THRESHOLD = 0.9                 
+                        return index
+            
+            sVars.SOG_THRESHOLD += 10
+            
+            if(sVars.SOG_THRESHOLD >= 500):
+                print ("Hit Threshold")
+                break
+            
+        sVars.AWA_THRESHOLD += 1
         
-        if(SOG_THRESHOLD >= 5):
-            return None;    
-    
+        if(sVars.AWA_THRESHOLD >= 100):
+            return None    
+
+# takes in a list of speeds. Deletes first element and appends the current speed to the end
+def changeSpdList(spdList):
+    if (len(spdList) == 0):
+        return -1
+    del spdList[0]
+    spdList.append(gVars.currentData[sVars.SOG_INDEX])
+    return spdList
+
+def meanOfList(numberList):
+    if len(numberList) == 0:
+        return -1
+ 
+    floatNums = [float(x) for x in numberList]
+    return sum(floatNums) / len(numberList)
 
 #Only works with tables with 4 columns!!!!!        
 def searchAWAIndex(number, list1):
@@ -135,23 +177,23 @@ def searchAWAIndex(number, list1):
             
     return indcol_list
 
-def searchSOGIndex(number, list1):
-    number = abs(number)
-    big_list = list()
-    indcol_list = list()
+def searchSOGIndex(numberSOG, list1SOG):
+    numberSOG = abs(numberSOG)
+    big_listSOG = list()
+    indcol_listSOG = list()
     
-    for i in range(len(list1)):
-        for j in range(len(list1[i])):
-            big_list.append(list1[i][j])    
+    for i in range(len(list1SOG)):
+        for j in range(len(list1SOG[i])):
+            big_listSOG.append(list1SOG[i][j])    
     
-    for n in range(len(big_list)):
-        if( math.fabs(big_list[n]-number) <= SOG_THRESHOLD ):
-            index = math.floor(n/4)
-            column = n%4
-            small_list = [index,column]
-            indcol_list.append(small_list)
+    for n in range(len(big_listSOG)):
+        if( math.fabs(big_listSOG[n]-numberSOG) <= sVars.SOG_THRESHOLD ):
+            indexSOG = math.floor(n/4)
+            columnSOG = n%4
+            small_listSOG = [indexSOG,columnSOG]
+            indcol_listSOG.append(small_listSOG)
             
-    return indcol_list
+    return indcol_listSOG
 
 #Convert a vector to degrees with respect to North
 def vectorToDegrees(x, y):
@@ -163,3 +205,17 @@ def vectorToDegrees(x, y):
         return 180 - math.tan(x/y)*180/3.14159
     else:
         return 90 + math.tan(x/y)*180/3.14159
+    
+def findCosLawAngle(a, b, c):  #cos law: c^2 = a^2 + b^2 - 2*a*b*cos(theta):
+    if ((a < 1) or (b < 1) or (c < 1)):
+        return 0
+    return math.acos((math.pow(a, 2) + math.pow(b, 2) - math.pow(c, 2)) / (2*a*b))
+
+# Bounds angle to -180 to 180
+def boundTo180(angle):
+    if (angle < -180):
+        return angle+360
+    elif (angle > 180):
+        return angle-360
+    else:
+        return angle

@@ -11,8 +11,8 @@ GUI Handler for the control logic
 import control.GlobalVars as gVars
 import control.StaticVars as sVars
 import control.challenge as challenge
-import control.logic.coresailinglogic as sl
-import control.datatype.datatypes as dt
+from datetime import timedelta
+from datetime import datetime
 
 # GUI Handler Class
 #    * GUI can call any of these functions and rest will be taken care of
@@ -27,21 +27,16 @@ class GuiHandler:
         gVars.boundaries = instructionsData.boundaries
         gVars.instructions = instructionsData
         # Stores function queue and parameter queue
-        if (instructionsData.challenge == 0):
+        if (instructionsData.challenge == sVars.NO_CHALLENGE):
             for waypoint in instructionsData.waypoints:
-                gVars.functionQueue.append(getattr(sl, waypoint.wtype))
-                gVars.queueParameters.append(waypoint.coordinate)
+                gVars.functionQueue.append(waypoint.wtype)
+                gVars.queueParameters.append((waypoint.coordinate, ))
                 
-        elif (instructionsData.challenge == sVars.NAVIGATION_CHALLENGE):
-            gVars.functionQueue.append(getattr(challenge.navigation, "run"))
-            gVars.queueParameters.append(tuple(instructionsData.waypoints))
-        elif (instructionsData.challenge == sVars.STATION_KEEPING_CHALLENGE):
-            gVars.functionQueue.append(getattr(challenge.stationkeeping, "run"))
-            gVars.queueParameters.append(tuple(instructionsData.waypoints))
-        elif (instructionsData.challenge == sVars.LONG_DISTANCE_CHALLENGE):
-            gVars.functionQueue.append(getattr(challenge.longdistance, "run"))
+        else:
+            gVars.functionQueue.append(instructionsData.challenge)
             gVars.queueParameters.append(tuple(instructionsData.waypoints))
             
+        print gVars.currentProcess
     # returns the  instructions object
     def getInstructions(self):        #main.returninstructionsdataforgui
         return gVars.instructions
@@ -50,13 +45,20 @@ class GuiHandler:
     # ex. apparent wind, gps location, SOG, COG, heading, etc.
     def getData(self):
         arr = gVars.currentData
-        output = {"telemetry":{"Heading": arr[0], "COG" : arr[1], "SOG" : arr[2], "AWA" : arr[3], "latitude": arr[4].lat , "longitude" : arr[4].long, "Rudder" : arr[5], "SheetPercent": arr[6]}}
+        if (not gVars.taskStartTime):
+            seconds = None
+        else:
+            seconds = (datetime.now() - gVars.taskStartTime).total_seconds()
+            seconds = round(seconds)
+            
+        output = {"telemetry":{"Heading": arr[sVars.HOG_INDEX], "COG" : arr[sVars.COG_INDEX], "SOG" : arr[sVars.SOG_INDEX], "AWA" : arr[sVars.AWA_INDEX], "latitude": arr[sVars.GPS_INDEX].lat , "longitude" : arr[sVars.GPS_INDEX].long, "SheetPercent": arr[sVars.SHT_INDEX], "Rudder": arr[sVars.RUD_INDEX]},
+                  "connectionStatus":{"gpsSat":arr[sVars.SAT_INDEX],"HDOP":arr[sVars.ACC_INDEX], "automode":arr[sVars.AUT_INDEX]}, 
+                  "currentProcess":{"name":gVars.currentProcess, "Starttime":seconds}}
         return output
-    
     
     #returns a string of debug messages
     def getDebugMessages(self):
-        #debug messages should be appended to a string buffer
-        #this buffer will be cleared every time this function is called
-        #a limit could be placed on the length of this buffer (ex. 100 lines)
-        pass
+        logger = gVars.logger
+        buff = logger.buffer
+        logger.clear()
+        return buff

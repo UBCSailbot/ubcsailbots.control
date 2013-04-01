@@ -10,9 +10,10 @@ Static Variables for the control logic and GUI
 '''
 
 # Constant names for challenges and logic
-NAVIGATION_CHALLENGE = "challenge.navigation"
-STATION_KEEPING_CHALLENGE = "challenge.stationkeeping"
-LONG_DISTANCE_CHALLENGE = "challenge.longdistance"
+NAVIGATION_CHALLENGE = "navigation"
+STATION_KEEPING_CHALLENGE = "stationkeeping"
+LONG_DISTANCE_CHALLENGE = "longdistance"
+NO_CHALLENGE = "NONE"
 
 # -- Logic Waypoint Types --
 # Point to Point waypoint types
@@ -30,7 +31,9 @@ LD_SECOND = "ld_second"
 
 # Navigation Challenge waypoint types
 NAV_FIRST = "nav_first"
-NAV_FINISH ="nav_finish"
+NAV_START_PORT ="nav_start_port"
+NAV_START_STARBOARD ="nav_start_stbd"
+
 # Station Keeping Challenge waypoint types
 SK_TOP_LEFT = "sk_top_left"
 SK_TOP_RIGHT = "sk_top_right"
@@ -38,21 +41,19 @@ SK_BOTTOM_LEFT = "sk_bottom_left"
 SK_BOTTOM_RIGHT = "sk_bottom_right"
 
 # Thresholds for sailing logic functions
-ACCEPTANCE_DISTANCE = 3     #The acceptable distance (how close the boat has to be to the waypoint before it accepts that it has reached its destination
+ACCEPTANCE_DISTANCE_DEFAULT = 3     #The acceptable distance (how close the boat has to be to the waypoint before it accepts that it has reached its destination
 AWA_THRESHOLD = 0.9         #Since the table has non-realistic values for AWA, this allows the AWA lookup to be off slightly
-SPEED_AFFECTION_THRESHOLD = 119     #Speed threshold at which lower speeds are shown to note have a significant variation between AWA and TWA
-
-# Methods for the Arduino Steer function
-ARD_STEER_COMPASS = "compass"
-ARD_STEER_COG = "cog"
-ARD_STEER_APPARENT_WIND = "apparent_wind"
+SOG_THRESHOLD = 0.9
+SPEED_AFFECTION_THRESHOLD = 55     #Speed threshold at which lower speeds are shown to note have a significant variation between AWA and TWA
 
 # Indices for current_data
-HOG_INDEX=0
-COG_INDEX=1
-SOG_INDEX=2
-AWA_INDEX=3
-GPS_INDEX=4
-RUD_INDEX=5
-SHT_INDEX=6
-TAC_INDEX=7
+HOG_INDEX=0     # Heading over Ground
+COG_INDEX=1     # Course over Ground
+SOG_INDEX=2     # Speed over Ground
+AWA_INDEX=3     # Apparent Wind Angle Average
+GPS_INDEX=4     # GPS Coordinate
+SHT_INDEX=5     # Sheet Percentage
+SAT_INDEX=6     # GPS Number of Satellites
+ACC_INDEX=7     # GPS Accuracy (HDOP)
+AUT_INDEX=8     # Auto Mode
+RUD_INDEX=9     # Rudder

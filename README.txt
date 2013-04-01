@@ -6,8 +6,8 @@ UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop
 
 Steps to get project running:
 1) Navigate to top level directory
-2) Run 'python setup.py install_lib' (May need sudo before)
-3) Run 'python setup.py test' (May need sudo before)
+2) Run 'python setup.py install_lib' (May need sudo before or run as admin)
+3) Run 'python setup.py test' (May need sudo before or run as admin)
 4) Navigate to control directory
 5) Start code, run 'python __main__.py'
 
@@ -71,7 +71,7 @@ Libraries
 
 From console in top level run: 'python setup.py install_lib'
 
-To run the project you must have the mock and serial libraries installed.
+To run the project you must have all libraries installed
 
 Tests
 =====
@@ -102,3 +102,14 @@ Mock Arduino
 To activate set mock bool in main.
 
 Mocks an arduino class which should feed back information as if the boat was in the water.  Use this class to test code in a simulation mode.  There are parameters which can be explicitly set in the class to test implementation code in different ways.
+
+Logging
+=======
+
+There is support for logging throughout the entire project which logs to a file in log/sailbot.log.  To access the logger call functions on 'logger' in GlobalVar.
+Example Calls:
+	globvar.logger.warning("Warning Message")
+    	globvar.logger.debug("Debug Message")
+    	globvar.logger.critical("Critical Message")
+
+Test change
