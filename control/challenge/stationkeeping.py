@@ -56,12 +56,18 @@ def setWayPtCoords(boxCoords): #sets the waypoints of the challenge
 def setBoxCoords(tL, tR, bL, bR): #sets coords of box so that topleft is most west point of the two most northern points
     coordHalf1 = [tL, tR]
     coordHalf2 = [bL, bR]
+    firstCoordHalf = []
+    secondCoordHalf = []
     coordList = []
     finalCoordList = []
     if (coordHalf1[1].lat > coordHalf1[0].lat):
         firstCoordHalf = [coordHalf1[1], coordHalf1[0]]
+    else:
+        firstCoordHalf = [coordHalf1[0], coordHalf1[1]]
     if (coordHalf2[1].lat > coordHalf2[0].lat):
-        secondCoordHalf = [coordHalf1[1], coordHalf1[0]]
+        secondCoordHalf = [coordHalf2[1], coordHalf2[0]]
+    else:
+        secondCoordHalf = [coordHalf2[0], coordHalf2[1]]
         
     if (firstCoordHalf[0].lat >= secondCoordHalf[0].lat):  #mergesort
         coordList.append(firstCoordHalf[0])
