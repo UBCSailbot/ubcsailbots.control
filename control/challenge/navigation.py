@@ -28,10 +28,10 @@ HORIZ_BOUNDARY_DISTANCE = 60
 # ---    Navigation Challenge    ---
 #Input: Buoy GPS Coordinates (Latitude and Longitude of the Buoy), Left Inner Point (The coordinates of the left innermost gate), Right Inner Point (The coordinates of the right innermost gate)
 #Output: None
-def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
+def run(BuoyCoords,PortStartInnerPoint,StarboardStartInnerPoint):
     currentData = gVars.currentData
     GPSCoord = currentData[gps_index]
-    interpolatedPoint = datatypes.GPSCoordinate((LeftInnerPoint.latitude+RightInnerPoint.latitude)/2,(LeftInnerPoint.longitude+RightInnerPoint.longitude)/2)
+    interpolatedPoint = datatypes.GPSCoordinate((PortStartInnerPoint.latitude+StarboardStartInnerPoint.latitude)/2,(PortStartInnerPoint.longitude+StarboardStartInnerPoint.longitude)/2)
     angleOfCourse = standardcalc.angleBetweenTwoCoords(interpolatedPoint, BuoyCoords)
     boundAngle = math.atan(HORIZ_BOUNDARY_DISTANCE/30)*180/math.pi
     
@@ -40,9 +40,9 @@ def navigationChallenge(BuoyCoords,LeftInnerPoint,RightInnerPoint):
     netAngleLeft = boundAngle - angleOfCourse
     netAngleRight = boundAngle + angleOfCourse
     
-    leftBoundaryPoint = standardcalc.GPSDistAway(RightInnerPoint, bound_dist*math.sin(netAngleLeft), bound_dist*math.cos(netAngleLeft))
+    leftBoundaryPoint = standardcalc.GPSDistAway(StarboardStartInnerPoint, bound_dist*math.sin(netAngleLeft), bound_dist*math.cos(netAngleLeft))
     
-    rightBoundaryPoint = standardcalc.GPSDistAway(LeftInnerPoint, bound_dist*math.sin(netAngleRight), bound_dist*math.cos(netAngleRight))
+    rightBoundaryPoint = standardcalc.GPSDistAway(PortStartInnerPoint, bound_dist*math.sin(netAngleRight), bound_dist*math.cos(netAngleRight))
     
     
     
