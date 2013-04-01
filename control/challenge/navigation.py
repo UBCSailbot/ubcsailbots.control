@@ -3,6 +3,7 @@ Created on Jan 19, 2013
 
 @author: joshandrews
 '''
+import time
 import math
 import thread
 import sys
@@ -19,6 +20,7 @@ sog_index=sVars.SOG_INDEX
 awa_index=sVars.AWA_INDEX
 gps_index=sVars.GPS_INDEX
 sht_index=sVars.SHT_INDEX
+aut_index=sVars.AUT_INDEX
 COMPASS_METHOD = 0
 COG_METHOD = 1
 AWA_METHOD = 2
@@ -82,6 +84,9 @@ def run(Waypoint1,Waypoint2,Waypoint3):
     while(standardcalc.distBetweenTwoCoords(GPSCoord, interpolatedPoint)>sVars.ACCEPTANCE_DISTANCE_DEFAULT):
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
+        
+        while(gVars.currentData[aut_index] == True):
+            time.sleep(0.1)
         
         if(standardcalc.distBetweenTwoCoords(GPSCoord,leftBoundaryPoint) > bound_dist or standardcalc.distBetweenTwoCoords(GPSCoord,rightBoundaryPoint) > bound_dist):
             if(appWindAng > 0):
