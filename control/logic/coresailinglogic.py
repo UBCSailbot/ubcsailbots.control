@@ -11,6 +11,7 @@ from os import path
 from control.logic import standardcalc
 from control import StaticVars as sVars
 from control.piardio import arduino
+from control.datatype import datatypes
 
 hog_index=sVars.HOG_INDEX
 cog_index=sVars.COG_INDEX
@@ -30,21 +31,24 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     currentData = glob.currentData
         
     GPSCoord = currentData[gps_index]
-    appWindAng = currentData[awa_index]
-    cog = currentData[cog_index] # Course  over ground    
-    hog = currentData[hog_index] # Height over ground
+    # appWindAng = currentData[awa_index]
+    InitCog = currentData[cog_index] # Course  over ground    
+    InitHog = currentData[hog_index] # Heading over ground
     
     X = 16.64 # Degrees, Calculated
     Dest = 23.41 # Meters, Distance from boat to buoy
     angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
     reflectLong = GPSCoord.long * -1 # Used for calculation ONLY, when longitude decreases from left to right
+    quadDir = None
     
     if reflectLong > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
         moveLong = abs(math.sin(180 - angleToNorth + X)) * -1 # - X movement 
         moveLat = abs(math.cos(180 - angleToNorth + X)) * - 1 # - Y movement
+        quadDir = 3;
     elif reflectLong < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
         moveLong = abs(math.cos(angleToNorth -90 - X)) # + X Movement
         moveLat = abs(math.sin(angleToNorth - 90 - X)) * -1 # - Y Movement
+        quadDir = 4;
     elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
         moveLong = abs(math.sin(angleToNorth - X)) # + X Movement
         moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement
@@ -55,7 +59,29 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     moveLong *= Dest
     moveLat *= Dest
     
-    moveLong *= -1 # Convert back actual coordinates 
+    moveLong *= -1 # Convert back actual coordinates
+    
+    destinationLong = moveLong + GPSCoord.long
+    destinationLat = moveLong + GPSCoord.lat
+    
+    # 10 represents the degree of error around the destination point
+    # Calls point to point function until it reaches location past buoy 
+    while (GPSCoord.long >= (destinationLong + 10) or GPSCoord.long <= destinationLong - 10) and (GPSCoord.lat >= (destinationLat + 10) or GPSCoord.lat <= destinationLat - 10): 
+        GPSCoord.long = glob.currentData[gps_index].long
+        GPSCoord.lat = glob.currentData[gps_index].lat
+        pointToPoint(datatypes.GPSCoordinate(moveLat, moveLong),1)
+        
+    # Checks if the boat needs to round the buoy or just pass it
+    vect = None
+    vect.lat = BuoyLoc.lat - currentData.lat
+    vect.long = BuoyLoc.long - currentData.long
+    
+    buoyAngle = None
+    buoyAngle = standardcalc.vectorToDegrees(vect.lat, vect.long)
+    buoyAngle = boundAngle180(buoyAngle) #git later
+    
+    
+    
     return 0
 
 # --- Round Buoy Stbd---
@@ -91,6 +117,9 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
     moveLat *= Dest
     
     moveLong *= -1 # Convert back to actual coordinates
+    
+    pointToPoint(datatypes.GPSCoordinate(moveLat, moveLong),1)
+    
     return 0
 
 # --- Point to Point ---

@@ -152,8 +152,14 @@ def searchSOGIndex(number, list1):
             indcol_list.append(small_list)
             
     return indcol_list
-    
-        
-        
-    
-                    
+
+#Convert a vector to degrees with respect to North
+def vectorToDegrees(x, y):
+    if(x >= 0 and y >= 0):
+        return math.tan(x/y)*180/3.14159
+    elif(x < 0 and y > 0):
+        return 90 - math.tan(x/y)*180/3.14159
+    elif(x < 0 and y < 0):
+        return 180 - math.tan(x/y)*180/3.14159
+    else:
+        return 90 + math.tan(x/y)*180/3.14159
