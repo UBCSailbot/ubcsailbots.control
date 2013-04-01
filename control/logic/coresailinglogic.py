@@ -51,35 +51,47 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
         moveLong = abs(math.sin(angleToNorth - X)) # + X Movement
         moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement
+        quadDir = 1;
     else:
         moveLong = abs(math.sin(angleToNorth + X)) * - 1 # - X Movement
         moveLat = abs(math.cos(angleToNorth + X)) # + Y Movement 
+        quadDir = 2;
         
-    moveLong *= Dest
-    moveLat *= Dest
+    moveLong *= Dest # Error!
+    moveLat *= Dest # Error!
     
     moveLong *= -1 # Convert back actual coordinates
     
     destinationLong = moveLong + GPSCoord.long
-    destinationLat = moveLong + GPSCoord.lat
+    destinationLat = moveLat + GPSCoord.lat
     
     # 10 represents the degree of error around the destination point
-    # Calls point to point function until it reaches location past buoy 
-    while (GPSCoord.long >= (destinationLong + 10) or GPSCoord.long <= destinationLong - 10) and (GPSCoord.lat >= (destinationLat + 10) or GPSCoord.lat <= destinationLat - 10): 
+    # Calls point to point function until it reaches location past buoy
+    # Adding 10 does not increase the radius by 10 meters(ERROR!)
+    while (GPSCoord.long >= standardcalc.GPSDistAway(destinationLong, 10, 0) or GPSCoord.long <= standardcalc.GPSDistAway(destinationLong, -10, 0)) and (GPSCoord.lat >= standardcalc.GPSDistAway(destinationLong, 0, 10) or GPSCoord.lat <= standardcalc.GPSDistAway(destinationLong, 0, -10)): 
         GPSCoord.long = gVars.currentData[gps_index].long
         GPSCoord.lat = gVars.currentData[gps_index].lat
-        pointToPoint(datatypes.GPSCoordinate(moveLat, moveLong),1)
+        pointToPoint(datatypes.GPSCoordinate(destinationLat, destinationLong),1)
         
     # Checks if the boat needs to round the buoy or just pass it
     vect = None
     vect.lat = BuoyLoc.lat - currentData.lat
     vect.long = BuoyLoc.long - currentData.long
     
+    # Checks if the boat as to round the buoy
     buoyAngle = None
     buoyAngle = standardcalc.vectorToDegrees(vect.lat, vect.long)
+    buoyAngle -= 90 
     buoyAngle = standardcalc.boundTo180(buoyAngle) #git later
     
-    
+    if quadDir == 1 and FinalBearing < buoyAngle and FinalBearing > (buoyAngle - 90):
+        pointToPoint(standardcalc.GPSDistAway(gVars.currentData[gps_index], -10, 0), 1)
+    elif quadDir == 2 and FinalBearing < buoyAngle and FinalBearing > (buoyAngle - 90):
+        pointToPoint(standardcalc.GPSDistAway(gVars.currentData[gps_index], 0, -10), 1)
+    elif quadDir == 3 and FinalBearing < buoyAngle and FinalBearing > (buoyAngle - 90):
+        pointToPoint(standardcalc.GPSDistAway(gVars.currentData[gps_index], 10, 0), 1)
+    else: #quadDir == 4 and FinalBearing < buoyAngle and FinalBearing > (buoyAngle - 90):
+        pointToPoint(standardcalc.GPSDistAway(gVars.currentData[gps_index], 0, 10), 1)
     
     return 0
 
