@@ -270,6 +270,17 @@ def searchSOGIndex(numberSOG, list1SOG):
             indcol_listSOG.append(small_listSOG)
             
     return indcol_listSOG
+
+#Convert a vector to degrees with respect to North
+def vectorToDegrees(x, y):
+    if(x >= 0 and y >= 0):
+        return math.tan(x/y)*180/3.14159
+    elif(x < 0 and y > 0):
+        return 90 - math.tan(x/y)*180/3.14159
+    elif(x < 0 and y < 0):
+        return 180 - math.tan(x/y)*180/3.14159
+    else:
+        return 90 + math.tan(x/y)*180/3.14159
     
 def findCosLawAngle(a, b, c):  #cos law: c^2 = a^2 + b^2 - 2*a*b*cos(theta):
     if ((a < 1) or (b < 1) or (c < 1)):

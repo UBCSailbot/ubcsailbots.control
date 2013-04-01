@@ -3,7 +3,7 @@ Created on Jan 19, 2013
 
 @author: joshandrews
 '''
-
+import time
 import math
 import sys
 from os import path
@@ -11,13 +11,15 @@ from control.parser import parsing
 from control.logic import standardcalc
 from control import StaticVars as sVars
 from control import GlobalVars as gVars
-
+from control.datatype import datatypes
 hog_index=sVars.HOG_INDEX
 cog_index=sVars.COG_INDEX
 sog_index=sVars.SOG_INDEX
 awa_index=sVars.AWA_INDEX
 gps_index=sVars.GPS_INDEX
 sht_index=sVars.SHT_INDEX
+aut_index=sVars.AUT_INDEX
+
 COMPASS_METHOD = 0
 COG_METHOD = 1
 AWA_METHOD = 2 
@@ -30,21 +32,24 @@ end_flag=0
 def roundBuoyPort(BuoyLoc, FinalBearing):
     currentData = gVars.currentData
     GPSCoord = currentData[gps_index]
-    appWindAng = currentData[awa_index]
-    cog = currentData[cog_index] # Course  over ground    
-    hog = currentData[hog_index] # Height over ground
+    # appWindAng = currentData[awa_index]
+    InitCog = currentData[cog_index] # Course  over ground    
+    InitHog = currentData[hog_index] # Heading over ground
     
     X = 16.64 # Degrees, Calculated
     Dest = 23.41 # Meters, Distance from boat to buoy
     angleToNorth = standardcalc.angleBetweenTwoCoords(GPSCoord, BuoyLoc)
     reflectLong = GPSCoord.long * -1 # Used for calculation ONLY, when longitude decreases from left to right
+    quadDir = None
     
     if reflectLong > BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
         moveLong = abs(math.sin(180 - angleToNorth + X)) * -1 # - X movement 
         moveLat = abs(math.cos(180 - angleToNorth + X)) * - 1 # - Y movement
+        quadDir = 3;
     elif reflectLong < BuoyLoc.long & GPSCoord.lat > BuoyLoc.lat:
         moveLong = abs(math.cos(angleToNorth -90 - X)) # + X Movement
         moveLat = abs(math.sin(angleToNorth - 90 - X)) * -1 # - Y Movement
+        quadDir = 4;
     elif reflectLong < BuoyLoc.long & GPSCoord.lat < BuoyLoc.lat:
         moveLong = abs(math.sin(angleToNorth - X)) # + X Movement
         moveLat = abs(math.cos(angleToNorth - X)) # + Y Movement
@@ -55,7 +60,29 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     moveLong *= Dest
     moveLat *= Dest
     
-    moveLong *= -1 # Convert back actual coordinates 
+    moveLong *= -1 # Convert back actual coordinates
+    
+    destinationLong = moveLong + GPSCoord.long
+    destinationLat = moveLong + GPSCoord.lat
+    
+    # 10 represents the degree of error around the destination point
+    # Calls point to point function until it reaches location past buoy 
+    while (GPSCoord.long >= (destinationLong + 10) or GPSCoord.long <= destinationLong - 10) and (GPSCoord.lat >= (destinationLat + 10) or GPSCoord.lat <= destinationLat - 10): 
+        GPSCoord.long = gVars.currentData[gps_index].long
+        GPSCoord.lat = gVars.currentData[gps_index].lat
+        pointToPoint(datatypes.GPSCoordinate(moveLat, moveLong),1)
+        
+    # Checks if the boat needs to round the buoy or just pass it
+    vect = None
+    vect.lat = BuoyLoc.lat - currentData.lat
+    vect.long = BuoyLoc.long - currentData.long
+    
+    buoyAngle = None
+    buoyAngle = standardcalc.vectorToDegrees(vect.lat, vect.long)
+    buoyAngle = standardcalc.boundTo180(buoyAngle) #git later
+    
+    
+    
     return 0
 
 # --- Round Buoy Stbd---
@@ -91,6 +118,9 @@ def roundBuoyStbd(BuoyLoc, FinalBearing):
     moveLat *= Dest
     
     moveLong *= -1 # Convert back to actual coordinates
+    
+    pointToPoint(datatypes.GPSCoordinate(moveLat, moveLong),1)
+    
     return 0
 
 def killPointToPoint():
@@ -122,6 +152,10 @@ def pointToPointAWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
     
     while(end_flag == 0 and gVars.kill_flagPTP == 0):
         print('hello')
+        
+        while(gVars.currentData[aut_index] == True):
+            time.sleep(0.1)
+            
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         newappWindAng = currentData[awa_index]
@@ -146,6 +180,10 @@ def pointToPointAWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
                 if((abs(-newappWindAng-43)<abs(-newappWindAng+43) and initialTack is None) or initialTack == 1):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP ==0):
+                        
+                        while(gVars.currentData[aut_index] == True):
+                            time.sleep(0.1)
+                        
                         gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         newappWindAng = currentData[awa_index]
@@ -180,6 +218,8 @@ def pointToPointAWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
                 elif((abs(-newappWindAng-43)>=abs(-newappWindAng+43) and initialTack is None) or initialTack == 0):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP == 0):
+                        while(gVars.currentData[aut_index] == True):
+                            time.sleep(0.1)
                         gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         newappWindAng = currentData[awa_index]
@@ -240,6 +280,8 @@ def pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
     gVars.logger.info("Started point to point")
     
     while(end_flag == 0 and gVars.kill_flagPTP == 0):
+        while(gVars.currentData[aut_index] == True):
+            time.sleep(0.1)
         currentData = gVars.currentData
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
@@ -279,6 +321,8 @@ def pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
                 if((abs(-newTWA-45)<abs(-newTWA+45) and initialTack is None) or initialTack == 1):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP ==0):
+                        while(gVars.currentData[aut_index] == True):
+                            time.sleep(0.1)
                         gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]
@@ -319,6 +363,8 @@ def pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
                 elif((abs(-newTWA-45)>=abs(-newTWA+45) and initialTack is None) or initialTack == 0):
                     initialTack = None
                     while(abs(hog-standardcalc.angleBetweenTwoCoords(GPSCoord, Dest))<80 and gVars.kill_flagPTP == 0):
+                        while(gVars.currentData[aut_index] == True):
+                            time.sleep(0.1)
                         gVars.tacked_flag = 0
                         GPSCoord = currentData[gps_index]
                         appWindAng = currentData[awa_index]

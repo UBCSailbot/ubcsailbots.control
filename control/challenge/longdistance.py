@@ -4,5 +4,12 @@ Created on Jan 19, 2013
 @author: joshandrews
 '''
 
-def run():
+def longDistance():
+    CurrentCheckPoint = "Start"
+    NextCheckPoint = "Bouy1"
+    LapCounter = 0
+    
+    while LapCounter < 2:
+        while CurrentCheckPoint != NextCheckPoint:
+            PointToPoint(NextCheckPoint)
     return 0

@@ -111,3 +111,5 @@ Example Calls:
 	globvar.logger.warning("Warning Message")
     	globvar.logger.debug("Debug Message")
     	globvar.logger.critical("Critical Message")
+
+Test change
