@@ -31,7 +31,9 @@ LD_SECOND = "ld_second"
 
 # Navigation Challenge waypoint types
 NAV_FIRST = "nav_first"
-NAV_FINISH ="nav_finish"
+NAV_START_PORT ="nav_start_port"
+NAV_START_STARBOARD ="nav_start_stbd"
+
 # Station Keeping Challenge waypoint types
 SK_TOP_LEFT = "sk_top_left"
 SK_TOP_RIGHT = "sk_top_right"
