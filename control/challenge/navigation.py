@@ -77,7 +77,7 @@ def run(Waypoint1,Waypoint2,Waypoint3):
     
     coresailinglogic.pointToPoint(buoySailPoint)
     
-    coresailinglogic.roundBuoyStbd(BuoyCoords,standardcalc.angleBetweenTwoCoords(BuoyCoords,GPSCoord))
+    coresailinglogic.roundBuoyPort(BuoyCoords,standardcalc.angleBetweenTwoCoords(BuoyCoords,GPSCoord))
     
     thread.start_new_thread(coresailinglogic.pointToPoint, interpolatedPoint)
     
