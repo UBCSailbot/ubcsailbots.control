@@ -64,13 +64,14 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     
     moveLong *= -1 # Convert back actual coordinates
     
-    destinationLong = moveLong + GPSCoord.long
-    destinationLat = moveLat + GPSCoord.lat
+    destinationLong = standardcalc.GPSDistAway(GPSCoord, moveLong, 0) #moveLong + GPSCoord.long
+    destinationLat = standardcalc.GPSDistAway(GPSCoord, 0, moveLat)# moveLat + GPSCoord.lat
+    destination = standardcalc.datatypes(destinationLong, destinationLat)
     
     # 10 represents the degree of error around the destination point
     # Calls point to point function until it reaches location past buoy
     # Adding 10 does not increase the radius by 10 meters(ERROR!)
-    while (GPSCoord.long >= standardcalc.GPSDistAway(destinationLong, 10, 0) or GPSCoord.long <= standardcalc.GPSDistAway(destinationLong, -10, 0)) and (GPSCoord.lat >= standardcalc.GPSDistAway(destinationLong, 0, 10) or GPSCoord.lat <= standardcalc.GPSDistAway(destinationLong, 0, -10)): 
+    while (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0) or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0)) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10) or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10)): 
         GPSCoord.long = gVars.currentData[gps_index].long
         GPSCoord.lat = gVars.currentData[gps_index].lat
         pointToPoint(datatypes.GPSCoordinate(destinationLat, destinationLong),1)
@@ -86,6 +87,7 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     buoyAngle -= 90 
     buoyAngle = standardcalc.boundTo180(buoyAngle) #git later
     
+    # Incomplete, not static values, need to use trig to determine new gps locations 
     if quadDir == 1 and FinalBearing < buoyAngle and FinalBearing > (buoyAngle - 90):
         pointToPoint(standardcalc.GPSDistAway(gVars.currentData[gps_index], -10, 0), 1)
     elif quadDir == 2 and FinalBearing < buoyAngle and FinalBearing > (buoyAngle - 90):
