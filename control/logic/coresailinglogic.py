@@ -69,7 +69,7 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     # 10 represents the degree of error around the destination point
     # Calls point to point function until it reaches location past buoy
     # Adding 10 does not increase the radius by 10 meters(ERROR!) - fixed
-    while (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long):# or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0).long) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
+    if (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long):# or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0).long) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
         pointToPoint(datatypes.GPSCoordinate(destination.lat, destination.long),1)
         GPSCoord.long = gVars.currentData[gps_index].long
         GPSCoord.lat = gVars.currentData[gps_index].lat
@@ -105,7 +105,7 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
         # 10 represents the degree of error around the destination point
         # Calls point to point function until it reaches location past buoy
         # Adding 10 does not increase the radius by 10 meters(ERROR!) - fixed
-        while (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0).long) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
+        if (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0).long) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
             pointToPoint(datatypes.GPSCoordinate(destination.lat, destination.long),1)
             GPSCoord.long = gVars.currentData[gps_index].long
             GPSCoord.lat = gVars.currentData[gps_index].lat 
