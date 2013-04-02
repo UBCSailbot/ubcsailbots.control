@@ -15,6 +15,7 @@ from challenge import navigation
 from challenge import stationkeeping
 from logic import coresailinglogic
 from control import sailbotlogger
+from datatype import datatypes
 import control.GlobalVars as gVars
 import control.StaticVars as sVars
 import piardio.arduino
@@ -43,9 +44,13 @@ def main(argv=None):
     s = sched.scheduler(time.time, time.sleep)
     s.enter(1, 1, setGlobVar, (arduino, s,))
     thread.start_new_thread(s.run, ())
+    i = 0
     while (gVars.run):
         # When the function queue has waiting calls, and there is no currently running process,
         # switch processes to the next function in the queue (FIFO)
+        i +=1
+        if i == 5:
+            coresailinglogic.roundBuoyPort(datatypes.GPSCoordinate(49.276037,-123.195105), 179)
         if (len(gVars.functionQueue) > 0 and gVars.currentProcess is None):
             gVars.currentProcess = gVars.functionQueue.pop(0)
             gVars.currentParams = gVars.queueParameters.pop(0)
