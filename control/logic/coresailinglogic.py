@@ -64,22 +64,20 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
     
     moveLong *= -1 # Convert back actual coordinates
     
-    destinationLong = standardcalc.GPSDistAway(GPSCoord, moveLong, 0) #moveLong + GPSCoord.long
-    destinationLat = standardcalc.GPSDistAway(GPSCoord, 0, moveLat)# moveLat + GPSCoord.lat
-    destination = standardcalc.datatypes.GPSCoordinate(destinationLong, destinationLat)
+    destination = standardcalc.GPSDistAway(GPSCoord, moveLong, moveLat)
     
     # 10 represents the degree of error around the destination point
     # Calls point to point function until it reaches location past buoy
     # Adding 10 does not increase the radius by 10 meters(ERROR!) - fixed
-    while (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0)).long and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
-        pointToPoint(datatypes.GPSCoordinate(destinationLat, destinationLong),1)
+    while (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long):# or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0).long) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
+        pointToPoint(datatypes.GPSCoordinate(destination.lat, destination.long),1)
         GPSCoord.long = gVars.currentData[gps_index].long
         GPSCoord.lat = gVars.currentData[gps_index].lat
         
     # Checks if the boat needs to round the buoy or just pass it
-    vect = None
-    vect.lat = BuoyLoc.lat - currentData.lat
-    vect.long = BuoyLoc.long - currentData.long
+    vect = datatypes.GPSCoordinate()
+    vect.lat = BuoyLoc.lat - currentData[gps_index].lat
+    vect.long = BuoyLoc.long - currentData[gps_index].long
     
     # Checks if the boat as to round the buoy
     buoyAngle = None
@@ -102,15 +100,13 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
             moveLong2 = abs(math.sin(angleToNorth - X)) * - 1 # - X Movement
             moveLat2 = abs(math.cos(angleToNorth - X)) # + Y Movement
         
-        destinationLong = standardcalc.GPSDistAway(GPSCoord, moveLong2, 0) #moveLong + GPSCoord.long
-        destinationLat = standardcalc.GPSDistAway(GPSCoord, 0, moveLat2)# moveLat + GPSCoord.lat
-        destination = standardcalc.datatypes.GPSCoordinate(destinationLong, destinationLat)
+        destination = standardcalc.GPSDistAway(GPSCoord, moveLong2, moveLat2)
         
         # 10 represents the degree of error around the destination point
         # Calls point to point function until it reaches location past buoy
         # Adding 10 does not increase the radius by 10 meters(ERROR!) - fixed
         while (GPSCoord.long >= standardcalc.GPSDistAway(destination, 10, 0).long or GPSCoord.long <= standardcalc.GPSDistAway(destination, -10, 0).long) and (GPSCoord.lat >= standardcalc.GPSDistAway(destination, 0, 10).lat or GPSCoord.lat <= standardcalc.GPSDistAway(destination, 0, -10).lat): 
-            pointToPoint(datatypes.GPSCoordinate(destinationLat, destinationLong),1)
+            pointToPoint(datatypes.GPSCoordinate(destination.lat, destination.long),1)
             GPSCoord.long = gVars.currentData[gps_index].long
             GPSCoord.lat = gVars.currentData[gps_index].lat 
     
