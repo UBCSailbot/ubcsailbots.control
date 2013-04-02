@@ -32,5 +32,6 @@ arduino = None
 tacked_flag = 0
 TrueWindAngle = 0
 kill_flagPTP = 0
+kill_flagNav = 0
 logBuffer = ""
 kill_flagSK = 0
