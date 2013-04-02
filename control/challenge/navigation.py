@@ -34,6 +34,8 @@ def run(Waypoint1,Waypoint2,Waypoint3):
     currentData = gVars.currentData
     GPSCoord = currentData[gps_index]
     
+    gVars.kill_flagNav = 0
+    
     num_nav_first = 0
     num_nav_start_port = 0
     num_nav_start_stbd = 0
@@ -75,17 +77,20 @@ def run(Waypoint1,Waypoint2,Waypoint3):
     
     buoySailPoint = setNavigationBuoyPoint(BuoyCoords, GPSCoord, 10)
     
-    coresailinglogic.pointToPoint(buoySailPoint)
+    if(gVars.kill_flagNav == 0):
+        coresailinglogic.pointToPoint(buoySailPoint)
     
-    coresailinglogic.roundBuoyStbd(BuoyCoords,standardcalc.angleBetweenTwoCoords(BuoyCoords,GPSCoord))
+    if(gVars.kill_flagNav == 0):
+        coresailinglogic.roundBuoyPort(BuoyCoords,standardcalc.angleBetweenTwoCoords(BuoyCoords,GPSCoord))
     
-    thread.start_new_thread(coresailinglogic.pointToPoint, interpolatedPoint)
+    if(gVars.kill_flagNav == 0):
+        thread.start_new_thread(coresailinglogic.pointToPoint, interpolatedPoint)
     
-    while(standardcalc.distBetweenTwoCoords(GPSCoord, interpolatedPoint)>sVars.ACCEPTANCE_DISTANCE_DEFAULT):
+    while(standardcalc.distBetweenTwoCoords(GPSCoord, interpolatedPoint)>sVars.ACCEPTANCE_DISTANCE_DEFAULT and gVars.kill_flagNav == 0):
         GPSCoord = currentData[gps_index]
         appWindAng = currentData[awa_index]
         
-        while(gVars.currentData[aut_index] == True):
+        while(gVars.currentData[aut_index] == False):
             time.sleep(0.1)
         
         if(standardcalc.distBetweenTwoCoords(GPSCoord,leftBoundaryPoint) > bound_dist or standardcalc.distBetweenTwoCoords(GPSCoord,rightBoundaryPoint) > bound_dist):
