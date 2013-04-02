@@ -423,7 +423,7 @@ def pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
                         
                         if(TWA != newTWA or oldColumn != gVars.currentColumn):
                             gVars.logger.info("Changing sheets and rudder")
-                            arduino.adjust_sheets(sheetList[int(newTWA)][gVars.currentColumn])
+                            arduino.adjust_sheets(sheetList[int(abs(newTWA))][gVars.currentColumn])
                             arduino.steer(AWA_METHOD,hog-newTWA+45)
                             TWA = newTWA
                             oldColumn = gVars.currentColumn
@@ -451,7 +451,7 @@ def pointToPointTWA(Dest, initialTack, ACCEPTANCE_DISTANCE):
                 gVars.logger.info("Sailing straight to point")
                 if(TWA != newTWA or oldColumn != gVars.currentColumn):
                     gVars.logger.info("Adjusting sheets and rudder")
-                    arduino.adjust_sheets(sheetList[newTWA][gVars.currentColumn])
+                    arduino.adjust_sheets(sheetList[abs(int(newTWA))][gVars.currentColumn])
                     arduino.steer(COMPASS_METHOD,standardcalc.angleBetweenTwoCoords(GPSCoord,Dest))
                     TWA = newTWA
                     gVars.currentColumn
