@@ -102,8 +102,8 @@ def roundBuoyPort(BuoyLoc, FinalBearing):
             moveLong2 = abs(math.sin(angleToNorth - X)) * - 1 # - X Movement
             moveLat2 = abs(math.cos(angleToNorth - X)) # + Y Movement
         
-        destinationLong = standardcalc.GPSDistAway(GPSCoord, moveLong, 0) #moveLong + GPSCoord.long
-        destinationLat = standardcalc.GPSDistAway(GPSCoord, 0, moveLat)# moveLat + GPSCoord.lat
+        destinationLong = standardcalc.GPSDistAway(GPSCoord, moveLong2, 0) #moveLong + GPSCoord.long
+        destinationLat = standardcalc.GPSDistAway(GPSCoord, 0, moveLat2)# moveLat + GPSCoord.lat
         destination = standardcalc.datatypes(destinationLong, destinationLat)
         
         # 10 represents the degree of error around the destination point
