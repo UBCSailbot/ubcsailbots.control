@@ -60,5 +60,5 @@ class GuiHandler:
     def getDebugMessages(self):
         logger = gVars.logger
         buff = logger.buffer
-        logger.clear()
+        logger.clearBuffer()
         return buff
