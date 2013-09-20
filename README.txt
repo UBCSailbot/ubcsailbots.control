@@ -1,6 +1,8 @@
-===================
-UBC Sailbot Control
-===================
+==================================
+DO NOT UPDATE - UBC Sailbot Control
+==================================
+
+Use UBCSailbot/ubcsailbots.git
 
 UBC Sailbot runs the UBC Sailbot control system.  Running __main__ starts a loop which will continue to run until told otherwise by the GUI.
 
